@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</title>
+<link rel="stylesheet" href="assets/style.css">
+<style>
+  /* استایل‌های اختصاصی برای بخش‌های تاشو درون کارت ۲۸ درسی */
+  .sub-accordion {
+    margin-bottom: 0.6rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    background: var(--bg);
+    overflow: hidden;
+  }
+  .sub-accordion summary {
+    padding: 0.45rem 0.75rem;
+    font-size: 0.86rem;
+    font-weight: 700;
+    cursor: pointer;
+    list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    color: var(--text);
+    user-select: none;
+  }
+  .sub-accordion summary::-webkit-details-marker { display: none; }
+  .sub-accordion summary::after {
+    content: "▾";
+    font-size: 0.8rem;
+    transition: transform 0.2s ease;
+    color: var(--muted);
+  }
+  .sub-accordion[open] summary::after {
+    transform: rotate(180deg);
+  }
+  .sub-accordion summary:hover {
+    background: rgba(0, 0, 0, 0.03);
+  }
+  html.dark .sub-accordion summary:hover {
+    background: rgba(255, 255, 255, 0.04);
+  }
+  .sub-accordion ol {
+    margin: 0;
+    padding: 0.3rem 0.75rem 0.5rem 0.5rem;
+    border-top: 1px solid var(--border);
+    background: var(--surface);
+  }
+  .sub-accordion ol li a {
+    padding: 0.22rem 0;
+    font-size: 0.83rem;
+  }
+</style>
+<script defer src="assets/app.js"></script>
+</head>
+<body class="home-page">
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start"><a class="brand" href="index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a></div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<main class="home">
+  <section class="hero">
+    <h1>سرفصل‌های دوره جامع ایجنت‌های هوش مصنوعی</h1>
+    <p class="hero-credit">این دوره توسط کانال یوتیوب <a href="https://www.youtube.com/@MohammadTaghizadeh" target="_blank" rel="noopener">MohammadTaghizadeh</a> و مبتنی بر داکیومنت رسمی هاگینگ فیس آماده شده است.</p>
+  </section>
+  <div class="chapters">
+
+<!-- فصل ۰۰ -->
+<article class="chapter-card">
+  <a class="card-top" href="00 - شروع و راه‌اندازی/01 - خوش‌آمدید.html">
+    <span class="card-num">۰۰</span>
+    <div>
+      <h2>شروع و راه‌اندازی (Onboarding)</h2>
+      <span class="card-meta">۳ درس</span>
+    </div>
+  </a>
+  <ol>
+    <li><a href="00 - شروع و راه‌اندازی/01 - خوش‌آمدید.html">۰۱ - خوش‌آمدید به دوره</a></li>
+    <li><a href="00 - شروع و راه‌اندازی/02 - مراحل آغازین.html">۰۲ - مراحل آغازین و راه‌اندازی با Ollama</a></li>
+    <li><a href="00 - شروع و راه‌اندازی/03 - راهنمای دیسکورد.html">۰۳ - راهنمای Discord</a></li>
+  </ol>
+</article>
+
+<!-- فصل ۰۱ -->
+<article class="chapter-card">
+  <a class="card-top" href="01 - مدل‌های ایجنت و مبانی/01 - مقدمه.html">
+    <span class="card-num">۰۱</span>
+    <div>
+      <h2>مبانی ایجنت‌های هوش مصنوعی</h2>
+      <span class="card-meta">۱۴ درس</span>
+    </div>
+  </a>
+  <ol>
+    <li><a href="01 - مدل‌های ایجنت و مبانی/01 - مقدمه.html">۰۱ - مقدمه</a></li>
+    <li><a href="01 - مدل‌های ایجنت و مبانی/02 - ایجنت چیست؟.html">۰۲ - ایجنت چیست؟</a></li>
+    <li><a href="01 - مدل‌های ایجنت و مبانی/03 - آزمون کوتاه ۱.html">۰۳ - آزمون کوتاه ۱</a></li>
+    <li><a href="01 - مدل‌های ایجنت و مبانی/04 - مدل‌های زبانی بزرگ چیستند؟.html">۰۴ - مدل‌های زبانی بزرگ چیستند؟</a></li>
+    <li><a href="01 - مدل‌های ایجنت و مبانی/05 - پیام‌ها و توکن‌های ویژه.html">۰۵ - پیام‌ها و توکن‌های ویژه</a></li>
+    <li><a href="01 - مدل‌های ایجنت و مبانی/06 - ابزارها چه هستند؟.html">۰۶ - ابزارها چه هستند؟</a></li>
+    <li><a href="01 - مدل‌های ایجنت و مبانی/07 - چرخه تفکر، اقدام و مشاهده.html">۰۷ - چرخه تفکر، اقدام و مشاهده</a></li>
+    <li><a href="01 - مدل‌های ایجنت و مبانی/08 - تفکر و رویکرد ReAct.html">۰۸ - تفکر و رویکرد ReAct</a></li>
+    <li><a href="01 - مدل‌های ایجنت و مبانی/09 - اقدام‌ها و رویکرد Stop and Parse.html">۰۹ - اقدام‌ها و رویکرد Stop and Parse</a></li>
+    <li><a href="01 - مدل‌های ایجنت و مبانی/10 - مشاهدات و بازخورد محیط.html">۱۰ - مشاهدات و بازخورد محیط</a></li>
+    <li><a href="01 - مدل‌های ایجنت و مبانی/11 - کتابخانه Dummy Agent.html">۱۱ - کتابخانه Dummy Agent</a></li>
+    <li><a href="01 - مدل‌های ایجنت و مبانی/12 - ساخت اولین ایجنت با smolagents.html">۱۲ - ساخت اولین ایجنت با smolagents</a></li>
+    <li><a href="01 - مدل‌های ایجنت و مبانی/13 - آزمون پایانی فصل ۱.html">۱۳ - آزمون پایانی فصل ۱</a></li>
+    <li><a href="01 - مدل‌های ایجنت و مبانی/14 - جمع‌بندی فصل ۱.html">۱۴ - جمع‌بندی فصل ۱</a></li>
+  </ol>
+</article>
+
+<!-- فصل ۰۲ (با قابلیت باز و بسته شدن ماژول‌ها) -->
+<article class="chapter-card">
+  <a class="card-top" href="02 - فریم‌ورک‌های ایجنت/مقدمه_ای بر فریم_ورک_های ایجنتی.html">
+    <span class="card-num">۰۲</span>
+    <div>
+      <h2>فریم‌ورک‌های توسعه ایجنت (Frameworks)</h2>
+      <span class="card-meta">۲۸ درس</span>
+    </div>
+  </a>
+
+  <ol style="margin-bottom: 0.6rem;">
+    <li><a href="02 - فریم‌ورک‌های ایجنت/مقدمه_ای بر فریم_ورک_های ایجنتی.html">۰۰ - مقدمه‌ای بر فریم‌ورک‌های ایجنتی</a></li>
+  </ol>
+
+  <!-- زیرمجموعه smolagents -->
+  <details class="sub-accordion" open>
+    <summary><span>بخش ۲.۱: فریم‌ورک smolagents</span><span style="font-size:0.75rem; color:var(--muted);">۱۲ درس</span></summary>
+    <ol>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/smolagents/01 - مقدمه‌ای بر smolagents.html">۰۱ - مقدمه‌ای بر smolagents</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/smolagents/02 - چرا smolagents؟.html">۰۲ - چرا smolagents؟</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/smolagents/03 - آزمون کوتاه ۱.html">۰۳ - آزمون کوتاه ۱</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/smolagents/04 - ساخت ایجنت‌های کد.html">۰۴ - ساخت ایجنت‌های کد</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/smolagents/05 - ایجنت‌های فراخوان ابزار.html">۰۵ - ایجنت‌های فراخوان ابزار</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/smolagents/06 - ابزارها در smolagents.html">۰۶ - ابزارها در smolagents</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/smolagents/07 - ایجنت‌های بازیابی و RAG.html">۰۷ - ایجنت‌های بازیابی و RAG</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/smolagents/08 - آزمون کوتاه ۲.html">۰۸ - آزمون کوتاه ۲</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/smolagents/09 - سیستم‌های چند ایجنتی.html">۰۹ - سیستم‌های چند ایجنتی</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/smolagents/10 - ایجنت‌های بینایی و مرورگر.html">۱۰ - ایجنت‌های بینایی و مرورگر</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/smolagents/11 - آزمون پایانی smolagents.html">۱۱ - آزمون پایانی smolagents</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/smolagents/12 - جمع‌بندی smolagents.html">۱۲ - جمع‌بندی smolagents</a></li>
+    </ol>
+  </details>
+
+  <!-- زیرمجموعه LlamaIndex -->
+  <details class="sub-accordion">
+    <summary><span>بخش ۲.۲: فریم‌ورک LlamaIndex</span><span style="font-size:0.75rem; color:var(--muted);">۹ درس</span></summary>
+    <ol>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/LlamaIndex/01 - مقدمه‌ای بر LlamaIndex.html">۰۱ - مقدمه‌ای بر LlamaIndex</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/LlamaIndex/02 - آشنایی با LlamaHub.html">۰۲ - آشنایی با LlamaHub</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/LlamaIndex/03 - کامپوننت‌ها در LlamaIndex.html">۰۳ - کامپوننت‌ها در LlamaIndex</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/LlamaIndex/04 - ابزارها در LlamaIndex.html">۰۴ - ابزارها در LlamaIndex</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/LlamaIndex/05 - آزمون کوتاه ۱.html">۰۵ - آزمون کوتاه ۱</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/LlamaIndex/06 - ایجنت‌ها در LlamaIndex.html">۰۶ - ایجنت‌ها در LlamaIndex</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/LlamaIndex/07 - ساخت گردش‌کارهای ایجنتی.html">۰۷ - ساخت گردش‌کارهای ایجنتی</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/LlamaIndex/08 - آزمون کوتاه ۲.html">۰۸ - آزمون کوتاه ۲</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/LlamaIndex/09 - جمع‌بندی LlamaIndex.html">۰۹ - جمع‌بندی LlamaIndex</a></li>
+    </ol>
+  </details>
+
+  <!-- زیرمجموعه LangGraph -->
+  <details class="sub-accordion">
+    <summary><span>بخش ۲.۳: فریم‌ورک LangGraph</span><span style="font-size:0.75rem; color:var(--muted);">۶ درس</span></summary>
+    <ol>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/LangGraph/01 - معرفی LangGraph.html">۰۱ - معرفی LangGraph</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/LangGraph/02 - اجزای بنیادین LangGraph.html">۰۲ - اجزای بنیادین LangGraph</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/LangGraph/03 - ساخت اولین گراف با LangGraph.html">۰۳ - ساخت اولین گراف با LangGraph</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/LangGraph/04 - گراف تحلیل اسناد و ReAct.html">۰۴ - گراف تحلیل اسناد و ReAct</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/LangGraph/05 - آزمون LangGraph.html">۰۵ - آزمون LangGraph</a></li>
+      <li><a href="02 - فریم‌ورک‌های ایجنت/LangGraph/06 - جمع‌بندی LangGraph.html">۰۶ - جمع‌بندی LangGraph</a></li>
+    </ol>
+  </details>
+</article>
+
+<!-- فصل ۰۳ -->
+<article class="chapter-card">
+  <a class="card-top" href="03 - سناریوی Agentic RAG/01 - مقدمه‌ای بر کاربرد Agentic RAG.html">
+    <span class="card-num">۰۳</span>
+    <div>
+      <h2>پروژه عملی Agentic RAG</h2>
+      <span class="card-meta">۶ درس</span>
+    </div>
+  </a>
+  <ol>
+    <li><a href="03 - سناریوی Agentic RAG/01 - مقدمه‌ای بر کاربرد Agentic RAG.html">۰۱ - مقدمه‌ای بر کاربرد Agentic RAG</a></li>
+    <li><a href="03 - سناریوی Agentic RAG/02 - مفهوم و مبانی Agentic RAG.html">۰۲ - مفهوم و مبانی Agentic RAG</a></li>
+    <li><a href="03 - سناریوی Agentic RAG/03 - ابزار RAG برای اطلاعات مهمانان.html">۰۳ - ابزار RAG برای اطلاعات مهمانان</a></li>
+    <li><a href="03 - سناریوی Agentic RAG/04 - ساخت و یکپارچه‌سازی ابزارها.html">۰۴ - ساخت و یکپارچه‌سازی ابزارها</a></li>
+    <li><a href="03 - سناریوی Agentic RAG/05 - سرهم‌بندی ایجنت کامل مهمانی.html">۰۵ - سرهم‌بندی ایجنت کامل مهمانی</a></li>
+    <li><a href="03 - سناریوی Agentic RAG/06 - جمع‌بندی فصل سوم.html">۰۶ - جمع‌بندی فصل سوم</a></li>
+  </ol>
+</article>
+
+<!-- فصل ۰۴ -->
+<article class="chapter-card">
+  <a class="card-top" href="04 - پروژه پایانی و GAIA/01 - مقدمه‌ای بر پروژه پایانی.html">
+    <span class="card-num">۰۴</span>
+    <div>
+      <h2>پروژه پایانی و ارزیابی GAIA</h2>
+      <span class="card-meta">۶ درس</span>
+    </div>
+  </a>
+  <ol>
+    <li><a href="04 - پروژه پایانی و GAIA/01 - مقدمه‌ای بر پروژه پایانی.html">۰۱ - مقدمه‌ای بر پروژه پایانی</a></li>
+    <li><a href="04 - پروژه پایانی و GAIA/02 - بنچ‌مارک GAIA چیست؟.html">۰۲ - بنچ‌مارک GAIA چیست؟</a></li>
+    <li><a href="04 - پروژه پایانی و GAIA/03 - پروژه عملی و نحوه ارسال نتایج.html">۰۳ - پروژه عملی و ارسال نتایج به API</a></li>
+    <li><a href="04 - پروژه پایانی و GAIA/04 - دریافت سرتیفیکیت رسمی دوره.html">۰۴ - دریافت سرتیفیکیت رسمی دوره</a></li>
+    <li><a href="04 - پروژه پایانی و GAIA/05 - جمع‌بندی دوره.html">۰۵ - جمع‌بندی دوره</a></li>
+    <li><a href="04 - پروژه پایانی و GAIA/06 - مسیر پیش‌رو.html">۰۶ - مسیر پیش‌رو: پروتکل‌های MCP و A2A</a></li>
+  </ol>
+</article>
+
+<!-- بخش امتیازی ۱ -->
+<article class="chapter-card">
+  <a class="card-top" href="Bonus Unit 1 - Fine-Tuning Function Calling/01 - مقدمه.html">
+    <span class="card-num">★۱</span>
+    <div>
+      <h2>بخش امتیازی ۱: Function Calling با LoRA</h2>
+      <span class="card-meta">۴ درس</span>
+    </div>
+  </a>
+  <ol>
+    <li><a href="Bonus Unit 1 - Fine-Tuning Function Calling/01 - مقدمه.html">۰۱ - مقدمه</a></li>
+    <li><a href="Bonus Unit 1 - Fine-Tuning Function Calling/02 - فراخوانی توابع چیست؟.html">۰۲ - فراخوانی توابع چیست؟</a></li>
+    <li><a href="Bonus Unit 1 - Fine-Tuning Function Calling/03 - فاین‌تیون مدل با LoRA.html">۰۳ - فاین‌تیون مدل با LoRA</a></li>
+    <li><a href="Bonus Unit 1 - Fine-Tuning Function Calling/04 - جمع‌بندی بخش امتیازی ۱.html">۰۴ - جمع‌بندی بخش امتیازی ۱</a></li>
+  </ol>
+</article>
+
+<!-- بخش امتیازی ۲ -->
+<article class="chapter-card">
+  <a class="card-top" href="Bonus Unit 2 - Observability and Evaluation/01 - مقدمه.html">
+    <span class="card-num">★۲</span>
+    <div>
+      <h2>بخش امتیازی ۲: Observability & Evaluation</h2>
+      <span class="card-meta">۴ درس</span>
+    </div>
+  </a>
+  <ol>
+    <li><a href="Bonus Unit 2 - Observability and Evaluation/01 - مقدمه.html">۰۱ - مقدمه</a></li>
+    <li><a href="Bonus Unit 2 - Observability and Evaluation/02 - مشاهده‌پذیری و ارزیابی چیست؟.html">۰۲ - مشاهده‌پذیری و ارزیابی چیست؟</a></li>
+    <li><a href="Bonus Unit 2 - Observability and Evaluation/03 - مانیتورینگ و ارزیابی با Langfuse.html">۰۳ - مانیتورینگ و ارزیابی با Langfuse</a></li>
+    <li><a href="Bonus Unit 2 - Observability and Evaluation/04 - آزمون ارزیابی ایجنت‌ها.html">۰۴ - آزمون ارزیابی ایجنت‌ها</a></li>
+  </ol>
+</article>
+
+<!-- بخش امتیازی ۳ -->
+<article class="chapter-card">
+  <a class="card-top" href="Bonus Unit 3 - AI in Games/01 - مقدمه.html">
+    <span class="card-num">★۳</span>
+    <div>
+      <h2>بخش امتیازی ۳: ایجنت‌ها در بازی‌ها (Pokémon)</h2>
+      <span class="card-meta">۶ درس</span>
+    </div>
+  </a>
+  <ol>
+    <li><a href="Bonus Unit 3 - AI in Games/01 - مقدمه.html">۰۱ - مقدمه</a></li>
+    <li><a href="Bonus Unit 3 - AI in Games/02 - وضعیت کنونی LLM در بازی‌ها.html">۰۲ - وضعیت کنونی LLM در بازی‌ها</a></li>
+    <li><a href="Bonus Unit 3 - AI in Games/03 - از مدل زبانی تا ایجنت در بازی.html">۰۳ - از مدل زبانی تا ایجنت در بازی</a></li>
+    <li><a href="Bonus Unit 3 - AI in Games/04 - ساخت ایجنت مبارز پوکمون.html">۰۴ - ساخت ایجنت مبارز پوکمون</a></li>
+    <li><a href="Bonus Unit 3 - AI in Games/05 - اجرای ایجنت در نبرد آنلاین.html">۰۵ - اجرای ایجنت در نبرد آنلاین</a></li>
+    <li><a href="Bonus Unit 3 - AI in Games/06 - جمع‌بندی بخش امتیازی ۳.html">۰۶ - جمع‌بندی بخش امتیازی ۳</a></li>
+  </ol>
+</article>
+
+  </div>
+</main>
+</body>
+</html>
