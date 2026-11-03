@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ساخت و یکپارچه‌سازی ابزارها | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../assets/vendor/highlight.min.js"></script>
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۳</div>
+    <div class="chapter-name">پروژه عملی Agentic RAG</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۳</span><span class="toc-title">سناریوی Agentic RAG</span><span class="toc-count">۶</span></summary>
+      <ol><li><a href="01 - مقدمه‌ای بر کاربرد Agentic RAG.html">مقدمه‌ای بر کاربرد Agentic RAG</a></li><li><a href="02 - مفهوم و مبانی Agentic RAG.html">مفهوم و مبانی Agentic RAG</a></li><li><a href="03 - ابزار RAG برای اطلاعات مهمانان.html">ابزار RAG برای اطلاعات مهمانان</a></li><li><a href="04 - ساخت و یکپارچه‌سازی ابزارها.html" class="active">ساخت و یکپارچه‌سازی ابزارها</a></li><li><a href="05 - سرهم‌بندی ایجنت کامل مهمانی.html">سرهم‌بندی ایجنت کامل مهمانی</a></li><li><a href="06 - جمع‌بندی فصل سوم.html">جمع‌بندی فصل سوم</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../index.html">خانه</a><span>/</span><span>۰۳ — سناریوی Agentic RAG</span><span>/</span><span>ساخت و یکپارچه‌سازی ابزارها</span></div>
+<h1>ساخت و یکپارچه‌سازی ابزارها برای ایجنت شما</h1>
+<p>در این بخش به آلفرد دسترسی به وب می‌دهیم تا بتواند آخرین اخبار و رویدادهای جهان را پیدا کند. علاوه بر این، به داده‌های آب‌وهوا و آمار دانلود مدل‌های Hugging Face Hub دسترسی خواهد داشت تا بتواند درباره موضوعات تازه گفتگوی مرتبط داشته باشد.</p>
+
+<h2>دسترسی ایجنت شما به وب</h2>
+<p>به یاد داشته باشید که می‌خواهیم آلفرد حضور خود را به عنوان یک میزبان واقعی رنسانسی با دانش عمیق از جهان تثبیت کند.</p>
+<p>برای این کار باید مطمئن شویم آلفرد به آخرین اخبار و اطلاعات جهان دسترسی دارد.</p>
+<p>بیایید با ساخت یک ابزار جستجوی وب برای آلفرد شروع کنیم!</p>
+<h4>smolagents</h4>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents import DuckDuckGoSearchTool
+
+# Initialize the DuckDuckGo search tool
+search_tool = DuckDuckGoSearchTool()
+
+# Example usage
+results = search_tool("Who's the current President of France?")
+print(results)</code></pre></div>
+<p>خروجی مورد انتظار:</p>
+<div class="code"><pre dir="ltr"><code class="language-text">The current President of France in Emmanuel Macron.</code></pre></div>
+<h4>LlamaIndex</h4>
+<div class="code"><pre dir="ltr"><code class="language-python">from llama_index.tools.duckduckgo import DuckDuckGoSearchToolSpec
+from llama_index.core.tools import FunctionTool
+
+# Initialize the DuckDuckGo search tool
+tool_spec = DuckDuckGoSearchToolSpec()
+
+search_tool = FunctionTool.from_defaults(tool_spec.duckduckgo_full_search)
+# Example usage
+response = search_tool("Who's the current President of France?")
+print(response.raw_output[-1]['body'])</code></pre></div>
+<p>خروجی مورد انتظار:</p>
+<div class="code"><pre dir="ltr"><code class="language-text">The President of the French Republic is the head of state of France. The current President is Emmanuel Macron since 14 May 2017 defeating Marine Le Pen in the second round of the presidential election on 7 May 2017. List of French presidents (Fifth Republic) N° Portrait Name ...</code></pre></div>
+<h4>LangGraph</h4>
+<div class="code"><pre dir="ltr"><code class="language-python">from langchain_community.tools import DuckDuckGoSearchRun
+
+search_tool = DuckDuckGoSearchRun()
+results = search_tool.invoke("Who's the current President of France?")
+print(results)</code></pre></div>
+<p>خروجی مورد انتظار:</p>
+<div class="code"><pre dir="ltr"><code class="language-text">Emmanuel Macron (born December 21, 1977, Amiens, France) is a French banker and politician who was elected president of France in 2017...</code></pre></div>
+
+<h2>ساخت ابزار سفارشی اطلاعات آب‌وهوا برای زمان‌بندی آتش‌بازی</h2>
+<p>یک جشن بی‌نقص باید آتش‌بازی‌ای در آسمان صاف داشته باشد؛ پس باید مطمئن شویم آتش‌بازی به خاطر هوای بد لغو نمی‌شود.</p>
+<p>بیایید ابزار سفارشی بسازیم که یک API خارجی آب‌وهوا را فراخوانی کند و اطلاعات هوا را برای یک مکان مشخص بگیرد.</p>
+<blockquote><p><strong>نکته:</strong> برای سادگی، در این مثال از یک API آب‌وهوای ساختگی (dummy) استفاده می‌کنیم. اگر می‌خواهید از API واقعی استفاده کنید، می‌توانید ابزاری بسازید که از OpenWeatherMap API استفاده کند، مانند آنچه در <a href="https://huggingface.co/learn/agents-course/unit1/tutorial">واحد ۱</a> دیدیم.</p></blockquote><h4>smolagents</h4>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents import Tool
+import random
+
+class WeatherInfoTool(Tool):
+    name = "weather_info"
+    description = "Fetches dummy weather information for a given location."
+    inputs = {
+        "location": {
+            "type": "string",
+            "description": "The location to get weather information for."
+        }
+    }
+    output_type = "string"
+
+    def forward(self, location: str):
+        # Dummy weather data
+        weather_conditions = [
+            {"condition": "Rainy", "temp_c": 15},
+            {"condition": "Clear", "temp_c": 25},
+            {"condition": "Windy", "temp_c": 20}
+        ]
+        # Randomly select a weather condition
+        data = random.choice(weather_conditions)
+        return f"Weather in {location}: {data['condition']}, {data['temp_c']}°C"
+
+# Initialize the tool
+weather_info_tool = WeatherInfoTool()</code></pre></div>
+<h4>LlamaIndex</h4>
+<div class="code"><pre dir="ltr"><code class="language-python">import random
+from llama_index.core.tools import FunctionTool
+
+def get_weather_info(location: str) -&gt; str:
+    """Fetches dummy weather information for a given location."""
+    # Dummy weather data
+    weather_conditions = [
+        {"condition": "Rainy", "temp_c": 15},
+        {"condition": "Clear", "temp_c": 25},
+        {"condition": "Windy", "temp_c": 20}
+    ]
+    # Randomly select a weather condition
+    data = random.choice(weather_conditions)
+    return f"Weather in {location}: {data['condition']}, {data['temp_c']}°C"
+
+# Initialize the tool
+weather_info_tool = FunctionTool.from_defaults(get_weather_info)</code></pre></div>
+<h4>LangGraph</h4>
+<div class="code"><pre dir="ltr"><code class="language-python">from langchain_core.tools import Tool
+import random
+
+def get_weather_info(location: str) -&gt; str:
+    """Fetches dummy weather information for a given location."""
+    # Dummy weather data
+    weather_conditions = [
+        {"condition": "Rainy", "temp_c": 15},
+        {"condition": "Clear", "temp_c": 25},
+        {"condition": "Windy", "temp_c": 20}
+    ]
+    # Randomly select a weather condition
+    data = random.choice(weather_conditions)
+    return f"Weather in {location}: {data['condition']}, {data['temp_c']}°C"
+
+# Initialize the tool
+weather_info_tool = Tool(
+    name="get_weather_info",
+    func=get_weather_info,
+    description="Fetches dummy weather information for a given location."
+)</code></pre></div>
+
+<h2>ساخت ابزار آمار Hub برای سازندگان تأثیرگذار هوش مصنوعی</h2>
+<p>در این جشن، سرشناس‌ترین سازندگان هوش مصنوعی حضور دارند. آلفرد می‌خواهد با صحبت درباره محبوب‌ترین مدل‌ها، مجموعه‌داده‌ها و Spaceهای آن‌ها تحت تأثیرشان قرار دهد. ابزاری می‌سازیم که بر اساس نام کاربری، آمار مدل‌ها را از Hugging Face Hub بگیرد.</p>
+<h4>smolagents</h4>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents import Tool
+from huggingface_hub import list_models
+
+class HubStatsTool(Tool):
+    name = "hub_stats"
+    description = "Fetches the most downloaded model from a specific author on the Hugging Face Hub."
+    inputs = {
+        "author": {
+            "type": "string",
+            "description": "The username of the model author/organization to find models from."
+        }
+    }
+    output_type = "string"
+
+    def forward(self, author: str):
+        try:
+            # List models from the specified author, sorted by downloads
+            models = list(list_models(author=author, sort="downloads", direction=-1, limit=1))
+            
+            if models:
+                model = models[0]
+                return f"The most downloaded model by {author} is {model.id} with {model.downloads:,} downloads."
+            else:
+                return f"No models found for author {author}."
+        except Exception as e:
+            return f"Error fetching models for {author}: {str(e)}"
+
+# Initialize the tool
+hub_stats_tool = HubStatsTool()
+
+# Example usage
+print(hub_stats_tool("facebook")) # Example: Get the most downloaded model by Facebook</code></pre></div>
+<p>خروجی مورد انتظار:</p>
+<div class="code"><pre dir="ltr"><code class="language-text">The most downloaded model by facebook is facebook/esmfold_v1 with 12,544,550 downloads.</code></pre></div>
+<h4>LlamaIndex</h4>
+<div class="code"><pre dir="ltr"><code class="language-python">import random
+from llama_index.core.tools import FunctionTool
+from huggingface_hub import list_models
+
+def get_hub_stats(author: str) -&gt; str:
+    """Fetches the most downloaded model from a specific author on the Hugging Face Hub."""
+    try:
+        # List models from the specified author, sorted by downloads
+        models = list(list_models(author=author, sort="downloads", direction=-1, limit=1))
+
+        if models:
+            model = models[0]
+            return f"The most downloaded model by {author} is {model.id} with {model.downloads:,} downloads."
+        else:
+            return f"No models found for author {author}."
+    except Exception as e:
+        return f"Error fetching models for {author}: {str(e)}"
+
+# Initialize the tool
+hub_stats_tool = FunctionTool.from_defaults(get_hub_stats)
+
+# Example usage
+print(hub_stats_tool("facebook")) # Example: Get the most downloaded model by Facebook</code></pre></div>
+<p>خروجی مورد انتظار:</p>
+<div class="code"><pre dir="ltr"><code class="language-text">The most downloaded model by facebook is facebook/esmfold_v1 with 12,544,550 downloads.</code></pre></div>
+<h4>LangGraph</h4>
+<div class="code"><pre dir="ltr"><code class="language-python">from langchain_core.tools import Tool
+from huggingface_hub import list_models
+
+def get_hub_stats(author: str) -&gt; str:
+    """Fetches the most downloaded model from a specific author on the Hugging Face Hub."""
+    try:
+        # List models from the specified author, sorted by downloads
+        models = list(list_models(author=author, sort="downloads", direction=-1, limit=1))
+
+        if models:
+            model = models[0]
+            return f"The most downloaded model by {author} is {model.id} with {model.downloads:,} downloads."
+        else:
+            return f"No models found for author {author}."
+    except Exception as e:
+        return f"Error fetching models for {author}: {str(e)}"
+
+# Initialize the tool
+hub_stats_tool = Tool(
+    name="get_hub_stats",
+    func=get_hub_stats,
+    description="Fetches the most downloaded model from a specific author on the Hugging Face Hub."
+)
+
+# Example usage
+print(hub_stats_tool.invoke("facebook")) # Example: Get the most downloaded model by Facebook</code></pre></div>
+<p>خروجی مورد انتظار:</p>
+<div class="code"><pre dir="ltr"><code class="language-text">The most downloaded model by facebook is facebook/esmfold_v1 with 13,109,861 downloads.</code></pre></div>
+
+<p>با ابزار آمار Hub، آلفرد حالا می‌تواند با صحبت درباره محبوب‌ترین مدل‌های سازندگان تأثیرگذار هوش مصنوعی آن‌ها را تحت تأثیر قرار دهد.</p>
+
+<h2>یکپارچه‌سازی ابزارها با آلفرد</h2>
+<p>حالا که همه ابزارها را داریم، بیایید آن‌ها را در ایجنت آلفرد یکپارچه کنیم:</p>
+<h4>smolagents</h4>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents import CodeAgent, InferenceClientModel
+
+# Initialize the Hugging Face model
+model = InferenceClientModel()
+
+# Create Alfred with all the tools
+alfred = CodeAgent(
+    tools=[search_tool, weather_info_tool, hub_stats_tool], 
+    model=model
+)
+
+# Example query Alfred might receive during the gala
+response = alfred.run("What is Facebook and what's their most popular model?")
+
+print("🎩 Alfred's Response:")
+print(response)</code></pre></div>
+<p>خروجی مورد انتظار:</p>
+<div class="code"><pre dir="ltr"><code class="language-text">🎩 Alfred's Response:
+Facebook is a social networking website where users can connect, share information, and interact with others. The most downloaded model by Facebook on the Hugging Face Hub is ESMFold_v1.</code></pre></div>
+<h4>LlamaIndex</h4>
+<div class="code"><pre dir="ltr"><code class="language-python">from llama_index.core.agent.workflow import AgentWorkflow
+from llama_index.llms.huggingface_api import HuggingFaceInferenceAPI
+
+# Initialize the Hugging Face model
+llm = HuggingFaceInferenceAPI(model_name="Qwen/Qwen2.5-Coder-32B-Instruct")
+# Create Alfred with all the tools
+alfred = AgentWorkflow.from_tools_or_functions(
+    [search_tool, weather_info_tool, hub_stats_tool],
+    llm=llm
+)
+
+# Example query Alfred might receive during the gala
+response = await alfred.run("What is Facebook and what's their most popular model?")
+
+print("🎩 Alfred's Response:")
+print(response)</code></pre></div>
+<p>خروجی مورد انتظار:</p>
+<div class="code"><pre dir="ltr"><code class="language-text">🎩 Alfred's Response:
+Facebook is a social networking service and technology company based in Menlo Park, California. It was founded by Mark Zuckerberg and allows people to create profiles, connect with friends and family, share photos and videos, and join groups based on shared interests. The most popular model by Facebook on the Hugging Face Hub is `facebook/esmfold_v1` with 13,109,861 downloads.</code></pre></div>
+<h4>LangGraph</h4>
+<div class="code"><pre dir="ltr"><code class="language-python">from typing import TypedDict, Annotated
+from langgraph.graph.message import add_messages
+from langchain_core.messages import AnyMessage, HumanMessage, AIMessage
+from langgraph.prebuilt import ToolNode
+from langgraph.graph import START, StateGraph
+from langgraph.prebuilt import tools_condition
+from langchain_huggingface import HuggingFaceEndpoint, ChatHuggingFace
+
+# Generate the chat interface, including the tools
+llm = HuggingFaceEndpoint(
+    repo_id="Qwen/Qwen2.5-Coder-32B-Instruct",
+    huggingfacehub_api_token=HUGGINGFACEHUB_API_TOKEN,
+)
+
+chat = ChatHuggingFace(llm=llm, verbose=True)
+tools = [search_tool, weather_info_tool, hub_stats_tool]
+chat_with_tools = chat.bind_tools(tools)
+
+# Generate the AgentState and Agent graph
+class AgentState(TypedDict):
+    messages: Annotated[list[AnyMessage], add_messages]
+
+def assistant(state: AgentState):
+    return {
+        "messages": [chat_with_tools.invoke(state["messages"])],
+    }
+
+## The graph
+builder = StateGraph(AgentState)
+
+# Define nodes: these do the work
+builder.add_node("assistant", assistant)
+builder.add_node("tools", ToolNode(tools))
+
+# Define edges: these determine how the control flow moves
+builder.add_edge(START, "assistant")
+builder.add_conditional_edges(
+    "assistant",
+    # If the latest message requires a tool, route to tools
+    # Otherwise, provide a direct response
+    tools_condition,
+)
+builder.add_edge("tools", "assistant")
+alfred = builder.compile()
+
+messages = [HumanMessage(content="Who is Facebook and what's their most popular model?")]
+response = alfred.invoke({"messages": messages})
+
+print("🎩 Alfred's Response:")
+print(response['messages'][-1].content)</code></pre></div>
+<p>خروجی مورد انتظار:</p>
+<div class="code"><pre dir="ltr"><code class="language-text">🎩 Alfred's Response:
+Facebook is a social media company known for its social networking site, Facebook, as well as other services like Instagram and WhatsApp. The most downloaded model by Facebook on the Hugging Face Hub is facebook/esmfold_v1 with 13,202,321 downloads.</code></pre></div>
+
+<h2>جمع‌بندی</h2>
+<p>با یکپارچه‌سازی این ابزارها، آلفرد اکنون مجهز است تا طیف متنوعی از کارها را انجام دهد، از جستجوی وب گرفته تا به‌روزرسانی‌های آب‌وهوا و آمار مدل‌ها. این تضمین می‌کند که او آگاه‌ترین و جذاب‌ترین میزبان جشن باقی بماند.</p>
+<blockquote><p><strong>نکته:</strong> سعی کنید ابزاری پیاده کنید که بتواند آخرین اخبار درباره یک موضوع مشخص را دریافت کند.<br>وقتی کارتان تمام شد، ابزارهای سفارشی خود را در فایل <code>tools.py</code> پیاده کنید.</p></blockquote><nav class="pager"><a href="03 - ابزار RAG برای اطلاعات مهمانان.html"><span>درس قبلی</span><strong>→ ابزار RAG برای اطلاعات مهمانان</strong></a><a class="next" href="05 - سرهم‌بندی ایجنت کامل مهمانی.html"><span>درس بعدی</span><strong>سرهم‌بندی ایجنت کامل مهمانی ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>
