@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>از مدل زبانی تا ایجنت در بازی | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../assets/vendor/highlight.min.js"></script>
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">امتیازی ۳</div>
+    <div class="chapter-name">ایجنت‌های هوش مصنوعی در بازی‌ها</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">★۳</span><span class="toc-title">نبرد پوکمون با ایجنت</span><span class="toc-count">۶</span></summary>
+      <ol><li><a href="01 - مقدمه.html">مقدمه</a></li><li><a href="02 - وضعیت کنونی LLM در بازی‌ها.html">وضعیت کنونی LLM در بازی‌ها</a></li><li><a href="03 - از مدل زبانی تا ایجنت در بازی.html" class="active">از مدل زبانی تا ایجنت در بازی</a></li><li><a href="04 - ساخت ایجنت مبارز پوکمون.html">ساخت ایجنت مبارز پوکمون</a></li><li><a href="05 - اجرای ایجنت در نبرد آنلاین.html">اجرای ایجنت در نبرد آنلاین</a></li><li><a href="06 - جمع‌بندی بخش امتیازی ۳.html">جمع‌بندی بخش امتیازی ۳</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../index.html">خانه</a><span>/</span><span>بخش امتیازی ۳ — ایجنت‌ها در بازی‌ها</span><span>/</span><span>از مدل زبانی تا ایجنت در بازی</span></div>
+<h1>از مدل‌های زبانی تا ایجنت‌های هوش مصنوعی</h1>
+<p>در <a href="https://huggingface.co/learn/agents-course/unit1/introduction" target="_blank" rel="noopener">واحد اول</a> دوره آموختیم که ایجنت‌های هوش مصنوعی می‌توانند برنامه‌ریزی کنند و تصمیم بگیرند. مدل‌های زبانی تعامل طبیعی‌تر با NPCها را ممکن کرده‌اند، اما هوش مصنوعی ایجنتی (Agentic AI) یک گام جلوتر می‌رود و به شخصیت‌ها اجازه می‌دهد تصمیم بگیرند، اقدام‌هایشان را برنامه‌ریزی کنند و با محیط در حال تغییر سازگار شوند.</p>
+<p>برای روشن شدن تفاوت، یک NPC کلاسیک در بازی‌های نقش‌آفرینی (RPG) را در نظر بگیرید:</p>
+<ul>
+  <li><strong>با LLM:</strong> NPC ممکن است به پرسش‌های شما طبیعی‌تر و متنوع‌تر پاسخ دهد. برای دیالوگ عالی است، اما NPC همچنان ایستا می‌ماند و تا شما کاری نکنید، خودش اقدامی نمی‌کند.</li>
+  <li><strong>با هوش مصنوعی ایجنتی:</strong> NPC می‌تواند تصمیم بگیرد به دنبال کمک برود، تله بگذارد یا کلاً از شما دوری کند، حتی اگر مستقیماً با او تعامل نداشته باشید.</li>
+</ul>
+<p>این تغییر کوچک همه‌چیز را عوض می‌کند. ما از پاسخ‌دهندگانِ از پیش نوشته‌شده، به سوی <strong>بازیگران خودمختار در دنیای بازی</strong> حرکت می‌کنیم.</p>
+<p>این تحول یعنی NPCها اکنون می‌توانند از طریق رفتارهای هدفمند مستقیماً با محیط خود تعامل کنند و در نهایت گیم‌پلی پویاتر و غیرقابل پیش‌بینی‌تری شکل بگیرد.</p>
+<p>هوش مصنوعی ایجنتی به NPCها این قابلیت‌ها را می‌بخشد:</p>
+<ul>
+  <li><strong>خودمختاری (Autonomy):</strong> تصمیم‌گیری مستقل بر پایه وضعیت فعلی بازی.</li>
+  <li><strong>انطباق‌پذیری (Adaptability):</strong> تنظیم استراتژی‌ها در واکنش به اقدام‌های بازیکن.</li>
+  <li><strong>پایداری حافظه (Persistence):</strong> به خاطر سپردن تعامل‌های گذشته برای اثرگذاری بر رفتار آینده.</li>
+</ul>
+<p>این ویژگی‌ها NPCها را از موجوداتی <strong>واکنشی</strong> (که فقط به ورودی شما واکنش نشان می‌دهند) به <strong>مشارکت‌کنندگانی کنش‌گر</strong> در دنیای بازی تبدیل می‌کند و راه را برای گیم‌پلی نوآورانه باز می‌کند.</p>
+
+<h2>محدودیت بزرگ ایجنت‌ها: کند هستند (فعلاً)</h2>
+<p>با این حال هنوز نباید بیش از حد خوش‌بین بود. با وجود پتانسیل بالا، هوش مصنوعی ایجنتی در کاربردهای بلادرنگ (Real-time) هنوز با چالش‌هایی روبه‌رو است.</p>
+<p>فرآیندهای استدلال و برنامه‌ریزی می‌توانند تأخیر (Latency) ایجاد کنند و همین آن را برای بازی‌های پرسرعتی مانند <em>Doom</em> یا <em>Super Mario Bros.</em> نامناسب می‌سازد.</p>
+<p>پروژه <a href="https://www.twitch.tv/claudeplayspokemon" target="_blank" rel="noopener"><em>Claude Plays Pokémon</em></a> را در نظر بگیرید. اگر تعداد توکن‌های لازم برای <strong>فکر کردن</strong> را با توکن‌های لازم برای <strong>عمل کردن</strong> جمع بزنید، روشن می‌شود که برای امکان‌پذیر شدن بازی بلادرنگ به راهبردهای رمزگشایی (Decoding) کاملاً متفاوتی نیاز داریم.</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit3/claude-plays-pokemon.png" alt="کلود در حال بازی پوکمون" width="100%"/>
+</div>
+<p>بیشتر بازی‌ها باید با حدود ۳۰ فریم بر ثانیه (FPS) اجرا شوند؛ یعنی یک ایجنت بلادرنگ باید ۳۰ بار در ثانیه عمل کند، که با LLMهای ایجنتی امروزی شدنی نیست.</p>
+<p>در عوض، بازی‌های نوبتی (Turn-based) مانند <em>پوکمون</em> گزینه‌های ایده‌آلی هستند، چون به هوش مصنوعی زمان کافی برای سبک‌سنگین کردن و اتخاذ تصمیم‌های استراتژیک می‌دهند.</p>
+<p>به همین دلیل در بخش بعد، ایجنت هوش مصنوعی خودتان را می‌سازید تا در مبارزات نوبتی به سبک پوکمون شرکت کند، و حتی خودتان هم آن را به چالش می‌کشید. شروع کنیم!</p>
+<nav class="pager"><a href="02 - وضعیت کنونی LLM در بازی‌ها.html"><span>درس قبلی</span><strong>→ وضعیت کنونی LLM در بازی‌ها</strong></a><a class="next" href="04 - ساخت ایجنت مبارز پوکمون.html"><span>درس بعدی</span><strong>ساخت ایجنت مبارز پوکمون ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

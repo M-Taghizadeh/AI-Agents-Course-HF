@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ساخت ایجنت مبارز پوکمون | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../assets/vendor/highlight.min.js"></script>
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">امتیازی ۳</div>
+    <div class="chapter-name">ایجنت‌های هوش مصنوعی در بازی‌ها</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">★۳</span><span class="toc-title">نبرد پوکمون با ایجنت</span><span class="toc-count">۶</span></summary>
+      <ol><li><a href="01 - مقدمه.html">مقدمه</a></li><li><a href="02 - وضعیت کنونی LLM در بازی‌ها.html">وضعیت کنونی LLM در بازی‌ها</a></li><li><a href="03 - از مدل زبانی تا ایجنت در بازی.html">از مدل زبانی تا ایجنت در بازی</a></li><li><a href="04 - ساخت ایجنت مبارز پوکمون.html" class="active">ساخت ایجنت مبارز پوکمون</a></li><li><a href="05 - اجرای ایجنت در نبرد آنلاین.html">اجرای ایجنت در نبرد آنلاین</a></li><li><a href="06 - جمع‌بندی بخش امتیازی ۳.html">جمع‌بندی بخش امتیازی ۳</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../index.html">خانه</a><span>/</span><span>بخش امتیازی ۳ — ایجنت‌ها در بازی‌ها</span><span>/</span><span>ساخت ایجنت مبارز پوکمون</span></div>
+<h1>ساخت ایجنت مبارز پوکمون (Build Your Own Pokémon Battle Agent)</h1>
+<p>حالا که پتانسیل‌ها و محدودیت‌های هوش مصنوعی ایجنتی در بازی‌ها را بررسی کردید، وقت دست‌به‌کار شدن است. در این بخش، با استفاده از هرآنچه در طول دوره آموخته‌اید، <strong>ایجنت هوش مصنوعی خودتان را می‌سازید تا در مبارزات نوبتی به سبک پوکمون بجنگد</strong>.</p>
+<p>سیستم را به چهار بلوک سازنده کلیدی تقسیم می‌کنیم:</p>
+<ul>
+  <li><strong>Poke-env:</strong> یک کتابخانه پایتونی که برای آموزش بات‌های پوکمونِ قانون‌محور (Rule-based) یا مبتنی بر یادگیری تقویتی (Reinforcement Learning) طراحی شده است.</li>
+  <li><strong>Pokémon Showdown:</strong> یک شبیه‌ساز آنلاین مبارزه که ایجنت شما در آن خواهد جنگید.</li>
+  <li><strong>LLMAgentBase:</strong> یک کلاس پایتونی سفارشی که ما ساخته‌ایم تا LLM شما را به محیط مبارزه Poke-env وصل کند.</li>
+  <li><strong>TemplateAgent:</strong> یک قالب اولیه که برای ساخت ایجنت مبارز منحصربه‌فرد خودتان تکمیلش می‌کنید.</li>
+</ul>
+<p>بیایید هر یک از این اجزا را با جزئیات بیشتری بررسی کنیم.</p>
+
+<h2>🧠 Poke-env</h2>
+<div class="flex justify-center">
+<img src="https://github.com/hsahovic/poke-env/raw/master/rl-gif.gif" alt="تصویر متحرک یک مبارزه" width="100%"/>
+</div>
+<p><a href="https://github.com/hsahovic/poke-env" target="_blank" rel="noopener">Poke-env</a> یک رابط پایتونی است که در اصل توسط <a href="https://huggingface.co/hsahovic" target="_blank" rel="noopener">Haris Sahovic</a> برای آموزش بات‌های یادگیری تقویتی ساخته شده، اما ما آن را برای هوش مصنوعی ایجنتی بازتعریف کرده‌ایم. این کتابخانه به ایجنت شما اجازه می‌دهد از طریق یک API ساده با Pokémon Showdown تعامل کند.</p>
+<p>این کتابخانه کلاسی به نام <code>Player</code> فراهم می‌کند که ایجنت شما از آن ارث‌بری (Inherit) می‌کند و هرآنچه برای ارتباط با رابط گرافیکی لازم است را پوشش می‌دهد.</p>
+<p><strong>مستندات:</strong> <a href="https://poke-env.readthedocs.io/en/stable/" target="_blank" rel="noopener">poke-env.readthedocs.io</a><br>
+<strong>مخزن کد:</strong> <a href="https://github.com/hsahovic/poke-env" target="_blank" rel="noopener">github.com/hsahovic/poke-env</a></p>
+
+<h2>⚔️ Pokémon Showdown</h2>
+<p><a href="https://pokemonshowdown.com/" target="_blank" rel="noopener">Pokémon Showdown</a> یک شبیه‌ساز مبارزه <a href="https://github.com/smogon/Pokemon-Showdown" target="_blank" rel="noopener">متن‌باز</a> است که ایجنت شما در آن مبارزه‌های زنده پوکمون انجام می‌دهد. این شبیه‌ساز یک رابط کامل برای شبیه‌سازی و نمایش بلادرنگ نبردها فراهم می‌کند. در چالش ما، بات شما دقیقاً مثل یک بازیکن انسانی عمل می‌کند و نوبت‌به‌نوبت حرکت انتخاب می‌کند.</p>
+<p>ما سروری را راه‌اندازی کرده‌ایم که همه شرکت‌کنندگان برای مبارزه از آن استفاده می‌کنند. ببینیم چه کسی بهترین ایجنت مبارز هوش مصنوعی را می‌سازد!</p>
+<p><strong>مخزن کد:</strong> <a href="https://github.com/smogon/Pokemon-Showdown" target="_blank" rel="noopener">github.com/smogon/Pokemon-Showdown</a><br>
+<strong>وب‌سایت:</strong> <a href="https://pokemonshowdown.com/" target="_blank" rel="noopener">pokemonshowdown.com</a></p>
+
+<h2>🔌 LLMAgentBase</h2>
+<p>کلاس <code>LLMAgentBase</code> یک کلاس پایتونی است که کلاس <code>Player</code> از <strong>Poke-env</strong> را توسعه می‌دهد. این کلاس نقش پل میان <strong>LLM</strong> شما و <strong>شبیه‌ساز مبارزه پوکمون</strong> را دارد؛ قالب‌بندی ورودی/خروجی را انجام می‌دهد و زمینه (Context) مبارزه را حفظ می‌کند.</p>
+<p>این ایجنت پایه مجموعه‌ای از ابزارها (تعریف‌شده در <code>STANDARD_TOOL_SCHEMA</code>) برای تعامل با محیط فراهم می‌کند، از جمله:</p>
+<ul>
+  <li><code>choose_move</code>: برای انتخاب یک حمله در طول مبارزه</li>
+  <li><code>choose_switch</code>: برای تعویض پوکمون</li>
+</ul>
+<p>LLM باید از این ابزارها برای تصمیم‌گیری در طول مسابقه استفاده کند.</p>
+
+<h3>🧠 منطق اصلی</h3>
+<ul>
+  <li><code>choose_move(battle: Battle)</code>: متد اصلی که در هر نوبت فراخوانی می‌شود. یک شیء <code>Battle</code> دریافت می‌کند و بر اساس خروجی LLM، یک رشته‌ی دستور (Action) برمی‌گرداند.</li>
+</ul>
+
+<h3>🔧 متدهای داخلی کلیدی</h3>
+<ul>
+  <li><code>_format_battle_state(battle)</code>: وضعیت فعلی مبارزه را به رشته تبدیل می‌کند تا برای ارسال به LLM مناسب باشد.</li>
+  <li><code>_find_move_by_name(battle, move_name)</code>: یک حرکت را با نامش پیدا می‌کند و در پاسخ‌های LLM که <code>choose_move</code> را فراخوانی می‌کنند به کار می‌رود.</li>
+  <li><code>_find_pokemon_by_name(battle, pokemon_name)</code>: بر اساس دستور تعویضِ LLM، پوکمون مشخصی را برای جایگزینی پیدا می‌کند.</li>
+  <li><code>_get_llm_decision(battle_state)</code>: این متد در کلاس پایه انتزاعی (Abstract) است. باید آن را در ایجنت خودتان پیاده‌سازی کنید (بخش بعد را ببینید)، جایی که مشخص می‌کنید چگونه از LLM پرسش شود و پاسخ آن تجزیه (Parse) شود.</li>
+</ul>
+<p>در ادامه بخشی از کد را می‌بینید که نشان می‌دهد فرآیند تصمیم‌گیری چگونه کار می‌کند:</p>
+
+<div class="code"><pre dir="ltr"><code class="language-python">STANDARD_TOOL_SCHEMA = {
+    "choose_move": {
+        ...
+    },
+    "choose_switch": {
+        ...
+    },
+}
+
+class LLMAgentBase(Player):
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.standard_tools = STANDARD_TOOL_SCHEMA
+        self.battle_history = []
+
+    def _format_battle_state(self, battle: Battle) -&gt; str:
+        active_pkmn = battle.active_pokemon
+        active_pkmn_info = f"Your active Pokemon: {active_pkmn.species} " \
+                           f"(Type: {'/'.join(map(str, active_pkmn.types))}) " \
+                           f"HP: {active_pkmn.current_hp_fraction * 100:.1f}% " \
+                           f"Status: {active_pkmn.status.name if active_pkmn.status else 'None'} " \
+                           f"Boosts: {active_pkmn.boosts}"
+
+        opponent_pkmn = battle.opponent_active_pokemon
+        opp_info_str = "Unknown"
+        if opponent_pkmn:
+            opp_info_str = f"{opponent_pkmn.species} " \
+                           f"(Type: {'/'.join(map(str, opponent_pkmn.types))}) " \
+                           f"HP: {opponent_pkmn.current_hp_fraction * 100:.1f}% " \
+                           f"Status: {opponent_pkmn.status.name if opponent_pkmn.status else 'None'} " \
+                           f"Boosts: {opponent_pkmn.boosts}"
+        opponent_pkmn_info = f"Opponent's active Pokemon: {opp_info_str}"
+
+        available_moves_info = "Available moves:\n"
+        if battle.available_moves:
+            available_moves_info += "\n".join(
+                [f"- {move.id} (Type: {move.type}, BP: {move.base_power}, Acc: {move.accuracy}, PP: {move.current_pp}/{move.max_pp}, Cat: {move.category.name})"
+                 for move in battle.available_moves]
+            )
+        else:
+             available_moves_info += "- None (Must switch or Struggle)"
+
+        available_switches_info = "Available switches:\n"
+        if battle.available_switches:
+              available_switches_info += "\n".join(
+                  [f"- {pkmn.species} (HP: {pkmn.current_hp_fraction * 100:.1f}%, Status: {pkmn.status.name if pkmn.status else 'None'})"
+                   for pkmn in battle.available_switches]
+              )
+        else:
+            available_switches_info += "- None"
+
+        state_str = f"{active_pkmn_info}\n" \
+                    f"{opponent_pkmn_info}\n\n" \
+                    f"{available_moves_info}\n\n" \
+                    f"{available_switches_info}\n\n" \
+                    f"Weather: {battle.weather}\n" \
+                    f"Terrains: {battle.fields}\n" \
+                    f"Your Side Conditions: {battle.side_conditions}\n" \
+                    f"Opponent Side Conditions: {battle.opponent_side_conditions}"
+        return state_str.strip()
+
+    def _find_move_by_name(self, battle: Battle, move_name: str) -&gt; Optional[Move]:
+        normalized_name = normalize_name(move_name)
+        # Prioritize exact ID match
+        for move in battle.available_moves:
+            if move.id == normalized_name:
+                return move
+        # Fallback: Check display name (less reliable)
+        for move in battle.available_moves:
+            if move.name.lower() == move_name.lower():
+                print(f"Warning: Matched move by display name '{move.name}' instead of ID '{move.id}'. Input was '{move_name}'.")
+                return move
+        return None
+
+    def _find_pokemon_by_name(self, battle: Battle, pokemon_name: str) -&gt; Optional[Pokemon]:
+        normalized_name = normalize_name(pokemon_name)
+        for pkmn in battle.available_switches:
+            # Normalize the species name for comparison
+            if normalize_name(pkmn.species) == normalized_name:
+                return pkmn
+        return None
+
+    async def choose_move(self, battle: Battle) -&gt; str:
+        battle_state_str = self._format_battle_state(battle)
+        decision_result = await self._get_llm_decision(battle_state_str)
+        print(decision_result)
+        decision = decision_result.get("decision")
+        error_message = decision_result.get("error")
+        action_taken = False
+        fallback_reason = ""
+
+        if decision:
+            function_name = decision.get("name")
+            args = decision.get("arguments", {})
+            if function_name == "choose_move":
+                move_name = args.get("move_name")
+                if move_name:
+                    chosen_move = self._find_move_by_name(battle, move_name)
+                    if chosen_move and chosen_move in battle.available_moves:
+                        action_taken = True
+                        chat_msg = f"AI Decision: Using move '{chosen_move.id}'."
+                        print(chat_msg)
+                        return self.create_order(chosen_move)
+                    else:
+                        fallback_reason = f"LLM chose unavailable/invalid move '{move_name}'."
+                else:
+                     fallback_reason = "LLM 'choose_move' called without 'move_name'."
+            elif function_name == "choose_switch":
+                pokemon_name = args.get("pokemon_name")
+                if pokemon_name:
+                    chosen_switch = self._find_pokemon_by_name(battle, pokemon_name)
+                    if chosen_switch and chosen_switch in battle.available_switches:
+                        action_taken = True
+                        chat_msg = f"AI Decision: Switching to '{chosen_switch.species}'."
+                        print(chat_msg)
+                        return self.create_order(chosen_switch)
+                    else:
+                        fallback_reason = f"LLM chose unavailable/invalid switch '{pokemon_name}'."
+                else:
+                    fallback_reason = "LLM 'choose_switch' called without 'pokemon_name'."
+            else:
+                fallback_reason = f"LLM called unknown function '{function_name}'."
+
+        if not action_taken:
+            if not fallback_reason:
+                 if error_message:
+                     fallback_reason = f"API Error: {error_message}"
+                 elif decision is None:
+                      fallback_reason = "LLM did not provide a valid function call."
+                 else:
+                      fallback_reason = "Unknown error processing LLM decision."
+
+            print(f"Warning: {fallback_reason} Choosing random action.")
+
+            if battle.available_moves or battle.available_switches:
+                 return self.choose_random_move(battle)
+            else:
+                 print("AI Fallback: No moves or switches available. Using Struggle/Default.")
+                 return self.choose_default_move(battle)
+
+    async def _get_llm_decision(self, battle_state: str) -&gt; Dict[str, Any]:
+        raise NotImplementedError("Subclasses must implement _get_llm_decision")</code></pre></div>
+
+<p><strong>کد کامل:</strong> <a href="https://huggingface.co/spaces/Jofthomas/twitch_streaming/blob/main/agents.py" target="_blank" rel="noopener">agents.py</a></p>
+
+<h2>🧪 TemplateAgent</h2>
+<p>حالا به بخش جذاب می‌رسیم! با تکیه بر <code>LLMAgentBase</code> وقت آن است که ایجنت خودتان را با استراتژی خودتان پیاده‌سازی کنید تا در جدول امتیازات (Leaderboard) بالا بروید.</p>
+<p>شما از این قالب شروع می‌کنید و منطق خودتان را می‌سازید. ما همچنین سه <a href="https://huggingface.co/spaces/Jofthomas/twitch_streaming/blob/main/agents.py" target="_blank" rel="noopener">نمونه کامل</a> با استفاده از مدل‌های <strong>OpenAI</strong>، <strong>Mistral</strong> و <strong>Gemini</strong> آماده کرده‌ایم تا راهنمای شما باشند.</p>
+<p>این نسخه ساده‌شده‌ی قالب است:</p>
+
+<div class="code"><pre dir="ltr"><code class="language-python">class TemplateAgent(LLMAgentBase):
+    """Uses Template AI API for decisions."""
+    def __init__(self, api_key: str = None, model: str = "model-name", *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.model = model
+        self.template_client = TemplateModelProvider(api_key=...)
+        self.template_tools = list(self.standard_tools.values())
+
+    async def _get_llm_decision(self, battle_state: str) -&gt; Dict[str, Any]:
+        """Sends state to the LLM and gets back the function call decision."""
+        system_prompt = (
+            "You are a ..."
+        )
+        user_prompt = f"..."
+
+        try:
+            response = await self.template_client.chat.completions.create(
+                model=self.model,
+                messages=[
+                    {"role": "system", "content": system_prompt},
+                    {"role": "user", "content": user_prompt},
+                ],
+            )
+            message = response.choices[0].message
+            
+            return {"decision": {"name": function_name, "arguments": arguments}}
+
+        except Exception as e:
+            print(f"Unexpected error during call: {e}")
+            return {"error": f"Unexpected error: {e}"}</code></pre></div>
+
+<p>این کد به‌صورت آماده اجرا نمی‌شود؛ یک طرح اولیه (Blueprint) برای منطق سفارشی شماست.</p>
+<p>اکنون که همه قطعات آماده‌اند، نوبت شماست که یک ایجنت رقابتی بسازید. در بخش بعد نشان می‌دهیم چگونه ایجنت خود را روی سرور ما مستقر کنید و به‌صورت بلادرنگ با دیگران بجنگید.</p>
+<p><strong>بگذارید نبرد آغاز شود!</strong> 🔥</p>
+<nav class="pager"><a href="03 - از مدل زبانی تا ایجنت در بازی.html"><span>درس قبلی</span><strong>→ از مدل زبانی تا ایجنت در بازی</strong></a><a class="next" href="05 - اجرای ایجنت در نبرد آنلاین.html"><span>درس بعدی</span><strong>اجرای ایجنت در نبرد آنلاین ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

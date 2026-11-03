@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>وضعیت کنونی LLM در بازی‌ها | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../assets/vendor/highlight.min.js"></script>
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">امتیازی ۳</div>
+    <div class="chapter-name">ایجنت‌های هوش مصنوعی در بازی‌ها</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">★۳</span><span class="toc-title">نبرد پوکمون با ایجنت</span><span class="toc-count">۶</span></summary>
+      <ol><li><a href="01 - مقدمه.html">مقدمه</a></li><li><a href="02 - وضعیت کنونی LLM در بازی‌ها.html" class="active">وضعیت کنونی LLM در بازی‌ها</a></li><li><a href="03 - از مدل زبانی تا ایجنت در بازی.html">از مدل زبانی تا ایجنت در بازی</a></li><li><a href="04 - ساخت ایجنت مبارز پوکمون.html">ساخت ایجنت مبارز پوکمون</a></li><li><a href="05 - اجرای ایجنت در نبرد آنلاین.html">اجرای ایجنت در نبرد آنلاین</a></li><li><a href="06 - جمع‌بندی بخش امتیازی ۳.html">جمع‌بندی بخش امتیازی ۳</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../index.html">خانه</a><span>/</span><span>بخش امتیازی ۳ — ایجنت‌ها در بازی‌ها</span><span>/</span><span>وضعیت کنونی LLM در بازی‌ها</span></div>
+<h1>وضعیت کنونی استفاده از مدل‌های زبانی در بازی‌ها</h1>
+<p>برای اینکه بدانید در این حوزه چقدر پیشرفت شده است، سه نمونه آزمایشی فنی (Tech Demo) و یک بازی منتشرشده را بررسی می‌کنیم که ادغام LLMها در بازی را نشان می‌دهند.</p>
+
+<h2>🕵️‍♂️ پروتکل مخفی (Covert Protocol) — همکاری NVIDIA و Inworld AI</h2>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit3/covert-protocol.jpg" alt="Covert Protocol" width="100%"/>
+</div>
+<p>دموی <em>Covert Protocol</em> که در GDC 2024 رونمایی شد، شما را در نقش یک کارآگاه خصوصی قرار می‌دهد.</p>
+<p>نکته جذاب این دمو، حضور NPCهای مبتنی بر هوش مصنوعی است که به‌صورت بلادرنگ به پرسش‌های شما پاسخ می‌دهند و بر اساس تعامل‌های شما، روند داستان را تغییر می‌دهند.</p>
+<p>این دمو روی موتور Unreal Engine 5 ساخته شده و از بستر Avatar Cloud Engine (ACE) شرکت NVIDIA و هوش مصنوعی Inworld برای خلق تعامل‌های واقع‌گرایانه با شخصیت‌ها استفاده می‌کند.</p>
+<p>اطلاعات بیشتر 👈 <a href="https://inworld.ai/blog/nvidia-inworld-ai-demo-on-device-capabilities" target="_blank" rel="noopener">وبلاگ Inworld AI</a></p>
+
+<h2>🤖 شخصیت‌های نسل جدید (NEO NPCs) — شرکت Ubisoft</h2>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit3/neo-npc.jpeg" alt="NEO NPC" width="100%"/>
+</div>
+<p>یوبی‌سافت نیز در GDC 2024 پروژه <em>NEO NPCs</em> را معرفی کرد؛ پروتوتایپی که NPCهای مبتنی بر هوش مصنوعی مولد (Generative AI) را به نمایش می‌گذارد.</p>
+<p>این شخصیت‌ها می‌توانند محیط پیرامون خود را درک کنند، تعامل‌های گذشته را به خاطر بسپارند و با بازیکن گفتگوهای معنادار داشته باشند.</p>
+<p>ایده اصلی، ساختن دنیاهای بازیِ غوطه‌ورکننده‌تر و پاسخگوتر است که در آن‌ها بازیکن بتواند تعامل واقعی با NPCها داشته باشد.</p>
+<p>اطلاعات بیشتر 👈 <a href="https://inworld.ai/blog/gdc-2024" target="_blank" rel="noopener">وبلاگ Inworld AI</a></p>
+
+<h2>⚔️ بازی Mecha BREAK با فناوری ACE شرکت NVIDIA</h2>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit3/mecha-break.jpg" alt="Mecha BREAK" width="100%"/>
+</div>
+<p><em>Mecha BREAK</em>، یک بازی مبارزه‌ای رباتیک چندنفره در دست انتشار است که فناوری ACE انویدیا را برای زنده کردن NPCهای مبتنی بر هوش مصنوعی به کار می‌گیرد.</p>
+<p>بازیکنان می‌توانند با زبان طبیعی با این شخصیت‌ها تعامل کنند و NPCها به لطف ادغام GPT-4o می‌توانند بازیکنان و اشیاء را از طریق وب‌کم تشخیص دهند. این نوآوری وعده یک تجربه بازی غوطه‌ورکننده‌تر و تعاملی‌تر را می‌دهد.</p>
+<p>اطلاعات بیشتر 👈 <a href="https://blogs.nvidia.com/blog/digital-human-technology-mecha-break/" target="_blank" rel="noopener">وبلاگ NVIDIA</a></p>
+
+<h2>🧛‍♂️ بازی <em>Suck Up!</em> اثر Proxima Enterprises</h2>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit3/suck-up.jpg" alt="Suck Up" width="100%"/>
+</div>
+<p>در نهایت، <em>Suck Up!</em> یک بازی منتشرشده است که در آن نقش یک خون‌آشام را بازی می‌کنید و تلاش می‌کنید <strong>با متقاعد کردن NPCهای مبتنی بر هوش مصنوعی، از آن‌ها دعوت به ورود به خانه‌شان بگیرید.</strong></p>
+<p>هر شخصیت توسط هوش مصنوعی مولد هدایت می‌شود و همین، تعامل‌هایی پویا و غیرقابل پیش‌بینی ایجاد می‌کند.</p>
+<p>اطلاعات بیشتر 👈 <a href="https://www.playsuckup.com/" target="_blank" rel="noopener">وب‌سایت رسمی Suck Up!</a></p>
+
+<h2>صبر کنید... ایجنت‌ها کجایند؟</h2>
+<p>پس از دیدن این نمونه‌ها شاید از خودتان بپرسید: «این مثال‌ها کاربرد LLM در بازی را نشان می‌دهند، اما به نظر نمی‌رسد ایجنت در آن‌ها نقشی داشته باشد. پس تفاوت چیست و ایجنت‌ها چه قابلیت‌های اضافه‌ای به همراه می‌آورند؟»</p>
+<p>نگران نباشید؛ این دقیقاً همان چیزی است که در بخش بعد بررسی می‌کنیم.</p>
+<nav class="pager"><a href="01 - مقدمه.html"><span>درس قبلی</span><strong>→ مقدمه</strong></a><a class="next" href="03 - از مدل زبانی تا ایجنت در بازی.html"><span>درس بعدی</span><strong>از مدل زبانی تا ایجنت در بازی ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

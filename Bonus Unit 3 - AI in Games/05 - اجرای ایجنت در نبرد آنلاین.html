@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اجرای ایجنت در نبرد آنلاین | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../assets/vendor/highlight.min.js"></script>
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">امتیازی ۳</div>
+    <div class="chapter-name">ایجنت‌های هوش مصنوعی در بازی‌ها</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">★۳</span><span class="toc-title">نبرد پوکمون با ایجنت</span><span class="toc-count">۶</span></summary>
+      <ol><li><a href="01 - مقدمه.html">مقدمه</a></li><li><a href="02 - وضعیت کنونی LLM در بازی‌ها.html">وضعیت کنونی LLM در بازی‌ها</a></li><li><a href="03 - از مدل زبانی تا ایجنت در بازی.html">از مدل زبانی تا ایجنت در بازی</a></li><li><a href="04 - ساخت ایجنت مبارز پوکمون.html">ساخت ایجنت مبارز پوکمون</a></li><li><a href="05 - اجرای ایجنت در نبرد آنلاین.html" class="active">اجرای ایجنت در نبرد آنلاین</a></li><li><a href="06 - جمع‌بندی بخش امتیازی ۳.html">جمع‌بندی بخش امتیازی ۳</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../index.html">خانه</a><span>/</span><span>بخش امتیازی ۳ — ایجنت‌ها در بازی‌ها</span><span>/</span><span>اجرای ایجنت در نبرد آنلاین</span></div>
+<h1>اجرای ایجنت مبارز پوکمون (Launching Your Pokémon Battle Agent)</h1>
+<p>وقت مبارزه است! ⚡️</p>
+
+<h2>با ایجنت استریم مبارزه کنید!</h2>
+<p>اگر حوصله ساختن ایجنت خودتان را ندارید و فقط کنجکاو توان رزمی ایجنت‌ها در پوکمون هستید، ما یک پخش زنده خودکار در <a href="https://www.twitch.tv/jofthomas" target="_blank" rel="noopener">Twitch</a> برگزار می‌کنیم.</p>
+<div class="video">
+  <iframe src="https://jofthomas-twitch-streaming.hf.space" frameborder="0" width="100%" height="600"></iframe>
+</div>
+<p>برای مبارزه با ایجنتِ استریم می‌توانید مراحل زیر را انجام دهید:</p>
+<ol>
+  <li>به <strong>Pokémon Showdown Space</strong> بروید: <a href="https://huggingface.co/spaces/Jofthomas/Pokemon_showdown" target="_blank" rel="noopener">لینک</a>.</li>
+  <li><strong>نام خود را انتخاب کنید</strong> (گوشه بالا-راست).</li>
+  <li><strong>نام کاربری ایجنتِ فعلی</strong> را پیدا کنید. در این بخش بررسی کنید:
+    <ul><li><strong>نمایشگر استریم:</strong> <a href="https://www.twitch.tv/jofthomas" target="_blank" rel="noopener">لینک</a></li></ul>
+  </li>
+  <li>آن نام کاربری را در Showdown Space <strong>جستجو کنید</strong> و <strong>دعوت به مبارزه (Battle Invitation)</strong> بفرستید.</li>
+</ol>
+<div class="callout">
+  <div class="callout-title">توجه</div>
+  <p>در هر لحظه فقط یک ایجنت آنلاین است! مطمئن شوید نام درست را انتخاب کرده‌اید.</p>
+</div>
+
+<h2>چالش ایجنت مبارز پوکمون (Pokémon Battle Agent Challenger)</h2>
+<p>اگر در بخش قبل ایجنت مبارز پوکمون خودتان را ساخته‌اید، احتمالاً می‌پرسید: <strong>چطور می‌توانم آن را در برابر دیگران بیازمایم؟</strong> بیایید ببینیم!</p>
+<p>برای این منظور یک <a href="https://huggingface.co/spaces/PShowdown/pokemon_agents" target="_blank" rel="noopener">Hugging Face Space</a> اختصاصی ساخته‌ایم:</p>
+<div class="video">
+  <iframe src="https://pshowdown-pokemon-agents.hf.space" frameborder="0" width="100%" height="600"></iframe>
+</div>
+<p>این Space به <strong>سرور Pokémon Showdown</strong> اختصاصی ما متصل است؛ جایی که ایجنت شما می‌تواند در نبردهای حماسی مبتنی بر هوش مصنوعی با دیگران رقابت کند.</p>
+
+<h3>چگونه ایجنت خود را اجرا کنید</h3>
+<p>برای زنده کردن ایجنتتان در میدان نبرد، این مراحل را دنبال کنید:</p>
+<ol>
+  <li><strong>Space را Duplicate کنید.</strong><br>
+  روی منوی سه‌نقطه در بالا-راست Space کلیک کنید و گزینه «Duplicate this Space» را انتخاب کنید.</li>
+  <li><strong>کد ایجنت خود را به <code>agents.py</code> اضافه کنید.</strong><br>
+  فایل را باز کنید و پیاده‌سازی ایجنت خود را در آن قرار دهید. می‌توانید از این <a href="https://huggingface.co/spaces/PShowdown/pokemon_agents/blob/main/agents.py" target="_blank" rel="noopener">نمونه</a> پیروی کنید یا برای راهنمایی، <a href="https://huggingface.co/spaces/PShowdown/pokemon_agents/tree/main" target="_blank" rel="noopener">ساختار پروژه</a> را ببینید.</li>
+  <li><strong>ایجنت خود را در <code>app.py</code> ثبت کنید.</strong><br>
+  نام و منطق ایجنتتان را به منوی بازشو (Dropdown) اضافه کنید. برای الهام گرفتن به <a href="https://huggingface.co/spaces/PShowdown/pokemon_agents/blob/main/app.py" target="_blank" rel="noopener">این بخش از کد</a> مراجعه کنید.</li>
+  <li><strong>ایجنت خود را انتخاب کنید.</strong><br>
+  پس از افزودن، ایجنت شما در منوی بازشوی «Select Agent» نمایش داده می‌شود. آن را از فهرست برگزینید! ✅</li>
+  <li><strong>نام کاربری Pokémon Showdown خود را وارد کنید.</strong><br>
+  مطمئن شوید نام کاربری با نامی که در ورودی <strong>«Choose name»</strong> داخل iframe نمایش داده می‌شود یکسان است. همچنین می‌توانید با حساب رسمی خود وصل شوید.</li>
+  <li><strong>روی «Send Battle Invitation» کلیک کنید.</strong><br>
+  ایجنت شما برای حریف انتخاب‌شده دعوت‌نامه می‌فرستد. این دعوت باید روی صفحه ظاهر شود.</li>
+  <li><strong>مبارزه را بپذیرید و از نبرد لذت ببرید!</strong><br>
+  بگذارید نبرد آغاز شود! باشد که باهوش‌ترین ایجنت برنده شود.</li>
+</ol>
+<p>آماده‌اید ثمره کارتان را در عمل ببینید؟ بگذارید رویارویی هوش‌های مصنوعی آغاز شود! 🥊</p>
+<nav class="pager"><a href="04 - ساخت ایجنت مبارز پوکمون.html"><span>درس قبلی</span><strong>→ ساخت ایجنت مبارز پوکمون</strong></a><a class="next" href="06 - جمع‌بندی بخش امتیازی ۳.html"><span>درس بعدی</span><strong>جمع‌بندی بخش امتیازی ۳ ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>
