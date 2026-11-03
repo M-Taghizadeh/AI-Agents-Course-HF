@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>آزمون کوتاه ۲ | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../assets/vendor/highlight.min.js"></script>
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۱</div>
+    <div class="chapter-name">مقدمه‌ای بر ایجنت‌ها</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۱</span><span class="toc-title">مبانی و مفاهیم ایجنت‌ها</span><span class="toc-count">۱۴</span></summary>
+      <ol><li><a href="01 - مقدمه.html">مقدمه</a></li><li><a href="02 - ایجنت چیست؟.html">ایجنت چیست؟</a></li><li><a href="03 - آزمون کوتاه ۱.html">آزمون کوتاه ۱</a></li><li><a href="04 - مدل‌های زبانی بزرگ چیستند؟.html">مدل‌های زبانی بزرگ چیستند؟</a></li><li><a href="05 - پیام‌ها و توکن‌های ویژه.html">پیام‌ها و توکن‌های ویژه</a></li><li><a href="06 - ابزارها چه هستند؟.html" class="active">ابزارها چه هستند؟</a></li><li><a href="07 - چرخه تفکر، اقدام و مشاهده.html">چرخه تفکر، اقدام و مشاهده</a></li><li><a href="08 - تفکر و رویکرد ReAct.html">تفکر و رویکرد ReAct</a></li><li><a href="09 - اقدام‌ها و رویکرد Stop and Parse.html">اقدام‌ها و رویکرد Stop and Parse</a></li><li><a href="10 - مشاهدات و بازخورد محیط.html">مشاهدات و بازخورد محیط</a></li><li><a href="11 - کتابخانه Dummy Agent.html">کتابخانه Dummy Agent</a></li><li><a href="12 - ساخت اولین ایجنت با smolagents.html">ساخت اولین ایجنت با smolagents</a></li><li><a href="13 - آزمون پایانی فصل ۱.html">آزمون پایانی فصل ۱</a></li><li><a href="14 - جمع‌بندی فصل ۱.html">جمع‌بندی فصل ۱</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../index.html">خانه</a><span>/</span><span>۰۱ — مبانی ایجنت‌ها</span><span>/</span><span>آزمون کوتاه ۲</span></div>
+<h1>مرور سریع (بدون نمره) — آزمون کوتاه ۲ (Quick Self-Check)</h1>
+<p>چی؟! یک آزمون دیگر؟ می‌دانیم، می‌دانیم ... 😅 اما این آزمون کوتاه و بدون نمره اینجاست تا <strong>به تثبیت مفاهیم کلیدی‌ای که همین الان یاد گرفتید کمک کند</strong>.</p>
+<p>این آزمون مدل‌های زبانی بزرگ (LLMها)، سیستم پیام‌ها و ابزارها را پوشش می‌دهد؛ اجزای ضروری برای درک و ساخت ایجنت‌های هوش مصنوعی.</p>
+<hr>
+<h3>سوال ۱: کدام گزینه بهتر از بقیه یک ابزار هوش مصنوعی را توصیف می‌کند؟</h3>
+<div class="quiz">
+  <details class="choice no">
+    <summary>فرآیندی که فقط پاسخ‌های متنی تولید می‌کند</summary>
+    <div class="explain"><b>نادرست:</b></div>
+  </details>
+  <details class="choice ok">
+    <summary>یک فرآیند اجرایی یا API خارجی که به ایجنت‌ها اجازه می‌دهد وظایف مشخصی را انجام دهند و با محیط‌های خارجی تعامل کنند</summary>
+    <div class="explain"><b>درست است!</b> ابزارها توابع اجرایی هستند که ایجنت‌ها می‌توانند برای انجام وظایف مشخص و تعامل با محیط‌های خارجی از آن‌ها استفاده کنند.</div>
+  </details>
+  <details class="choice no">
+    <summary>قابلیتی که مکالمه‌های ایجنت را ذخیره می‌کند</summary>
+    <div class="explain"><b>نادرست:</b></div>
+  </details>
+</div>
+
+<h3>سوال ۲: ایجنت‌های هوش مصنوعی چگونه از ابزارها به عنوان شکلی از «اقدام» در یک محیط استفاده می‌کنند؟</h3>
+<div class="quiz">
+  <details class="choice no">
+    <summary>با انتظار منفعلانه برای دستورهای کاربر</summary>
+    <div class="explain"><b>نادرست:</b></div>
+  </details>
+  <details class="choice no">
+    <summary>با استفاده فقط از پاسخ‌های از پیش برنامه‌ریزی‌شده</summary>
+    <div class="explain"><b>نادرست:</b></div>
+  </details>
+  <details class="choice ok">
+    <summary>با درخواست از LLM برای تولید کد فراخوانی ابزار در زمان مناسب و اجرای ابزارها از طرف مدل</summary>
+    <div class="explain"><b>درست است!</b> ایجنت‌ها می‌توانند ابزارها را فراخوانی کنند و از استدلال برای برنامه‌ریزی و برنامه‌ریزی مجدد بر اساس اطلاعات به‌دست‌آمده استفاده کنند.</div>
+  </details>
+</div>
+
+<h3>سوال ۳: مدل زبانی بزرگ (LLM) چیست؟</h3>
+<div class="quiz">
+  <details class="choice no">
+    <summary>یک چت‌بات ساده که برای پاسخ دادن با جواب‌های از پیش تعریف‌شده طراحی شده است</summary>
+    <div class="explain"><b>نادرست:</b></div>
+  </details>
+  <details class="choice ok">
+    <summary>یک مدل یادگیری عمیق که روی حجم زیادی از متن آموزش دیده تا زبان شبیه انسان را بفهمد و تولید کند</summary>
+    <div class="explain"><b>درست است!</b></div>
+  </details>
+  <details class="choice no">
+    <summary>یک هوش مصنوعی مبتنی بر قاعده که از دستورهای از پیش تعریف‌شده سخت‌گیرانه پیروی می‌کند</summary>
+    <div class="explain"><b>نادرست:</b></div>
+  </details>
+</div>
+
+<h3>سوال ۴: کدام گزینه بهتر از بقیه نقش توکن‌های ویژه در LLMها را توصیف می‌کند؟</h3>
+<div class="quiz">
+  <details class="choice no">
+    <summary>آن‌ها کلمات اضافه‌ای هستند که در واژگان مدل ذخیره شده‌اند تا کیفیت تولید متن را بهبود دهند</summary>
+    <div class="explain"><b>نادرست:</b></div>
+  </details>
+  <details class="choice ok">
+    <summary>آن‌ها کارکردهای مشخصی دارند، مثل نشان دادن پایان یک دنباله (EOS) یا جدا کردن نقش‌های مختلف پیام در مدل‌های چت</summary>
+    <div class="explain"><b>درست است!</b></div>
+  </details>
+  <details class="choice no">
+    <summary>آن‌ها توکن‌هایی هستند که به‌طور تصادفی درج می‌شوند تا تنوع پاسخ‌ها بهبود یابد</summary>
+    <div class="explain"><b>نادرست:</b></div>
+  </details>
+</div>
+
+<h3>سوال ۵: مدل‌های چت هوش مصنوعی پیام‌های کاربر را در درون چگونه پردازش می‌کنند؟</h3>
+<div class="quiz">
+  <details class="choice no">
+    <summary>آن‌ها پیام‌ها را مستقیماً به عنوان دستورهای ساختارمند و بدون هیچ تبدیلی تفسیر می‌کنند</summary>
+    <div class="explain"><b>نادرست:</b></div>
+  </details>
+  <details class="choice ok">
+    <summary>آن‌ها پیام‌های کاربر را با اتصال پیام‌های سیستم، کاربر و دستیار به یک پرامپت فرمت‌شده تبدیل می‌کنند</summary>
+    <div class="explain"><b>درست است!</b></div>
+  </details>
+  <details class="choice no">
+    <summary>آن‌ها بر اساس مکالمه‌های قبلی، پاسخ‌ها را به‌طور تصادفی تولید می‌کنند</summary>
+    <div class="explain"><b>نادرست:</b></div>
+  </details>
+</div>
+<hr>
+<p>متوجه شدید؟ عالی! حالا بیایید <strong>به جریان کامل ایجنت بپردازیم و ساخت اولین ایجنت هوش مصنوعی خودمان را شروع کنیم!</strong></p>
+<nav class="pager"><a href="06 - ابزارها چه هستند؟.html"><span>درس قبلی</span><strong>→ ابزارها چه هستند؟</strong></a><a class="next" href="07 - چرخه تفکر، اقدام و مشاهده.html"><span>درس بعدی</span><strong>چرخه تفکر، اقدام و مشاهده ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

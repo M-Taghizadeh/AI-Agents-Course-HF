@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مدل‌های زبانی بزرگ چیستند؟ | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../assets/vendor/highlight.min.js"></script>
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۱</div>
+    <div class="chapter-name">مقدمه‌ای بر ایجنت‌ها</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۱</span><span class="toc-title">مبانی و مفاهیم ایجنت‌ها</span><span class="toc-count">۱۴</span></summary>
+      <ol><li><a href="01 - مقدمه.html">مقدمه</a></li><li><a href="02 - ایجنت چیست؟.html">ایجنت چیست؟</a></li><li><a href="03 - آزمون کوتاه ۱.html">آزمون کوتاه ۱</a></li><li><a href="04 - مدل‌های زبانی بزرگ چیستند؟.html" class="active">مدل‌های زبانی بزرگ چیستند؟</a></li><li><a href="05 - پیام‌ها و توکن‌های ویژه.html">پیام‌ها و توکن‌های ویژه</a></li><li><a href="06 - ابزارها چه هستند؟.html">ابزارها چه هستند؟</a></li><li><a href="07 - چرخه تفکر، اقدام و مشاهده.html">چرخه تفکر، اقدام و مشاهده</a></li><li><a href="08 - تفکر و رویکرد ReAct.html">تفکر و رویکرد ReAct</a></li><li><a href="09 - اقدام‌ها و رویکرد Stop and Parse.html">اقدام‌ها و رویکرد Stop and Parse</a></li><li><a href="10 - مشاهدات و بازخورد محیط.html">مشاهدات و بازخورد محیط</a></li><li><a href="11 - کتابخانه Dummy Agent.html">کتابخانه Dummy Agent</a></li><li><a href="12 - ساخت اولین ایجنت با smolagents.html">ساخت اولین ایجنت با smolagents</a></li><li><a href="13 - آزمون پایانی فصل ۱.html">آزمون پایانی فصل ۱</a></li><li><a href="14 - جمع‌بندی فصل ۱.html">جمع‌بندی فصل ۱</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../index.html">خانه</a><span>/</span><span>۰۱ — مبانی ایجنت‌ها</span><span>/</span><span>مدل‌های زبانی بزرگ چیستند؟</span></div>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/whiteboard-check-1.jpg" alt="Unit 1 planning" width="100%"/>
+</div>
+<h1>مدل‌های زبانی بزرگ (LLMها) چیستند؟</h1>
+<p>در بخش قبل یاد گرفتیم که هر ایجنت <strong>در هسته‌اش به یک مدل هوش مصنوعی</strong> نیاز دارد و LLMها رایج‌ترین نوع مدل هوش مصنوعی برای این منظور هستند.</p>
+<p>حالا می‌آموزیم LLMها چه هستند و چگونه به ایجنت‌ها قدرت می‌دهند.</p>
+<p>این بخش توضیح فنی مختصری درباره استفاده از LLMها ارائه می‌دهد. اگر می‌خواهید عمیق‌تر شوید، می‌توانید <a href="https://huggingface.co/learn/nlp-course/chapter1/1" target="_blank">دوره رایگان پردازش زبان طبیعی (NLP)</a> ما را ببینید.</p>
+
+<h2>مدل زبانی بزرگ چیست؟</h2>
+<p>LLM نوعی مدل هوش مصنوعی است که در <strong>فهم و تولید زبان انسانی</strong> عالی عمل می‌کند. این مدل‌ها روی حجم عظیمی از داده‌های متنی آموزش می‌بینند و به این ترتیب الگوها، ساختار و حتی ظرایف زبان را یاد می‌گیرند. این مدل‌ها معمولاً شامل میلیون‌ها پارامتر هستند.</p>
+<p>بیشتر LLMهای امروزی <strong>بر پایه معماری ترنسفرمر (Transformer)</strong> ساخته شده‌اند؛ معماری یادگیری عمیقی مبتنی بر الگوریتم «توجه» (Attention) که از زمان انتشار BERT از گوگل در سال ۲۰۱۸ توجه زیادی را جلب کرده است.</p>
+<figure style="margin:1.2em 0;text-align:center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/transformer.jpg" alt="Transformer" width="100%"/>
+<figcaption style="font-size:.9em;opacity:.8;margin-top:.5em">معماری اصلی ترنسفرمر این‌گونه بود: انکودر در سمت چپ و دکودر در سمت راست.</figcaption>
+</figure>
+<p>سه نوع ترنسفرمر وجود دارد:</p>
+<ol>
+  <li><strong>انکودرها (Encoders)</strong>
+    <p>ترنسفرمر مبتنی بر انکودر، متن (یا داده‌های دیگر) را به عنوان ورودی می‌گیرد و یک بازنمایی فشرده (Dense) یا همان امبدینگ (Embedding) از آن متن را خروجی می‌دهد.</p>
+    <ul>
+      <li><strong>مثال:</strong> BERT از گوگل</li>
+      <li><strong>کاربردها:</strong> طبقه‌بندی متن، جستجوی معنایی، تشخیص موجودیت‌های نام‌دار (NER)</li>
+      <li><strong>اندازه معمول:</strong> میلیون‌ها پارامتر</li>
+    </ul>
+  </li>
+  <li><strong>دکودرها (Decoders)</strong>
+    <p>ترنسفرمر مبتنی بر دکودر <strong>روی تولید توکن‌های جدید برای تکمیل یک دنباله، یک توکن در هر مرحله</strong> تمرکز دارد.</p>
+    <ul>
+      <li><strong>مثال:</strong> Llama از Meta</li>
+      <li><strong>کاربردها:</strong> تولید متن، چت‌بات‌ها، تولید کد</li>
+      <li><strong>اندازه معمول:</strong> میلیاردها پارامتر (به معنای آمریکایی «بیلیون»، یعنی ۱۰<sup>۹</sup>)</li>
+    </ul>
+  </li>
+  <li><strong>Seq2Seq (انکودر–دکودر)</strong>
+    <p>ترنسفرمر دنباله‌به‌دنباله، انکودر و دکودر را با هم <em>ترکیب</em> می‌کند. ابتدا انکودر دنباله ورودی را به یک بازنمایی بافتی (Context) تبدیل می‌کند، سپس دکودر یک دنباله خروجی تولید می‌کند.</p>
+    <ul>
+      <li><strong>مثال:</strong> T5، BART</li>
+      <li><strong>کاربردها:</strong> ترجمه، خلاصه‌سازی، بازنویسی (Paraphrasing)</li>
+      <li><strong>اندازه معمول:</strong> میلیون‌ها پارامتر</li>
+    </ul>
+  </li>
+</ol>
+<p>اگرچه مدل‌های زبانی بزرگ در شکل‌های گوناگونی وجود دارند، LLMها معمولاً مدل‌های مبتنی بر دکودر با میلیاردها پارامتر هستند. در ادامه چند نمونه از شناخته‌شده‌ترین LLMها را می‌بینید:</p>
+<table>
+  <thead>
+    <tr><th>مدل</th><th>توسعه‌دهنده</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>Deepseek-R1</strong></td><td>DeepSeek</td></tr>
+    <tr><td><strong>GPT4</strong></td><td>OpenAI</td></tr>
+    <tr><td><strong>Llama 3</strong></td><td>Meta (Facebook AI Research)</td></tr>
+    <tr><td><strong>SmolLM2</strong></td><td>Hugging Face</td></tr>
+    <tr><td><strong>Gemma</strong></td><td>Google</td></tr>
+    <tr><td><strong>Mistral</strong></td><td>Mistral</td></tr>
+  </tbody>
+</table>
+
+<h2>توکن‌ها و پیش‌بینی توکن بعدی</h2>
+<p>اصل زیربنایی یک LLM ساده و در عین حال بسیار مؤثر است: <strong>هدف آن پیش‌بینی توکن بعدی با توجه به دنباله‌ای از توکن‌های قبلی است.</strong> «توکن» واحد اطلاعاتی است که LLM با آن کار می‌کند. می‌توانید توکن را مثل یک «کلمه» تصور کنید، اما به دلایل کارایی، LLMها از کلمات کامل استفاده نمی‌کنند.</p>
+<p>برای مثال، در حالی که تعداد کلمات زبان انگلیسی حدود ۶۰۰ هزار تخمین زده می‌شود، یک LLM ممکن است واژگانی در حدود ۳۲ هزار توکن داشته باشد (مثل Llama 2). توکن‌سازی (Tokenization) معمولاً روی واحدهای زیرکلمه (Sub-word) انجام می‌شود که قابل ترکیب با یکدیگرند.</p>
+<p>برای نمونه، توکن‌های «interest» و «ing» را می‌توان برای ساخت «interesting» ترکیب کرد، یا «ed» را برای ساخت «interested» به انتها افزود.</p>
+<p>در محیط تعاملی زیر می‌توانید توکنایزرهای مختلف را امتحان کنید:</p>
+<iframe src="https://agents-course-the-tokenizer-playground.static.hf.space" frameborder="0" width="100%" height="450" style="border:0;max-width:850px;display:block;margin:1em auto" loading="lazy"></iframe>
+<p>هر LLM مجموعه‌ای از <strong>توکن‌های ویژه (Special Tokens)</strong> مخصوص همان مدل دارد. LLM از این توکن‌ها برای باز و بسته کردن اجزای ساختارمند خروجی‌اش استفاده می‌کند؛ مثلاً برای نشان دادن آغاز یا پایان یک دنباله، پیام یا پاسخ. علاوه بر این، پرامپت‌های ورودی که به مدل می‌دهیم هم با توکن‌های ویژه ساختار می‌یابند. مهم‌ترین آن‌ها <strong>توکن پایان دنباله (End of Sequence یا EOS)</strong> است.</p>
+<p>شکل توکن‌های ویژه میان ارائه‌دهندگان مدل‌ها بسیار متنوع است.</p>
+<p>جدول زیر این تنوع را نشان می‌دهد.</p>
+<table>
+  <thead>
+    <tr>
+      <th>مدل</th>
+      <th>توسعه‌دهنده</th>
+      <th>توکن EOS</th>
+      <th>کاربرد</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr><td><strong>GPT4</strong></td><td>OpenAI</td><td><code>&lt;|endoftext|&gt;</code></td><td>پایان متن پیام</td></tr>
+    <tr><td><strong>Llama 3</strong></td><td>Meta (Facebook AI Research)</td><td><code>&lt;|eot_id|&gt;</code></td><td>پایان دنباله</td></tr>
+    <tr><td><strong>Deepseek-R1</strong></td><td>DeepSeek</td><td><code>&lt;|end_of_sentence|&gt;</code></td><td>پایان متن پیام</td></tr>
+    <tr><td><strong>SmolLM2</strong></td><td>Hugging Face</td><td><code>&lt;|im_end|&gt;</code></td><td>پایان دستور یا پیام</td></tr>
+    <tr><td><strong>Gemma</strong></td><td>Google</td><td><code>&lt;end_of_turn&gt;</code></td><td>پایان نوبت گفتگو</td></tr>
+  </tbody>
+</table>
+<div class="callout">
+  <div class="callout-title">نکته</div>
+  <p>از شما انتظار نداریم این توکن‌های ویژه را حفظ کنید، اما مهم است که تنوع آن‌ها و نقشی را که در تولید متن توسط LLMها دارند درک کنید. اگر می‌خواهید درباره توکن‌های ویژه بیشتر بدانید، می‌توانید پیکربندی مدل را در مخزن آن روی Hub ببینید. برای مثال، توکن‌های ویژه مدل SmolLM2 را می‌توانید در فایل <a href="https://huggingface.co/HuggingFaceTB/SmolLM2-135M-Instruct/blob/main/tokenizer_config.json" target="_blank">tokenizer_config.json</a> آن پیدا کنید.</p>
+</div>
+
+<h2>درک پیش‌بینی توکن بعدی</h2>
+<p>گفته می‌شود LLMها <strong>خودبازگشتی (Autoregressive)</strong> هستند، یعنی <strong>خروجی یک گذر (Pass) به ورودی گذر بعدی تبدیل می‌شود.</strong> این حلقه ادامه پیدا می‌کند تا زمانی که مدل پیش‌بینی کند توکن بعدی همان توکن EOS است؛ در این نقطه مدل می‌تواند متوقف شود.</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/AutoregressionSchema.gif" alt="تصویر متحرک رمزگشایی خودبازگشتی" width="60%"/>
+</div>
+<p>به بیان دیگر، یک LLM تا رسیدن به EOS متن را رمزگشایی (Decode) می‌کند. اما در یک حلقه رمزگشایی واحد چه اتفاقی می‌افتد؟</p>
+<p>اگرچه فرآیند کامل برای هدف یادگیری ایجنت‌ها بیش از حد فنی است، این یک مرور کوتاه است:</p>
+<ul>
+  <li>پس از اینکه متن ورودی <strong>توکن‌سازی</strong> شد، مدل یک بازنمایی از دنباله محاسبه می‌کند که اطلاعاتی درباره معنا و جایگاه هر توکن در دنباله ورودی را در خود دارد.</li>
+  <li>این بازنمایی وارد مدل می‌شود و مدل امتیازهایی (Scores) را خروجی می‌دهد که احتمال هر توکن واژگانش را برای اینکه توکن بعدی دنباله باشد، رتبه‌بندی می‌کنند.</li>
+</ul>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/DecodingFinal.gif" alt="تصویر متحرک رمزگشایی" width="60%"/>
+</div>
+<p>بر اساس این امتیازها، راهبردهای متعددی برای انتخاب توکن‌ها و تکمیل جمله داریم.</p>
+<ul>
+  <li>ساده‌ترین راهبرد رمزگشایی این است که همیشه توکنی را برداریم که بیشترین امتیاز را دارد.</li>
+</ul>
+<p>می‌توانید خودتان در این Space با مدل SmolLM2 با فرآیند رمزگشایی تعامل کنید (یادتان باشد که مدل تا رسیدن به توکن <strong>EOS</strong> رمزگشایی می‌کند که برای این مدل <strong><code>&lt;|im_end|&gt;</code></strong> است):</p>
+<iframe src="https://agents-course-decoding-visualizer.hf.space" frameborder="0" width="100%" height="450" style="border:0;max-width:850px;display:block;margin:1em auto" loading="lazy"></iframe>
+<ul>
+  <li>اما راهبردهای رمزگشایی پیشرفته‌تری هم وجود دارد. برای مثال، <em>جستجوی پرتو (Beam Search)</em> چند دنباله کاندید را هم‌زمان بررسی می‌کند تا دنباله‌ای را بیابد که مجموع امتیازش بیشترین است، حتی اگر برخی توکن‌های منفرد امتیاز پایین‌تری داشته باشند.</li>
+</ul>
+<iframe src="https://agents-course-beam-search-visualizer.hf.space" frameborder="0" width="100%" height="450" style="border:0;max-width:850px;display:block;margin:1em auto" loading="lazy"></iframe>
+<p>اگر می‌خواهید درباره رمزگشایی بیشتر بدانید، می‌توانید به <a href="https://huggingface.co/learn/nlp-course" target="_blank">دوره NLP</a> سر بزنید.</p>
+
+<h2>توجه، تمام آن چیزی است که نیاز دارید (Attention is all you need)</h2>
+<p>یکی از جنبه‌های کلیدی معماری ترنسفرمر، <strong>توجه (Attention)</strong> است. هنگام پیش‌بینی کلمه بعدی، همه کلمات یک جمله اهمیت یکسانی ندارند؛ کلماتی مثل «France» و «capital» در جمله <em>«The capital of France is ...»</em> بیشترین بار معنایی را دارند.</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/AttentionSceneFinal.gif" alt="تصویر متحرک مکانیسم توجه" width="60%"/>
+</div>
+<p>این فرآیند شناسایی مرتبط‌ترین کلمات برای پیش‌بینی توکن بعدی، به شکل باورنکردنی‌ای مؤثر ثابت شده است.</p>
+<p>اگرچه اصل بنیادین LLMها، یعنی پیش‌بینی توکن بعدی، از زمان GPT-2 ثابت مانده است، پیشرفت‌های چشمگیری در مقیاس‌دهی شبکه‌های عصبی و کارآمد کردن مکانیسم توجه برای دنباله‌های هرچه طولانی‌تر حاصل شده است.</p>
+<p>اگر با LLMها کار کرده باشید، احتمالاً با اصطلاح <em>طول کانتکست (Context Length)</em> آشنایید؛ یعنی حداکثر تعداد توکنی که LLM می‌تواند پردازش کند و حداکثر <em>بازه توجهی (Attention Span)</em> که دارد.</p>
+
+<h2>پرامپت دادن به LLM مهم است</h2>
+<p>با توجه به اینکه تنها کار یک LLM پیش‌بینی توکن بعدی با نگاه کردن به همه توکن‌های ورودی و انتخاب توکن‌های «مهم» است، شیوه نگارش دنباله ورودی شما بسیار اهمیت دارد.</p>
+<p>دنباله ورودی‌ای که به یک LLM می‌دهید <em>پرامپت (Prompt)</em> نام دارد. طراحی دقیق پرامپت، <strong>هدایت تولید LLM به سمت خروجی موردنظر</strong> را آسان‌تر می‌کند.</p>
+
+<h2>LLMها چگونه آموزش می‌بینند؟</h2>
+<p>LLMها روی مجموعه‌داده‌های بزرگ متنی آموزش می‌بینند و در آن‌ها با هدف خودنظارتی (Self-supervised) یا مدل‌سازی زبان ماسک‌شده (Masked Language Modeling)، پیش‌بینی کلمه بعدی در یک دنباله را یاد می‌گیرند.</p>
+<p>از این یادگیری بدون نظارت، مدل ساختار زبان و <strong>الگوهای زیربنایی متن را فرا می‌گیرد و می‌تواند به داده‌های دیده‌نشده تعمیم دهد</strong>.</p>
+<p>پس از این <em>پیش‌آموزش (Pre-training)</em> اولیه، LLMها را می‌توان با هدف یادگیری نظارت‌شده (Supervised) برای انجام وظایف مشخص ریزتنظیم (Fine-tune) کرد. برای مثال، برخی مدل‌ها برای ساختارهای مکالمه‌ای یا استفاده از ابزار آموزش می‌بینند، در حالی که برخی دیگر روی طبقه‌بندی یا تولید کد تمرکز می‌کنند.</p>
+
+<h2>چگونه می‌توانم از LLMها استفاده کنم؟</h2>
+<p>دو گزینه اصلی دارید:</p>
+<ol>
+  <li><strong>اجرای محلی (Run Locally)</strong> (اگر سخت‌افزار کافی دارید).</li>
+  <li><strong>استفاده از ابر/API</strong> (مثلاً از طریق Hugging Face Serverless Inference API).</li>
+</ol>
+<p>در طول این دوره، عمدتاً از مدل‌ها از طریق API روی Hugging Face Hub استفاده می‌کنیم. بعداً بررسی می‌کنیم که چگونه این مدل‌ها را روی سخت‌افزار خودتان اجرا کنید.</p>
+
+<h2>LLMها در ایجنت‌های هوش مصنوعی چگونه استفاده می‌شوند؟</h2>
+<p>LLMها جزء کلیدی ایجنت‌های هوش مصنوعی هستند و <strong>زیربنای فهم و تولید زبان انسانی را فراهم می‌کنند</strong>.</p>
+<p>آن‌ها می‌توانند دستورهای کاربر را تفسیر کنند، بافت مکالمه را حفظ کنند، برنامه تعریف کنند و تصمیم بگیرند از کدام ابزارها استفاده شود.</p>
+<p>این مراحل را در این فصل با جزئیات بیشتری بررسی خواهیم کرد، اما فعلاً آنچه باید بفهمید این است که LLM <strong>مغز ایجنت</strong> است.</p>
+<hr>
+<p>اطلاعات زیادی بود! اصول اولیه اینکه LLMها چه هستند، چگونه کار می‌کنند و چه نقشی در قدرت بخشیدن به ایجنت‌های هوش مصنوعی دارند را مرور کردیم.</p>
+<p>اگر می‌خواهید بیشتر در دنیای جذاب مدل‌های زبانی و پردازش زبان طبیعی غرق شوید، حتماً <a href="https://huggingface.co/learn/nlp-course/chapter1/1" target="_blank">دوره رایگان NLP</a> ما را ببینید.</p>
+<p>حالا که فهمیدیم LLMها چگونه کار می‌کنند، وقت آن است که ببینیم <strong>LLMها چگونه خروجی‌شان را در یک بافت مکالمه‌ای ساختارمند می‌کنند</strong>.</p>
+<div class="callout">
+  <div class="callout-title">اجرای نوت‌بوک</div>
+  <p>برای اجرای <a href="https://huggingface.co/agents-course/notebooks/blob/main/unit1/dummy_agent_library.ipynb" target="_blank">این نوت‌بوک</a> <strong>به یک توکن Hugging Face نیاز دارید</strong> که می‌توانید آن را از <a href="https://hf.co/settings/tokens" target="_blank">https://hf.co/settings/tokens</a> بگیرید.</p>
+<p>برای اطلاعات بیشتر درباره نحوه اجرای نوت‌بوک‌های Jupyter، <a href="https://huggingface.co/docs/hub/notebooks">Jupyter Notebooks on the Hugging Face Hub</a> را ببینید.</p>
+<p>همچنین باید برای <a href="https://huggingface.co/meta-llama/Llama-3.2-3B-Instruct" target="_blank">مدل‌های Meta Llama</a> درخواست دسترسی بدهید.</p>
+</div>
+<nav class="pager"><a href="03 - آزمون کوتاه ۱.html"><span>درس قبلی</span><strong>→ آزمون کوتاه ۱</strong></a><a class="next" href="05 - پیام‌ها و توکن‌های ویژه.html"><span>درس بعدی</span><strong>پیام‌ها و توکن‌های ویژه ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

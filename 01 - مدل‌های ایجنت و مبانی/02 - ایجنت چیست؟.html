@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ایجنت چیست؟ | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../assets/vendor/highlight.min.js"></script>
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۱</div>
+    <div class="chapter-name">مقدمه‌ای بر ایجنت‌ها</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۱</span><span class="toc-title">مبانی و مفاهیم ایجنت‌ها</span><span class="toc-count">۱۴</span></summary>
+      <ol><li><a href="01 - مقدمه.html">مقدمه</a></li><li><a href="02 - ایجنت چیست؟.html" class="active">ایجنت چیست؟</a></li><li><a href="03 - آزمون کوتاه ۱.html">آزمون کوتاه ۱</a></li><li><a href="04 - مدل‌های زبانی بزرگ چیستند؟.html">مدل‌های زبانی بزرگ چیستند؟</a></li><li><a href="05 - پیام‌ها و توکن‌های ویژه.html">پیام‌ها و توکن‌های ویژه</a></li><li><a href="06 - ابزارها چه هستند؟.html">ابزارها چه هستند؟</a></li><li><a href="07 - چرخه تفکر، اقدام و مشاهده.html">چرخه تفکر، اقدام و مشاهده</a></li><li><a href="08 - تفکر و رویکرد ReAct.html">تفکر و رویکرد ReAct</a></li><li><a href="09 - اقدام‌ها و رویکرد Stop and Parse.html">اقدام‌ها و رویکرد Stop and Parse</a></li><li><a href="10 - مشاهدات و بازخورد محیط.html">مشاهدات و بازخورد محیط</a></li><li><a href="11 - کتابخانه Dummy Agent.html">کتابخانه Dummy Agent</a></li><li><a href="12 - ساخت اولین ایجنت با smolagents.html">ساخت اولین ایجنت با smolagents</a></li><li><a href="13 - آزمون پایانی فصل ۱.html">آزمون پایانی فصل ۱</a></li><li><a href="14 - جمع‌بندی فصل ۱.html">جمع‌بندی فصل ۱</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../index.html">خانه</a><span>/</span><span>۰۱ — مبانی ایجنت‌ها</span><span>/</span><span>ایجنت چیست؟</span></div>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/whiteboard-no-check.jpg" alt="Unit 1 planning" width="100%"/>
+</div>
+<h1>ایجنت چیست؟ (What is an Agent?)</h1>
+<p>تا پایان این بخش با مفهوم ایجنت و کاربردهای گوناگون آن در هوش مصنوعی راحت خواهید بود.</p>
+<p>برای توضیح اینکه ایجنت چیست، با یک تمثیل شروع می‌کنیم.</p>
+
+<h2>تصویر کلی: آلفرد ایجنت</h2>
+<p>با آلفرد آشنا شوید؛ آلفرد یک <strong>ایجنت (Agent)</strong> است.</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/this-is-alfred.jpg" alt="این آلفرد است" width="100%"/>
+</div>
+<p>تصور کنید آلفرد <strong>دستوری دریافت می‌کند</strong>، مثلاً: <em>«آلفرد، لطفاً یک قهوه برای من بیاور.»</em></p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/coffee-please.jpg" alt="لطفاً قهوه بیاور" width="100%"/>
+</div>
+<p>از آنجا که آلفرد <strong>زبان طبیعی را می‌فهمد</strong>، به سرعت درخواست ما را درک می‌کند.</p>
+<p>پیش از اجرای سفارش، آلفرد به <strong>استدلال و برنامه‌ریزی (Reasoning & Planning)</strong> می‌پردازد و مراحل و ابزارهای لازم را مشخص می‌کند تا:</p>
+<ol>
+  <li>به آشپزخانه برود</li>
+  <li>از دستگاه قهوه‌ساز استفاده کند</li>
+  <li>قهوه را دم کند</li>
+  <li>قهوه را برگرداند و تحویل دهد</li>
+</ol>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/reason-and-plan.jpg" alt="استدلال و برنامه‌ریزی" width="100%"/>
+</div>
+<p>وقتی برنامه آماده شد، <strong>باید اقدام کند</strong>. برای اجرای برنامه، <strong>او می‌تواند از ابزارهایی استفاده کند که در فهرست ابزارهای شناخته‌شده‌اش وجود دارد</strong>.</p>
+<p>در این مثال، برای دم کردن قهوه از دستگاه قهوه‌ساز استفاده می‌کند و آن را روشن می‌کند تا قهوه آماده شود.</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/make-coffee.jpg" alt="دم کردن قهوه" width="100%"/>
+</div>
+<p>در نهایت، آلفرد قهوه تازه‌دم‌شده را نزد ما می‌آورد.</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/bring-coffee.jpg" alt="آوردن قهوه" width="100%"/>
+</div>
+<p>و ایجنت دقیقاً همین است: <strong>یک مدل هوش مصنوعی که توانایی استدلال، برنامه‌ریزی و تعامل با محیط پیرامون خود را دارد.</strong></p>
+<p>به آن «ایجنت» می‌گوییم چون <em>عاملیت (Agency)</em> دارد؛ یعنی توانایی تعامل و اثرگذاری روی محیط.</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/process.jpg" alt="چرخه ایجنت" width="100%"/>
+</div>
+
+<h2>تعریف دقیق‌تر و فنی</h2>
+<p>حالا که تصویر کلی را دارید، این هم یک تعریف دقیق‌تر:</p>
+<blockquote>ایجنت سیستمی است که از یک مدل هوش مصنوعی برای تعامل با محیط خود و دستیابی به هدفی که کاربر تعریف کرده استفاده می‌کند. این سیستم استدلال، برنامه‌ریزی و اجرای اقدامات (اغلب از طریق ابزارهای خارجی) را برای انجام وظایف با هم ترکیب می‌کند.</blockquote>
+<p>ایجنت را می‌توان دارای دو بخش اصلی دانست:</p>
+<ol>
+  <li><strong>مغز (Brain - مدل هوش مصنوعی)</strong>
+    <p>تمام تفکر در اینجا اتفاق می‌افتد. مدل هوش مصنوعی <strong>استدلال و برنامه‌ریزی را بر عهده دارد</strong> و <strong>بر اساس موقعیت تصمیم می‌گیرد چه اقداماتی انجام دهد</strong>.</p>
+  </li>
+  <li><strong>بدنه (Body - قابلیت‌ها و ابزارها)</strong>
+    <p>این بخش <strong>همه کارهایی را که ایجنت برای انجامشان مجهز شده است</strong> نشان می‌دهد.</p>
+    <p><strong>دامنه اقدامات ممکن</strong> به چیزی بستگی دارد که ایجنت <strong>به آن مجهز شده است</strong>. برای مثال، چون انسان‌ها بال ندارند نمی‌توانند اقدام «پرواز» را انجام دهند، اما اقداماتی مثل «راه رفتن»، «دویدن»، «پریدن» و «گرفتن» را اجرا می‌کنند.</p>
+  </li>
+</ol>
+
+<h3>طیف «عاملیت» (The spectrum of "Agency")</h3>
+<p>بر اساس این تعریف، ایجنت‌ها روی یک طیف پیوسته با عاملیت فزاینده قرار می‌گیرند:</p>
+<table>
+  <thead>
+    <tr>
+      <th>سطح عاملیت</th>
+      <th>توضیحات</th>
+      <th>عنوان فنی</th>
+      <th>الگوی نمونه در کد</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>☆☆☆</td>
+      <td>خروجی مدل هیچ تأثیری بر جریان برنامه ندارد</td>
+      <td>پردازشگر ساده (Simple processor)</td>
+      <td><code>process_llm_output(llm_response)</code></td>
+    </tr>
+    <tr>
+      <td>★☆☆</td>
+      <td>خروجی مدل، جریان کنترلی ساده برنامه (مسیر شرطی) را تعیین می‌کند</td>
+      <td>مسیریاب (Router)</td>
+      <td><code>if llm_decision(): path_a() else: path_b()</code></td>
+    </tr>
+    <tr>
+      <td>★★☆</td>
+      <td>خروجی مدل تعیین می‌کند چه تابعی با چه ورودی‌هایی اجرا شود</td>
+      <td>فراخوان ابزار (Tool caller)</td>
+      <td><code>run_function(llm_chosen_tool, llm_chosen_args)</code></td>
+    </tr>
+    <tr>
+      <td>★★★</td>
+      <td>خروجی مدل تکرار حلقه‌ها و ادامه یافتن برنامه را کنترل می‌کند</td>
+      <td>ایجنت چندمرحله‌ای (Multi-step Agent)</td>
+      <td><code>while llm_should_continue(): execute_next_step()</code></td>
+    </tr>
+    <tr>
+      <td>★★★</td>
+      <td>یک جریان ایجنتی می‌تواند جریان ایجنتی دیگری را آغاز کند</td>
+      <td>چندایجنتی (Multi-Agent)</td>
+      <td><code>if llm_trigger(): execute_agent()</code></td>
+    </tr>
+  </tbody>
+</table>
+<p>منبع جدول: <a href="https://huggingface.co/docs/smolagents/conceptual_guides/intro_agents" target="_blank">راهنمای مفهومی smolagents</a></p>
+
+<h2>برای ایجنت‌ها از چه نوع مدل‌های هوش مصنوعی استفاده می‌کنیم؟</h2>
+<p>رایج‌ترین مدل هوش مصنوعی در ایجنت‌ها، مدل زبانی بزرگ (LLM) است که <strong>متن</strong> را به عنوان ورودی می‌گیرد و <strong>متن</strong> هم تولید می‌کند.</p>
+<p>نمونه‌های شناخته‌شده آن <strong>GPT-4</strong> از <strong>OpenAI</strong>، <strong>Llama</strong> از <strong>Meta</strong>، <strong>Gemini</strong> از <strong>Google</strong> و غیره هستند. این مدل‌ها روی حجم عظیمی از متن آموزش دیده‌اند و تعمیم‌پذیری خوبی دارند. در <a href="04 - مدل‌های زبانی بزرگ چیستند؟.html">بخش بعدی</a> بیشتر درباره LLMها یاد می‌گیریم.</p>
+<div class="callout">
+  <div class="callout-title">نکته</div>
+  <p>می‌توان از مدل‌هایی که ورودی‌های دیگری می‌پذیرند هم به عنوان مدل هسته ایجنت استفاده کرد؛ مثلاً مدل بینایی-زبانی (Vision Language Model یا VLM) که مثل LLM است، اما تصویر را هم به عنوان ورودی می‌فهمد. فعلاً روی LLMها تمرکز می‌کنیم و گزینه‌های دیگر را بعداً بررسی خواهیم کرد.</p>
+</div>
+
+<h2>یک هوش مصنوعی چگونه روی محیط خود اقدام می‌کند؟</h2>
+<p>LLMها مدل‌های شگفت‌انگیزی هستند، اما <strong>فقط می‌توانند متن تولید کنند</strong>.</p>
+<p>با این حال، اگر از یک برنامه چت معروف مثل HuggingChat یا ChatGPT بخواهید تصویر بسازد، می‌تواند! این چطور ممکن است؟</p>
+<p>پاسخ این است که توسعه‌دهندگان HuggingChat، ChatGPT و برنامه‌های مشابه، قابلیت‌های اضافه‌ای به نام <strong>ابزارها (Tools)</strong> پیاده‌سازی کرده‌اند که مدل زبانی می‌تواند برای ساخت تصویر از آن‌ها استفاده کند.</p>
+<figure style="margin:1.2em 0;text-align:center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/eiffel_brocolis.jpg" alt="Eiffel Brocolis" width="100%"/>
+<figcaption style="font-size:.9em;opacity:.8;margin-top:.5em">مدل برای تولید این تصویر از یک ابزار تولید تصویر استفاده کرد.</figcaption>
+</figure>
+<p>در بخش <a href="06 - ابزارها چه هستند؟.html">ابزارها</a> بیشتر درباره ابزارها خواهیم آموخت.</p>
+
+<h2>یک ایجنت چه نوع کارهایی می‌تواند انجام دهد؟</h2>
+<p>یک ایجنت می‌تواند هر کاری را که از طریق <strong>ابزارها</strong> پیاده‌سازی کنیم و برای انجام <strong>اقدام‌ها (Actions)</strong> به آن بدهیم، انجام دهد.</p>
+<p>برای مثال، اگر ایجنتی بنویسم که روی کامپیوترم نقش دستیار شخصی (مثل Siri) را بازی کند و از آن بخواهم «برای مدیرم ایمیل بزن و بخواه جلسه امروز را به تعویق بیندازد»، می‌توانم کدی برای ارسال ایمیل در اختیارش بگذارم. این کد، ابزار جدیدی خواهد بود که ایجنت هر وقت لازم داشت ایمیل بفرستد، از آن استفاده می‌کند. می‌توانیم آن را در پایتون این‌طور بنویسیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">def send_message_to(recipient, message):
+    """Useful to send an e-mail message to a recipient"""
+    ...</code></pre></div>
+<p>همان‌طور که خواهیم دید، مدل زبانی هر وقت لازم باشد کدی برای اجرای ابزار تولید می‌کند و به این ترتیب کار موردنظر انجام می‌شود:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">send_message_to("Manager", "Can we postpone today's meeting?")</code></pre></div>
+<p><strong>طراحی ابزارها بسیار مهم است و تأثیر زیادی بر کیفیت ایجنت شما دارد.</strong> برخی کارها نیازمند ساخت ابزارهای بسیار اختصاصی هستند، در حالی که برخی دیگر با ابزارهای عمومی مثل «web_search» حل می‌شوند.</p>
+<blockquote><strong>توجه:</strong> <strong>اقدام‌ها با ابزارها یکی نیستند.</strong> برای مثال، یک اقدام ممکن است برای تکمیل شدن به استفاده از چند ابزار نیاز داشته باشد.</blockquote>
+<p>اجازه دادن به ایجنت برای تعامل با محیط، <strong>امکان استفاده واقعی از آن را برای شرکت‌ها و افراد فراهم می‌کند</strong>.</p>
+
+<h3>مثال ۱: دستیارهای مجازی شخصی</h3>
+<p>دستیارهای مجازی مانند Siri، Alexa یا Google Assistant زمانی که از طرف کاربر در محیط دیجیتال او عمل می‌کنند، به صورت ایجنت کار می‌کنند.</p>
+<p>آن‌ها پرسش‌های کاربر را دریافت می‌کنند، بافت (Context) را تحلیل می‌کنند، اطلاعات را از پایگاه‌های داده بازیابی می‌کنند و پاسخ می‌دهند یا اقدامی را آغاز می‌کنند (مثل تنظیم یادآور، ارسال پیام یا کنترل دستگاه‌های هوشمند).</p>
+
+<h3>مثال ۲: چت‌بات‌های خدمات مشتریان</h3>
+<p>بسیاری از شرکت‌ها چت‌بات‌هایی را به صورت ایجنت به کار می‌گیرند که با مشتریان به زبان طبیعی تعامل می‌کنند.</p>
+<p>این ایجنت‌ها می‌توانند به پرسش‌ها پاسخ دهند، کاربران را در مراحل عیب‌یابی راهنمایی کنند، در پایگاه‌های داده داخلی تیکت (Issue) باز کنند یا حتی تراکنش‌ها را کامل کنند.</p>
+<p>اهداف از پیش تعریف‌شده آن‌ها ممکن است شامل بهبود رضایت کاربر، کاهش زمان انتظار یا افزایش نرخ تبدیل فروش باشد. این ایجنت‌ها با تعامل مستقیم با مشتریان، یادگیری از گفتگوها و تطبیق تدریجی پاسخ‌هایشان، اصول اصلی یک ایجنت را در عمل نشان می‌دهند.</p>
+
+<h3>مثال ۳: شخصیت غیرقابل‌بازی (NPC) هوش مصنوعی در بازی‌های ویدیویی</h3>
+<p>ایجنت‌های هوش مصنوعی مبتنی بر LLM می‌توانند کاراکترهای غیرقابل‌بازی (NPC) را پویاتر و غیرقابل‌پیش‌بینی‌تر کنند.</p>
+<p>به جای پیروی از درخت‌های رفتاری خشک، این کاراکترها می‌توانند <strong>بر اساس بافت پاسخ دهند، با تعامل بازیکن سازگار شوند</strong> و دیالوگ‌های ظریف‌تری تولید کنند. این انعطاف به ساخت شخصیت‌های واقعی‌تر و جذاب‌تری کمک می‌کند که همگام با اقدامات بازیکن تکامل می‌یابند.</p>
+<hr>
+<p>به طور خلاصه، ایجنت سیستمی است که از یک مدل هوش مصنوعی (معمولاً LLM) به عنوان موتور استدلال هسته‌ای خود استفاده می‌کند تا:</p>
+<ul>
+  <li><strong>زبان طبیعی را بفهمد:</strong> دستورهای انسان را به شیوه‌ای معنادار تفسیر کند و به آن‌ها پاسخ دهد.</li>
+  <li><strong>استدلال و برنامه‌ریزی کند:</strong> اطلاعات را تحلیل کند، تصمیم بگیرد و برای حل مسائل راهبرد بچیند.</li>
+  <li><strong>با محیط خود تعامل کند:</strong> اطلاعات جمع کند، اقدام کند و نتایج اقدام‌هایش را مشاهده کند.</li>
+</ul>
+<p>حالا که درک خوبی از ایجنت‌ها دارید، با یک آزمون کوتاه و بدون نمره، یادگیری‌تان را تثبیت کنیم. بعد از آن، به سراغ «مغز ایجنت» می‌رویم: <a href="04 - مدل‌های زبانی بزرگ چیستند؟.html">LLMها</a>.</p>
+<nav class="pager"><a href="01 - مقدمه.html"><span>درس قبلی</span><strong>→ مقدمه</strong></a><a class="next" href="03 - آزمون کوتاه ۱.html"><span>درس بعدی</span><strong>آزمون کوتاه ۱ ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

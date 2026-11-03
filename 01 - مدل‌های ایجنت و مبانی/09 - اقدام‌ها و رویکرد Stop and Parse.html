@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اقدام‌ها و رویکرد Stop and Parse | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../assets/vendor/highlight.min.js"></script>
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۱</div>
+    <div class="chapter-name">مقدمه‌ای بر ایجنت‌ها</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۱</span><span class="toc-title">مبانی و مفاهیم ایجنت‌ها</span><span class="toc-count">۱۴</span></summary>
+      <ol><li><a href="01 - مقدمه.html">مقدمه</a></li><li><a href="02 - ایجنت چیست؟.html">ایجنت چیست؟</a></li><li><a href="03 - آزمون کوتاه ۱.html">آزمون کوتاه ۱</a></li><li><a href="04 - مدل‌های زبانی بزرگ چیستند؟.html">مدل‌های زبانی بزرگ چیستند؟</a></li><li><a href="05 - پیام‌ها و توکن‌های ویژه.html">پیام‌ها و توکن‌های ویژه</a></li><li><a href="06 - ابزارها چه هستند؟.html">ابزارها چه هستند؟</a></li><li><a href="07 - چرخه تفکر، اقدام و مشاهده.html">چرخه تفکر، اقدام و مشاهده</a></li><li><a href="08 - تفکر و رویکرد ReAct.html">تفکر و رویکرد ReAct</a></li><li><a href="09 - اقدام‌ها و رویکرد Stop and Parse.html" class="active">اقدام‌ها و رویکرد Stop and Parse</a></li><li><a href="10 - مشاهدات و بازخورد محیط.html">مشاهدات و بازخورد محیط</a></li><li><a href="11 - کتابخانه Dummy Agent.html">کتابخانه Dummy Agent</a></li><li><a href="12 - ساخت اولین ایجنت با smolagents.html">ساخت اولین ایجنت با smolagents</a></li><li><a href="13 - آزمون پایانی فصل ۱.html">آزمون پایانی فصل ۱</a></li><li><a href="14 - جمع‌بندی فصل ۱.html">جمع‌بندی فصل ۱</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../index.html">خانه</a><span>/</span><span>۰۱ — مبانی ایجنت‌ها</span><span>/</span><span>اقدام‌ها و رویکرد Stop and Parse</span></div>
+<h1>اقدام‌ها: توانمندسازی ایجنت برای تعامل با محیط (Actions)</h1>
+<div class="callout">
+  <div class="callout-title">نکته</div>
+  <p>در این بخش، گام‌های مشخصی را که یک ایجنت هوش مصنوعی برای تعامل با محیطش برمی‌دارد بررسی می‌کنیم.</p>
+<p>پوشش می‌دهیم که اقدام‌ها چگونه نمایش داده می‌شوند (با JSON یا کد)، اهمیت رویکرد توقف و پارس (Stop and Parse) چیست و انواع مختلف ایجنت‌ها را معرفی می‌کنیم.</p>
+</div>
+<p>اقدام‌ها (Actions) گام‌های مشخصی هستند که <strong>یک ایجنت هوش مصنوعی برای تعامل با محیطش برمی‌دارد</strong>.</p>
+<p>چه گشتن در وب برای یافتن اطلاعات باشد و چه کنترل یک دستگاه فیزیکی، هر اقدام یک عملیات سنجیده است که ایجنت اجرا می‌کند.</p>
+<p>برای مثال، ایجنتی که در خدمات مشتریان کمک می‌کند ممکن است داده‌های مشتری را بازیابی کند، مقاله‌های پشتیبانی پیشنهاد دهد یا مسائل را به یک نماینده انسانی ارجاع دهد.</p>
+
+<h2>انواع اقدام‌های ایجنت</h2>
+<p>انواع مختلفی از ایجنت‌ها وجود دارند که اقدام‌ها را به شیوه‌های متفاوتی انجام می‌دهند:</p>
+<table>
+  <thead>
+    <tr><th>نوع ایجنت</th><th>توضیح</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>ایجنت JSON (JSON Agent)</td><td>اقدامی که باید انجام شود در قالب JSON مشخص می‌شود.</td></tr>
+    <tr><td>ایجنت کد (Code Agent)</td><td>ایجنت یک بلوک کد می‌نویسد که به‌طور خارجی تفسیر (اجرا) می‌شود.</td></tr>
+    <tr><td>ایجنت فراخوانی تابع (Function-calling Agent)</td><td>زیرمجموعه‌ای از ایجنت JSON است که ریزتنظیم شده تا برای هر اقدام یک پیام جدید تولید کند.</td></tr>
+  </tbody>
+</table>
+<p>خود اقدام‌ها هم می‌توانند اهداف متعددی داشته باشند:</p>
+<table>
+  <thead>
+    <tr><th>نوع اقدام</th><th>توضیح</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>جمع‌آوری اطلاعات (Information Gathering)</td><td>انجام جستجوهای وب، پرس‌وجو از پایگاه‌های داده یا بازیابی اسناد.</td></tr>
+    <tr><td>استفاده از ابزار (Tool Usage)</td><td>فراخوانی APIها، اجرای محاسبات و اجرای کد.</td></tr>
+    <tr><td>تعامل با محیط (Environment Interaction)</td><td>دستکاری رابط‌های دیجیتال یا کنترل دستگاه‌های فیزیکی.</td></tr>
+    <tr><td>ارتباط (Communication)</td><td>تعامل با کاربران از طریق چت یا همکاری با ایجنت‌های دیگر.</td></tr>
+  </tbody>
+</table>
+<p>LLM فقط با متن سروکار دارد و از آن برای توصیف اقدامی که می‌خواهد انجام دهد و پارامترهایی که باید به ابزار بدهد استفاده می‌کند. برای اینکه ایجنت درست کار کند، LLM باید پس از تولید همه توکن‌هایی که یک اقدام کامل را تعریف می‌کنند، <strong>از تولید توکن‌های جدید باز ایستد (STOP)</strong>. این کار کنترل را از LLM به ایجنت برمی‌گرداند و تضمین می‌کند نتیجه قابل پارس شدن است، چه قالب موردنظر JSON باشد، چه کد و چه فراخوانی تابع.</p>
+
+<h2>رویکرد توقف و پارس (The Stop and Parse Approach)</h2>
+<p>یکی از روش‌های کلیدی برای پیاده‌سازی اقدام‌ها <strong>رویکرد توقف و پارس</strong> است. این روش تضمین می‌کند خروجی ایجنت ساختارمند و قابل‌پیش‌بینی باشد:</p>
+<ol>
+  <li><strong>تولید در یک قالب ساختارمند (Generation in a Structured Format):</strong>
+    <p>ایجنت اقدام موردنظرش را در یک قالب روشن و از پیش تعیین‌شده (JSON یا کد) خروجی می‌دهد.</p>
+  </li>
+  <li><strong>توقف تولید بیشتر (Halting Further Generation):</strong>
+    <p>به محض اینکه متن تعریف‌کننده اقدام تولید شد، <strong>LLM از تولید توکن‌های اضافی متوقف می‌شود</strong>. این کار از خروجی اضافه یا نادرست جلوگیری می‌کند.</p>
+  </li>
+  <li><strong>پارس کردن خروجی (Parsing the Output):</strong>
+    <p>یک پارسر خارجی اقدام فرمت‌شده را می‌خواند، تعیین می‌کند کدام ابزار را باید فراخوانی کند و پارامترهای موردنیاز را استخراج می‌کند.</p>
+  </li>
+</ol>
+<p>برای مثال، ایجنتی که باید آب‌وهوا را بررسی کند ممکن است این خروجی را بدهد:</p>
+<div class="code"><pre dir="ltr"><code class="language-json">Thought: I need to check the current weather for New York.
+Action :
+{
+  "action": "get_weather",
+  "action_input": {"location": "New York"}
+}</code></pre></div>
+<p>سپس فریم‌ورک می‌تواند به‌آسانی نام تابعی را که باید فراخوانی شود و آرگومان‌هایی را که باید اعمال شوند پارس کند.</p>
+<p>این قالب روشن و قابل‌خواندن برای ماشین، خطاها را به حداقل می‌رساند و به ابزارهای خارجی امکان می‌دهد فرمان ایجنت را دقیق پردازش کنند.</p>
+<p><strong>توجه:</strong> ایجنت‌های فراخوانی تابع به شیوه مشابهی کار می‌کنند، با این تفاوت که هر اقدام را طوری ساختار می‌دهند که تابعی مشخص با آرگومان‌های درست فراخوانی شود. در یک فصل بعدی عمیق‌تر به این نوع ایجنت‌ها می‌پردازیم.</p>
+
+<h2>ایجنت‌های کد (Code Agents)</h2>
+<p>رویکرد جایگزین استفاده از <em>ایجنت‌های کد</em> است. ایده این است: <strong>به جای خروجی دادن یک آبجکت ساده JSON</strong>، ایجنت کد یک <strong>بلوک کد اجرایی تولید می‌کند، معمولاً در یک زبان سطح بالا مثل پایتون</strong>.</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/code-vs-json-actions.png" alt="ایجنت‌های کد" width="100%"/>
+</div>
+<p>این رویکرد مزایای متعددی دارد:</p>
+<ul>
+  <li><strong>گویایی (Expressiveness):</strong> کد می‌تواند منطق پیچیده، از جمله حلقه‌ها، شرط‌ها و توابع تودرتو را به‌طور طبیعی نمایش دهد و انعطاف بیشتری از JSON فراهم کند.</li>
+  <li><strong>مدولار بودن و قابلیت استفاده مجدد (Modularity and Reusability):</strong> کد تولیدشده می‌تواند شامل توابع و ماژول‌هایی باشد که در اقدام‌ها یا تسک‌های مختلف قابل استفاده مجدد هستند.</li>
+  <li><strong>دیباگ‌پذیری بهتر (Enhanced Debuggability):</strong> با یک سینتکس برنامه‌نویسی مشخص، خطاهای کد اغلب راحت‌تر شناسایی و اصلاح می‌شوند.</li>
+  <li><strong>یکپارچگی مستقیم (Direct Integration):</strong> ایجنت‌های کد می‌توانند مستقیماً با کتابخانه‌ها و APIهای خارجی یکپارچه شوند و عملیات پیچیده‌تری مثل پردازش داده یا تصمیم‌گیری بلادرنگ را ممکن کنند.</li>
+</ul>
+<p>باید به یاد داشته باشید که اجرای کدی که LLM تولید کرده ممکن است ریسک‌های امنیتی داشته باشد، از تزریق پرامپت (Prompt Injection) گرفته تا اجرای کد مخرب. به همین دلیل توصیه می‌شود از فریم‌ورک‌های ایجنت هوش مصنوعی مثل <code>smolagents</code> استفاده شود که حفاظ‌های پیش‌فرض را یکپارچه کرده‌اند. اگر می‌خواهید درباره ریسک‌ها و روش‌های کاهش آن‌ها بیشتر بدانید، <a href="https://huggingface.co/docs/smolagents/tutorials/secure_code_execution" target="_blank">لطفاً به این بخش اختصاصی نگاهی بیندازید</a>.</p>
+<p>برای مثال، یک ایجنت کد که مأمور دریافت آب‌وهواست ممکن است قطعه کد پایتون زیر را تولید کند:</p>
+<div class="code"><pre dir="ltr"><code class="language-python"># Code Agent Example: Retrieve Weather Information
+def get_weather(city):
+    import requests
+    api_url = f"https://api.weather.com/v1/location/{city}?apiKey=YOUR_API_KEY"
+    response = requests.get(api_url)
+    if response.status_code == 200:
+        data = response.json()
+        return data.get("weather", "No weather information available")
+    else:
+        return "Error: Unable to fetch weather data."
+
+# Execute the function and prepare the final answer
+result = get_weather("New York")
+final_answer = f"The current weather in New York is: {result}"
+print(final_answer)</code></pre></div>
+<p>در این مثال، ایجنت کد:</p>
+<ul>
+  <li>داده‌های آب‌وهوا را <strong>از طریق یک فراخوانی API</strong> بازیابی می‌کند،</li>
+  <li>پاسخ را پردازش می‌کند،</li>
+  <li>و از تابع <code>print()</code> برای خروجی دادن پاسخ نهایی استفاده می‌کند.</li>
+</ul>
+<p>این روش <strong>هم‌زمان از رویکرد توقف و پارس نیز پیروی می‌کند</strong>، چون بلوک کد را به‌روشنی مشخص می‌کند و پایان اجرا را اعلام می‌کند (در اینجا با چاپ <code>final_answer</code>).</p>
+<hr>
+<p>یاد گرفتیم که اقدام‌ها پلی میان استدلال درونی ایجنت و تعامل‌های دنیای واقعی آن هستند و این کار را با اجرای وظایف روشن و ساختارمند انجام می‌دهند، چه از طریق JSON، چه کد و چه فراخوانی تابع.</p>
+<p>این اجرای سنجیده تضمین می‌کند هر اقدام دقیق است و از طریق رویکرد توقف و پارس برای پردازش خارجی آماده است. در بخش بعد، مشاهدات (Observations) را بررسی می‌کنیم تا ببینیم ایجنت‌ها چگونه بازخورد محیط را دریافت و یکپارچه می‌کنند.</p>
+<p>بعد از آن، <strong>بالاخره آماده می‌شویم اولین ایجنت خودمان را بسازیم!</strong></p>
+<nav class="pager"><a href="08 - تفکر و رویکرد ReAct.html"><span>درس قبلی</span><strong>→ تفکر و رویکرد ReAct</strong></a><a class="next" href="10 - مشاهدات و بازخورد محیط.html"><span>درس بعدی</span><strong>مشاهدات و بازخورد محیط ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

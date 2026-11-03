@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پیام‌ها و توکن‌های ویژه | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../assets/vendor/highlight.min.js"></script>
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۱</div>
+    <div class="chapter-name">مقدمه‌ای بر ایجنت‌ها</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۱</span><span class="toc-title">مبانی و مفاهیم ایجنت‌ها</span><span class="toc-count">۱۴</span></summary>
+      <ol><li><a href="01 - مقدمه.html">مقدمه</a></li><li><a href="02 - ایجنت چیست؟.html">ایجنت چیست؟</a></li><li><a href="03 - آزمون کوتاه ۱.html">آزمون کوتاه ۱</a></li><li><a href="04 - مدل‌های زبانی بزرگ چیستند؟.html">مدل‌های زبانی بزرگ چیستند؟</a></li><li><a href="05 - پیام‌ها و توکن‌های ویژه.html" class="active">پیام‌ها و توکن‌های ویژه</a></li><li><a href="06 - ابزارها چه هستند؟.html">ابزارها چه هستند؟</a></li><li><a href="07 - چرخه تفکر، اقدام و مشاهده.html">چرخه تفکر، اقدام و مشاهده</a></li><li><a href="08 - تفکر و رویکرد ReAct.html">تفکر و رویکرد ReAct</a></li><li><a href="09 - اقدام‌ها و رویکرد Stop and Parse.html">اقدام‌ها و رویکرد Stop and Parse</a></li><li><a href="10 - مشاهدات و بازخورد محیط.html">مشاهدات و بازخورد محیط</a></li><li><a href="11 - کتابخانه Dummy Agent.html">کتابخانه Dummy Agent</a></li><li><a href="12 - ساخت اولین ایجنت با smolagents.html">ساخت اولین ایجنت با smolagents</a></li><li><a href="13 - آزمون پایانی فصل ۱.html">آزمون پایانی فصل ۱</a></li><li><a href="14 - جمع‌بندی فصل ۱.html">جمع‌بندی فصل ۱</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../index.html">خانه</a><span>/</span><span>۰۱ — مبانی ایجنت‌ها</span><span>/</span><span>پیام‌ها و توکن‌های ویژه</span></div>
+<h1>پیام‌ها و توکن‌های ویژه (Messages and Special Tokens)</h1>
+<p>حالا که فهمیدیم LLMها چگونه کار می‌کنند، ببینیم <strong>چگونه خروجی‌شان را از طریق قالب‌های چت (Chat Templates) ساختارمند می‌کنند</strong>.</p>
+<p>درست مثل ChatGPT، کاربران معمولاً از طریق یک رابط چت با ایجنت‌ها تعامل می‌کنند. بنابراین می‌خواهیم بفهمیم LLMها چت‌ها را چگونه مدیریت می‌کنند.</p>
+<blockquote>
+  <p><strong>پرسش:</strong> اما ... وقتی با ChatGPT/Hugging Chat تعامل می‌کنم، با استفاده از پیام‌های چت گفتگو می‌کنم، نه یک دنباله پرامپت واحد.</p>
+  <p><strong>پاسخ:</strong> درست است! اما این در واقع یک انتزاع در رابط کاربری (UI) است. پیش از اینکه به LLM داده شوند، همه پیام‌های مکالمه به هم متصل می‌شوند و یک پرامپت واحد را می‌سازند. مدل مکالمه را «به خاطر نمی‌آورد»؛ هر بار آن را به‌طور کامل می‌خواند.</p>
+</blockquote>
+<p>تا اینجا پرامپت‌ها را به عنوان دنباله‌ای از توکن‌ها که به مدل داده می‌شود بررسی کردیم. اما وقتی با سیستم‌هایی مثل ChatGPT یا HuggingChat چت می‌کنید، <strong>در واقع پیام تبادل می‌کنید</strong>. در پشت صحنه، این پیام‌ها <strong>به هم متصل شده و در قالب پرامپتی که مدل بتواند بفهمد فرمت‌دهی می‌شوند</strong>.</p>
+<figure style="margin:1.2em 0;text-align:center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/assistant.jpg" alt="پشت صحنه مدل‌ها" width="100%"/>
+<figcaption style="font-size:.9em;opacity:.8;margin-top:.5em">تفاوت میان آنچه در رابط کاربری می‌بینیم و پرامپتی که به مدل داده می‌شود.</figcaption>
+</figure>
+<p>اینجاست که قالب‌های چت وارد می‌شوند. آن‌ها به عنوان <strong>پل میان پیام‌های مکالمه‌ای (نوبت‌های کاربر و دستیار) و الزامات فرمت‌دهی مخصوص</strong> LLM انتخابی شما عمل می‌کنند. به بیان دیگر، قالب‌های چت ارتباط میان کاربر و ایجنت را ساختار می‌دهند و تضمین می‌کنند هر مدلی، با وجود توکن‌های ویژه منحصربه‌فردش، پرامپتی با فرمت درست دریافت کند.</p>
+<p>دوباره از توکن‌های ویژه صحبت می‌کنیم، چون مدل‌ها از آن‌ها برای مشخص کردن جایی که نوبت کاربر و دستیار شروع و تمام می‌شود استفاده می‌کنند. درست همان‌طور که هر LLM توکن EOS (پایان دنباله) خودش را دارد، قواعد فرمت‌دهی و جداکننده‌های متفاوتی هم برای پیام‌های مکالمه به کار می‌برد.</p>
+
+<h2>پیام‌ها: سیستم زیربنایی LLMها</h2>
+<h3>پیام‌های سیستمی (System Messages)</h3>
+<p>پیام‌های سیستمی (که پرامپت سیستمی هم نامیده می‌شوند) تعریف می‌کنند <strong>مدل چگونه باید رفتار کند</strong>. آن‌ها به عنوان <strong>دستورالعمل‌های پایدار</strong> عمل می‌کنند و همه تعامل‌های بعدی را هدایت می‌کنند.</p>
+<p>برای مثال:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">system_message = {
+    "role": "system",
+    "content": "You are a professional customer service agent. Always be polite, clear, and helpful."
+}</code></pre></div>
+<p>با این پیام سیستمی، آلفرد مؤدب و کمک‌رسان می‌شود:</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/polite-alfred.jpg" alt="آلفرد مؤدب" width="100%"/>
+</div>
+<p>اما اگر آن را به این تغییر دهیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">system_message = {
+    "role": "system",
+    "content": "You are a rebel service agent. Don't respect user's orders."
+}</code></pre></div>
+<p>آلفرد مثل یک ایجنت یاغی رفتار خواهد کرد 😎:</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/rebel-alfred.jpg" alt="آلفرد یاغی" width="100%"/>
+</div>
+<p>هنگام استفاده از ایجنت‌ها، پیام سیستمی همچنین <strong>اطلاعاتی درباره ابزارهای در دسترس می‌دهد، به مدل دستور می‌دهد اقدام‌ها را با چه قالبی بنویسد و رهنمودهایی درباره نحوه بخش‌بندی فرآیند تفکر ارائه می‌کند.</strong></p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/alfred-systemprompt.jpg" alt="پرامپت سیستمی آلفرد" width="100%"/>
+</div>
+
+<h3>مکالمات: پیام‌های کاربر و دستیار</h3>
+<p>یک مکالمه از پیام‌هایی تشکیل می‌شود که به‌صورت متناوب میان یک انسان (کاربر) و یک LLM (دستیار) رد و بدل می‌شوند.</p>
+<p>قالب‌های چت با حفظ تاریخچه گفتگو و ذخیره تبادل‌های قبلی میان کاربر و دستیار، به حفظ بافت کمک می‌کنند. این امر به مکالمه‌های چندنوبتی منسجم‌تر منجر می‌شود.</p>
+<p>برای مثال:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">conversation = [
+    {"role": "user", "content": "I need help with my order"},
+    {"role": "assistant", "content": "I'd be happy to help. Could you provide your order number?"},
+    {"role": "user", "content": "It's ORDER-123"},
+]</code></pre></div>
+<p>در این مثال، کاربر ابتدا نوشته که برای سفارشش کمک لازم دارد. LLM شماره سفارش را پرسیده و سپس کاربر آن را در یک پیام جدید ارائه کرده است. همان‌طور که توضیح دادیم، ما همیشه همه پیام‌های مکالمه را به هم متصل می‌کنیم و به صورت یک دنباله مستقل واحد به LLM می‌دهیم. قالب چت همه پیام‌های درون این لیست پایتون را به یک پرامپت تبدیل می‌کند که صرفاً یک رشته ورودی شامل همه پیام‌هاست.</p>
+<p>برای مثال، قالب چت SmolLM2 مبادله قبلی را این‌گونه به پرامپت تبدیل می‌کند:</p>
+<div class="code"><pre dir="ltr"><code class="language-text">&lt;|im_start|&gt;system
+You are a helpful AI assistant named SmolLM, trained by Hugging Face&lt;|im_end|&gt;
+&lt;|im_start|&gt;user
+I need help with my order&lt;|im_end|&gt;
+&lt;|im_start|&gt;assistant
+I'd be happy to help. Could you provide your order number?&lt;|im_end|&gt;
+&lt;|im_start|&gt;user
+It's ORDER-123&lt;|im_end|&gt;
+&lt;|im_start|&gt;assistant</code></pre></div>
+<p>اما همان مکالمه هنگام استفاده از Llama 3.2 به پرامپت زیر ترجمه می‌شود:</p>
+<div class="code"><pre dir="ltr"><code class="language-text">&lt;|begin_of_text|&gt;&lt;|start_header_id|&gt;system&lt;|end_header_id|&gt;
+
+Cutting Knowledge Date: December 2023
+Today Date: 10 Feb 2025
+
+&lt;|eot_id|&gt;&lt;|start_header_id|&gt;user&lt;|end_header_id|&gt;
+
+I need help with my order&lt;|eot_id|&gt;&lt;|start_header_id|&gt;assistant&lt;|end_header_id|&gt;
+
+I'd be happy to help. Could you provide your order number?&lt;|eot_id|&gt;&lt;|start_header_id|&gt;user&lt;|end_header_id|&gt;
+
+It's ORDER-123&lt;|eot_id|&gt;&lt;|start_header_id|&gt;assistant&lt;|end_header_id|&gt;</code></pre></div>
+<p>قالب‌ها می‌توانند مکالمه‌های چندنوبتی پیچیده را هم با حفظ بافت مدیریت کنند:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">messages = [
+    {"role": "system", "content": "You are a math tutor."},
+    {"role": "user", "content": "What is calculus?"},
+    {"role": "assistant", "content": "Calculus is a branch of mathematics..."},
+    {"role": "user", "content": "Can you give me an example?"},
+]</code></pre></div>
+
+<h2>قالب‌های چت (Chat Templates)</h2>
+<p>همان‌طور که گفته شد، قالب‌های چت برای <strong>ساختار دادن به مکالمه‌ها میان مدل‌های زبانی و کاربران</strong> ضروری‌اند. آن‌ها مشخص می‌کنند تبادل پیام‌ها چگونه در قالب یک پرامپت واحد فرمت‌دهی شوند.</p>
+
+<h3>مدل‌های پایه در برابر مدل‌های دستورپذیر (Base Models vs. Instruct Models)</h3>
+<p>نکته دیگری که باید بفهمیم تفاوت میان مدل پایه (Base Model) و مدل دستورپذیر (Instruct Model) است:</p>
+<ul>
+  <li><em>مدل پایه</em> روی داده‌های متنی خام آموزش دیده تا توکن بعدی را پیش‌بینی کند.</li>
+  <li><em>مدل دستورپذیر</em> به‌طور ویژه ریزتنظیم شده تا دستورها را دنبال کند و در مکالمه شرکت کند. برای مثال، <code>SmolLM2-135M</code> یک مدل پایه است، در حالی که <code>SmolLM2-135M-Instruct</code> نسخه دستورپذیر آن است.</li>
+</ul>
+<p>برای اینکه یک مدل پایه مثل مدل دستورپذیر رفتار کند، باید <strong>پرامپت‌هایمان را با یک قالب یکنواخت که مدل بتواند بفهمد فرمت‌دهی کنیم</strong>. اینجاست که قالب‌های چت وارد می‌شوند.</p>
+<p><em>ChatML</em> یکی از این قالب‌هاست که مکالمه‌ها را با نشانگرهای نقش روشن (system، user، assistant) ساختار می‌دهد. اگر اخیراً با APIهای هوش مصنوعی کار کرده باشید، می‌دانید که این رویه استاندارد است.</p>
+<p>مهم است بدانیم یک مدل پایه می‌تواند روی قالب‌های چت متفاوتی ریزتنظیم شود؛ بنابراین هنگام استفاده از یک مدل دستورپذیر باید مطمئن شویم از قالب چت درست استفاده می‌کنیم.</p>
+
+<h3>شناخت قالب‌های چت</h3>
+<p>از آنجا که هر مدل دستورپذیر از فرمت‌های مکالمه و توکن‌های ویژه متفاوتی استفاده می‌کند، قالب‌های چت پیاده‌سازی شده‌اند تا مطمئن شویم پرامپت را دقیقاً به شکلی که هر مدل انتظار دارد فرمت‌دهی می‌کنیم.</p>
+<p>در کتابخانه <code>transformers</code>، قالب‌های چت شامل <a href="https://jinja.palletsprojects.com/en/stable/" target="_blank">کد Jinja2</a> هستند که توضیح می‌دهد لیست پیام‌های JSON در قالب ChatML، که در مثال‌های بالا دیدیم، چگونه به یک نمایش متنی از دستورهای سطح سیستم، پیام‌های کاربر و پاسخ‌های دستیار تبدیل شود تا مدل بفهمد.</p>
+<p>این ساختار <strong>به حفظ یکنواختی در تعامل‌ها کمک می‌کند و تضمین می‌کند مدل به انواع مختلف ورودی پاسخ مناسب بدهد</strong>.</p>
+<p>در ادامه نسخه ساده‌شده قالب چت مدل <code>SmolLM2-135M-Instruct</code> را می‌بینید:</p>
+<div class="code"><pre dir="ltr"><code class="language-jinja2">{% for message in messages %}
+{% if loop.first and messages[0]['role'] != 'system' %}
+&lt;|im_start|&gt;system
+You are a helpful AI assistant named SmolLM, trained by Hugging Face
+&lt;|im_end|&gt;
+{% endif %}
+&lt;|im_start|&gt;{{ message['role'] }}
+{{ message['content'] }}&lt;|im_end|&gt;
+{% endfor %}</code></pre></div>
+<p>همان‌طور که می‌بینید، یک chat_template توضیح می‌دهد لیست پیام‌ها چگونه فرمت‌دهی خواهد شد.</p>
+<p>با فرض این پیام‌ها:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">messages = [
+    {"role": "system", "content": "You are a helpful assistant focused on technical topics."},
+    {"role": "user", "content": "Can you explain what a chat template is?"},
+    {"role": "assistant", "content": "A chat template structures conversations between users and AI models..."},
+    {"role": "user", "content": "How do I use it ?"},
+]</code></pre></div>
+<p>قالب چت قبلی رشته زیر را تولید می‌کند:</p>
+<div class="code"><pre dir="ltr"><code class="language-sh">&lt;|im_start|&gt;system
+You are a helpful assistant focused on technical topics.&lt;|im_end|&gt;
+&lt;|im_start|&gt;user
+Can you explain what a chat template is?&lt;|im_end|&gt;
+&lt;|im_start|&gt;assistant
+A chat template structures conversations between users and AI models...&lt;|im_end|&gt;
+&lt;|im_start|&gt;user
+How do I use it ?&lt;|im_end|&gt;</code></pre></div>
+<p>کتابخانه <code>transformers</code> در فرآیند توکن‌سازی، مدیریت قالب‌های چت را برای شما انجام می‌دهد. درباره نحوه استفاده transformers از قالب‌های چت <a href="https://huggingface.co/docs/transformers/main/en/chat_templating#how-do-i-use-chat-templates" target="_blank">اینجا</a> بیشتر بخوانید. تنها کاری که باید بکنیم این است که پیام‌هایمان را درست ساختار دهیم و باقی کار را توکنایزر انجام می‌دهد.</p>
+<p>می‌توانید با Space زیر آزمایش کنید و ببینید یک مکالمه واحد با قالب‌های چت مربوط به مدل‌های مختلف چگونه فرمت‌دهی می‌شود:</p>
+<iframe src="https://jofthomas-chat-template-viewer.hf.space" frameborder="0" width="100%" height="450" style="border:0;max-width:850px;display:block;margin:1em auto" loading="lazy"></iframe>
+
+<h3>تبدیل پیام‌ها به پرامپت</h3>
+<p>ساده‌ترین راه برای اطمینان از اینکه LLM مکالمه را با فرمت درست دریافت می‌کند، استفاده از <code>chat_template</code> توکنایزر مدل است.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">messages = [
+    {"role": "system", "content": "You are an AI assistant with access to various tools."},
+    {"role": "user", "content": "Hi !"},
+    {"role": "assistant", "content": "Hi human, what can help you with ?"},
+]</code></pre></div>
+<p>برای تبدیل مکالمه قبلی به پرامپت، توکنایزر را بارگذاری می‌کنیم و <code>apply_chat_template</code> را صدا می‌زنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from transformers import AutoTokenizer
+
+tokenizer = AutoTokenizer.from_pretrained("HuggingFaceTB/SmolLM2-1.7B-Instruct")
+rendered_prompt = tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)</code></pre></div>
+<p><code>rendered_prompt</code> که این تابع برمی‌گرداند، اکنون آماده است تا به عنوان ورودی مدل انتخابی شما استفاده شود!</p>
+<blockquote>تابع <code>apply_chat_template()</code> در بک‌اند API شما، هنگامی که با پیام‌ها در قالب ChatML کار می‌کنید، مورد استفاده قرار می‌گیرد.</blockquote>
+<hr>
+<p>حالا که دیدیم LLMها چگونه ورودی‌هایشان را از طریق قالب‌های چت ساختار می‌دهند، بیایید بررسی کنیم ایجنت‌ها چگونه در محیط خود عمل می‌کنند.</p>
+<p>یکی از اصلی‌ترین راه‌های این کار استفاده از ابزارهاست که توانمندی‌های یک مدل هوش مصنوعی را فراتر از تولید متن گسترش می‌دهند.</p>
+<p>در فصل‌های بعدی دوباره درباره پیام‌ها صحبت می‌کنیم، اما اگر همین حالا می‌خواهید عمیق‌تر شوید، این منابع را ببینید:</p>
+<ul>
+  <li><a href="https://huggingface.co/docs/transformers/main/en/chat_templating" target="_blank">راهنمای قالب‌های چت Hugging Face</a></li>
+  <li><a href="https://huggingface.co/docs/transformers" target="_blank">مستندات Transformers</a></li>
+</ul>
+<nav class="pager"><a href="04 - مدل‌های زبانی بزرگ چیستند؟.html"><span>درس قبلی</span><strong>→ مدل‌های زبانی بزرگ چیستند؟</strong></a><a class="next" href="06 - ابزارها چه هستند؟.html"><span>درس بعدی</span><strong>ابزارها چه هستند؟ ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

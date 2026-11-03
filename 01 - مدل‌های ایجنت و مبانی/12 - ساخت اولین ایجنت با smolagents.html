@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ساخت اولین ایجنت با smolagents | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../assets/vendor/highlight.min.js"></script>
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۱</div>
+    <div class="chapter-name">مقدمه‌ای بر ایجنت‌ها</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۱</span><span class="toc-title">مبانی و مفاهیم ایجنت‌ها</span><span class="toc-count">۱۴</span></summary>
+      <ol><li><a href="01 - مقدمه.html">مقدمه</a></li><li><a href="02 - ایجنت چیست؟.html">ایجنت چیست؟</a></li><li><a href="03 - آزمون کوتاه ۱.html">آزمون کوتاه ۱</a></li><li><a href="04 - مدل‌های زبانی بزرگ چیستند؟.html">مدل‌های زبانی بزرگ چیستند؟</a></li><li><a href="05 - پیام‌ها و توکن‌های ویژه.html">پیام‌ها و توکن‌های ویژه</a></li><li><a href="06 - ابزارها چه هستند؟.html">ابزارها چه هستند؟</a></li><li><a href="07 - چرخه تفکر، اقدام و مشاهده.html">چرخه تفکر، اقدام و مشاهده</a></li><li><a href="08 - تفکر و رویکرد ReAct.html">تفکر و رویکرد ReAct</a></li><li><a href="09 - اقدام‌ها و رویکرد Stop and Parse.html">اقدام‌ها و رویکرد Stop and Parse</a></li><li><a href="10 - مشاهدات و بازخورد محیط.html">مشاهدات و بازخورد محیط</a></li><li><a href="11 - کتابخانه Dummy Agent.html">کتابخانه Dummy Agent</a></li><li><a href="12 - ساخت اولین ایجنت با smolagents.html" class="active">ساخت اولین ایجنت با smolagents</a></li><li><a href="13 - آزمون پایانی فصل ۱.html">آزمون پایانی فصل ۱</a></li><li><a href="14 - جمع‌بندی فصل ۱.html">جمع‌بندی فصل ۱</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../index.html">خانه</a><span>/</span><span>۰۱ — مبانی ایجنت‌ها</span><span>/</span><span>ساخت اولین ایجنت با smolagents</span></div>
+<h1>ساخت اولین ایجنت با smolagents</h1>
+<p>کتابخانه <code>smolagents</code> یک فریم‌ورک فوق‌العاده سبک، مینیمال و متمرکز بر <strong>CodeAgent</strong> از طرف هاگینگ فیس است.</p>
+
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/smolagents.png" alt="smolagents" width="100%"/>
+</div>
+
+<h2>کد کامل برنامه در قالب فایل <code>app.py</code></h2>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents import CodeAgent, DuckDuckGoSearchTool, InferenceClientModel, load_tool, tool
+import datetime
+import pytz
+import yaml
+from tools.final_answer import FinalAnswerTool
+from Gradio_UI import GradioUI
+
+@tool
+def get_current_time_in_timezone(timezone: str) -> str:
+    """A tool that fetches the current local time in a specified timezone.
+    Args:
+        timezone: A string representing a valid timezone (e.g., 'America/New_York').
+    """
+    try:
+        tz = pytz.timezone(timezone)
+        local_time = datetime.datetime.now(tz).strftime("%Y-%m-%d %H:%M:%S")
+        return f"The current local time in {timezone} is: {local_time}"
+    except Exception as e:
+        return f"Error fetching time: {str(e)}"
+
+final_answer = FinalAnswerTool()
+model = InferenceClientModel(
+    max_tokens=2096,
+    temperature=0.5,
+    model_id='Qwen/Qwen2.5-Coder-32B-Instruct',
+)
+
+with open("prompts.yaml", 'r') as stream:
+    prompt_templates = yaml.safe_load(stream)
+
+agent = CodeAgent(
+    model=model,
+    tools=[final_answer, get_current_time_in_timezone],
+    max_steps=6,
+    prompt_templates=prompt_templates
+)
+
+GradioUI(agent).launch()</code></pre></div>
+
+<p>پس از پیاده‌سازی، می‌توانید این پروژه را روی یک فضای Hugging Face Spaces مستقر کنید و توکن <code>HF_TOKEN</code> خود را در تنظیمات Secret قرار دهید.</p>
+<nav class="pager"><a href="11 - کتابخانه Dummy Agent.html"><span>درس قبلی</span><strong>→ کتابخانه Dummy Agent</strong></a><a class="next" href="13 - آزمون پایانی فصل ۱.html"><span>درس بعدی</span><strong>آزمون پایانی فصل ۱ ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

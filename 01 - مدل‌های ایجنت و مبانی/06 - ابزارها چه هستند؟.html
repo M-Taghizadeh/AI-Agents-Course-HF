@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ابزارها چه هستند؟ | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../assets/vendor/highlight.min.js"></script>
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۱</div>
+    <div class="chapter-name">مقدمه‌ای بر ایجنت‌ها</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۱</span><span class="toc-title">مبانی و مفاهیم ایجنت‌ها</span><span class="toc-count">۱۴</span></summary>
+      <ol><li><a href="01 - مقدمه.html">مقدمه</a></li><li><a href="02 - ایجنت چیست؟.html">ایجنت چیست؟</a></li><li><a href="03 - آزمون کوتاه ۱.html">آزمون کوتاه ۱</a></li><li><a href="04 - مدل‌های زبانی بزرگ چیستند؟.html">مدل‌های زبانی بزرگ چیستند؟</a></li><li><a href="05 - پیام‌ها و توکن‌های ویژه.html">پیام‌ها و توکن‌های ویژه</a></li><li><a href="06 - ابزارها چه هستند؟.html" class="active">ابزارها چه هستند؟</a></li><li><a href="07 - چرخه تفکر، اقدام و مشاهده.html">چرخه تفکر، اقدام و مشاهده</a></li><li><a href="08 - تفکر و رویکرد ReAct.html">تفکر و رویکرد ReAct</a></li><li><a href="09 - اقدام‌ها و رویکرد Stop and Parse.html">اقدام‌ها و رویکرد Stop and Parse</a></li><li><a href="10 - مشاهدات و بازخورد محیط.html">مشاهدات و بازخورد محیط</a></li><li><a href="11 - کتابخانه Dummy Agent.html">کتابخانه Dummy Agent</a></li><li><a href="12 - ساخت اولین ایجنت با smolagents.html">ساخت اولین ایجنت با smolagents</a></li><li><a href="13 - آزمون پایانی فصل ۱.html">آزمون پایانی فصل ۱</a></li><li><a href="14 - جمع‌بندی فصل ۱.html">جمع‌بندی فصل ۱</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../index.html">خانه</a><span>/</span><span>۰۱ — مبانی ایجنت‌ها</span><span>/</span><span>ابزارها چه هستند؟</span></div>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/whiteboard-check-2.jpg" alt="Unit 1 planning" width="100%"/>
+</div>
+<h1>ابزارها چه هستند؟ (What are Tools?)</h1>
+<p>یکی از جنبه‌های حیاتی ایجنت‌های هوش مصنوعی توانایی آن‌ها در انجام <strong>اقدام‌ها (Actions)</strong> است. همان‌طور که دیدیم، این کار از طریق استفاده از <strong>ابزارها (Tools)</strong> انجام می‌شود.</p>
+<p>در این بخش یاد می‌گیریم ابزارها چه هستند، چگونه آن‌ها را به‌طور مؤثر طراحی کنیم و چگونه از طریق پیام سیستمی (System Message) در ایجنت خود یکپارچه‌شان کنیم.</p>
+<p>با دادن ابزارهای درست به ایجنت، و توضیح روشن اینکه آن ابزارها چگونه کار می‌کنند، می‌توانید به‌طور چشمگیری دامنه کارهایی را که هوش مصنوعی‌تان می‌تواند انجام دهد افزایش دهید. شروع کنیم!</p>
+
+<h2>ابزارهای هوش مصنوعی چه هستند؟</h2>
+<p><strong>ابزار تابعی است که در اختیار LLM قرار می‌گیرد.</strong> این تابع باید یک <strong>هدف روشن</strong> را برآورده کند.</p>
+<p>در ادامه چند ابزار رایج در ایجنت‌های هوش مصنوعی را می‌بینید:</p>
+<table>
+  <thead>
+    <tr><th>ابزار</th><th>توضیح</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>جستجوی وب (Web Search)</td><td>به ایجنت اجازه می‌دهد اطلاعات به‌روز را از اینترنت دریافت کند.</td></tr>
+    <tr><td>تولید تصویر (Image Generation)</td><td>بر اساس توضیحات متنی تصویر می‌سازد.</td></tr>
+    <tr><td>بازیابی (Retrieval)</td><td>اطلاعات را از یک منبع خارجی بازیابی می‌کند.</td></tr>
+    <tr><td>رابط API (API Interface)</td><td>با یک API خارجی (مثل GitHub، YouTube، Spotify و ...) تعامل می‌کند.</td></tr>
+  </tbody>
+</table>
+<p>این‌ها فقط مثال هستند، چون در واقع می‌توانید برای هر کاربردی ابزار بسازید!</p>
+<p>یک ابزار خوب باید چیزی باشد که <strong>قدرت LLM را تکمیل کند</strong>.</p>
+<p>برای مثال، اگر لازم است محاسبات ریاضی انجام دهید، دادن یک <strong>ابزار ماشین‌حساب</strong> به LLM نتایج بهتری می‌دهد تا اتکا به توانایی‌های ذاتی خود مدل.</p>
+<p>علاوه بر این، <strong>LLMها تکمیل یک پرامپت را بر اساس داده‌های آموزشی‌شان پیش‌بینی می‌کنند</strong>، یعنی دانش درونی آن‌ها فقط شامل رویدادهای پیش از آموزش مدل است. بنابراین اگر ایجنت شما به داده‌های به‌روز نیاز دارد، باید آن‌ها را از طریق یک ابزار فراهم کنید.</p>
+<p>برای مثال، اگر مستقیماً (بدون ابزار جستجو) از یک LLM وضعیت آب‌وهوای امروز را بپرسید، احتمالاً مدل آب‌وهوایی تصادفی را از خودش «توهم» می‌زند (Hallucinate).</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/weather.jpg" alt="آب‌وهوا" width="100%"/>
+</div>
+<p>یک ابزار باید شامل موارد زیر باشد:</p>
+<ul>
+  <li>یک <strong>توضیح متنی از کاری که تابع انجام می‌دهد</strong>.</li>
+  <li>یک <em>تابع قابل فراخوانی (Callable)</em> (چیزی که اقدام را انجام دهد).</li>
+  <li><em>آرگومان‌ها</em> همراه با تایپ‌ها.</li>
+  <li>(اختیاری) خروجی‌ها همراه با تایپ‌ها.</li>
+</ul>
+
+<h2>ابزارها چگونه کار می‌کنند؟</h2>
+<p>همان‌طور که دیدیم، LLMها فقط می‌توانند ورودی متنی دریافت کنند و خروجی متنی تولید کنند. آن‌ها به‌تنهایی هیچ راهی برای فراخوانی ابزارها ندارند. وقتی می‌گوییم به یک ایجنت ابزار می‌دهیم، منظورمان این است که <strong>وجود این ابزارها را به LLM آموزش می‌دهیم و به آن دستور می‌دهیم در صورت نیاز، فراخوانی‌هایی به صورت متن تولید کند.</strong></p>
+<p>برای مثال، اگر ابزاری برای بررسی آب‌وهوای یک مکان از اینترنت فراهم کنیم و سپس از LLM درباره آب‌وهوای پاریس بپرسیم، LLM تشخیص می‌دهد این فرصتی برای استفاده از ابزار «آب‌وهوا» است. LLM به جای اینکه خودش داده‌های آب‌وهوا را بازیابی کند، متنی تولید می‌کند که نمایانگر یک فراخوانی ابزار است، مثل <code>call weather_tool('Paris')</code>.</p>
+<p>سپس <strong>ایجنت</strong> این پاسخ را می‌خواند، تشخیص می‌دهد فراخوانی ابزار لازم است، ابزار را از طرف LLM اجرا می‌کند و داده‌های واقعی آب‌وهوا را بازیابی می‌کند.</p>
+<p>مراحل فراخوانی ابزار معمولاً به کاربر نمایش داده نمی‌شوند: ایجنت آن‌ها را به صورت یک پیام جدید به مکالمه اضافه می‌کند و سپس مکالمه به‌روزشده را دوباره به LLM می‌دهد. LLM این بافت اضافی را پردازش می‌کند و پاسخی طبیعی برای کاربر تولید می‌کند. از دید کاربر چنین به نظر می‌رسد که LLM مستقیماً با ابزار تعامل کرده است، اما در واقع این ایجنت بوده که کل فرآیند اجرا را در پس‌زمینه مدیریت کرده است.</p>
+<p>در جلسه‌های بعدی درباره این فرآیند بسیار بیشتر صحبت خواهیم کرد.</p>
+
+<h2>چگونه ابزارها را به یک LLM بدهیم؟</h2>
+<p>پاسخ کامل ممکن است سنگین به نظر برسد، اما اساساً ما از پرامپت سیستمی (System Prompt) برای ارائه توضیحات متنی ابزارهای در دسترس به مدل استفاده می‌کنیم:</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/Agent_system_prompt.png" alt="پرامپت سیستمی برای ابزارها" width="100%"/>
+</div>
+<p>برای اینکه این کار جواب بدهد، باید درباره موارد زیر بسیار دقیق و صحیح باشیم:</p>
+<ol>
+  <li><strong>ابزار چه کاری انجام می‌دهد</strong></li>
+  <li><strong>دقیقاً چه ورودی‌هایی انتظار دارد</strong></li>
+</ol>
+<p>به همین دلیل توضیحات ابزارها معمولاً با ساختارهایی گویا اما دقیق، مثل زبان‌های کامپیوتری یا JSON، ارائه می‌شوند. این کار <em>ضروری</em> نیست؛ هر فرمت دقیق و منسجمی کار می‌کند.</p>
+<p>اگر این موضوع بیش از حد تئوریک به نظر می‌رسد، بیایید با یک مثال عینی آن را بفهمیم.</p>
+<p>یک ابزار <strong>ماشین‌حساب</strong> ساده‌شده پیاده‌سازی می‌کنیم که فقط دو عدد صحیح را در هم ضرب می‌کند. این می‌تواند پیاده‌سازی پایتونی ما باشد:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">def calculator(a: int, b: int) -&gt; int:
+    """Multiply two integers."""
+    return a * b</code></pre></div>
+<p>پس ابزار ما <code>calculator</code> نام دارد، <strong>دو عدد صحیح را ضرب می‌کند</strong> و به ورودی‌های زیر نیاز دارد:</p>
+<ul>
+  <li><strong><code>a</code></strong> (<em>int</em>): یک عدد صحیح.</li>
+  <li><strong><code>b</code></strong> (<em>int</em>): یک عدد صحیح.</li>
+</ul>
+<p>خروجی ابزار یک عدد صحیح دیگر است که می‌توانیم این‌طور توصیفش کنیم:</p>
+<ul>
+  <li>(<em>int</em>): حاصل‌ضرب <code>a</code> و <code>b</code>.</li>
+</ul>
+<p>همه این جزئیات مهم‌اند. بیایید آن‌ها را در یک رشته متنی کنار هم بگذاریم که ابزار ما را برای LLM توصیف می‌کند.</p>
+<div class="code"><pre dir="ltr"><code class="language-text">Tool Name: calculator, Description: Multiply two integers., Arguments: a: int, b: int, Outputs: int</code></pre></div>
+<blockquote><strong>یادآوری:</strong> این توضیح متنی <em>چیزی است که می‌خواهیم LLM درباره ابزار بداند</em>.</blockquote>
+<p>وقتی رشته قبلی را به عنوان بخشی از ورودی به LLM می‌دهیم، مدل آن را به عنوان یک ابزار تشخیص می‌دهد و می‌داند چه ورودی‌هایی باید بدهد و چه خروجی‌ای انتظار داشته باشد.</p>
+<p>اگر بخواهیم ابزارهای بیشتری فراهم کنیم، باید منسجم باشیم و همیشه از همین فرمت استفاده کنیم. این فرآیند می‌تواند شکننده باشد و ممکن است به‌طور تصادفی برخی جزئیات را از قلم بیندازیم.</p>
+<p>آیا راه بهتری وجود دارد؟</p>
+
+<h3>قالب‌دهی خودکار بخش‌های ابزار (Auto-formatting Tool sections)</h3>
+<p>ابزار ما به پایتون نوشته شده و خود پیاده‌سازی همه آنچه را نیاز داریم فراهم می‌کند:</p>
+<ul>
+  <li>یک نام توصیفی از کاری که انجام می‌دهد: <code>calculator</code></li>
+  <li>یک توضیح طولانی‌تر، که با کامنت docstring تابع داده شده: <code>Multiply two integers.</code></li>
+  <li>ورودی‌ها و تایپشان: تابع به‌وضوح دو <code>int</code> انتظار دارد.</li>
+  <li>تایپ خروجی.</li>
+</ul>
+<p>مردم دلیل خوبی برای استفاده از زبان‌های برنامه‌نویسی دارند: این زبان‌ها گویا، مختصر و دقیق‌اند.</p>
+<p>می‌توانیم خود کد منبع پایتون را به عنوان <em>مشخصات</em> ابزار به LLM بدهیم، اما شیوه پیاده‌سازی ابزار مهم نیست. تنها چیزی که مهم است نام، کارکرد، ورودی‌های موردانتظار و خروجی ارائه‌شده آن است.</p>
+<p>ما از قابلیت‌های درون‌نگری (Introspection) پایتون استفاده می‌کنیم تا از کد منبع بهره ببریم و توضیح ابزار را به‌طور خودکار بسازیم. تنها چیزی که لازم است این است که پیاده‌سازی ابزار از type hint، docstring و نام‌های توابع معنادار استفاده کند. کدی می‌نویسیم تا بخش‌های مربوط را از کد منبع استخراج کند.</p>
+<p>پس از اتمام کار، فقط کافی است از یک دکوراتور (Decorator) پایتون استفاده کنیم تا مشخص کنیم تابع <code>calculator</code> یک ابزار است:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">@tool
+def calculator(a: int, b: int) -&gt; int:
+    """Multiply two integers."""
+    return a * b
+
+print(calculator.to_string())</code></pre></div>
+<p>به دکوراتور <code>@tool</code> پیش از تعریف تابع توجه کنید.</p>
+<p>با پیاده‌سازی‌ای که در ادامه می‌بینیم، خواهیم توانست متن زیر را به‌طور خودکار از کد منبع، از طریق تابع <code>to_string()</code> که دکوراتور فراهم می‌کند، بازیابی کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-text">Tool Name: calculator, Description: Multiply two integers., Arguments: a: int, b: int, Outputs: int</code></pre></div>
+<p>همان‌طور که می‌بینید، دقیقاً همان چیزی است که قبلاً دستی نوشتیم!</p>
+
+<h3>پیاده‌سازی عمومی ابزار (Generic Tool implementation)</h3>
+<p>یک کلاس عمومی <code>Tool</code> می‌سازیم که هر وقت لازم داشتیم از ابزار استفاده کنیم بتوانیم دوباره از آن بهره ببریم.</p>
+<blockquote><strong>توجه:</strong> این پیاده‌سازی نمونه، ساختگی است اما شباهت زیادی به پیاده‌سازی‌های واقعی در بیشتر کتابخانه‌ها دارد.</blockquote>
+<div class="code"><pre dir="ltr"><code class="language-python">from typing import Callable
+
+
+class Tool:
+    """
+    A class representing a reusable piece of code (Tool).
+
+    Attributes:
+        name (str): Name of the tool.
+        description (str): A textual description of what the tool does.
+        func (callable): The function this tool wraps.
+        arguments (list): A list of arguments.
+        outputs (str or list): The return type(s) of the wrapped function.
+    """
+    def __init__(self,
+                 name: str,
+                 description: str,
+                 func: Callable,
+                 arguments: list,
+                 outputs: str):
+        self.name = name
+        self.description = description
+        self.func = func
+        self.arguments = arguments
+        self.outputs = outputs
+
+    def to_string(self) -&gt; str:
+        """
+        Return a string representation of the tool,
+        including its name, description, arguments, and outputs.
+        """
+        args_str = ", ".join([
+            f"{arg_name}: {arg_type}" for arg_name, arg_type in self.arguments
+        ])
+
+        return (
+            f"Tool Name: {self.name},"
+            f" Description: {self.description},"
+            f" Arguments: {args_str},"
+            f" Outputs: {self.outputs}"
+        )
+
+    def __call__(self, *args, **kwargs):
+        """
+        Invoke the underlying function (callable) with provided arguments.
+        """
+        return self.func(*args, **kwargs)</code></pre></div>
+<p>ممکن است پیچیده به نظر برسد، اما اگر آرام آرام مرورش کنیم می‌بینیم چه می‌کند. ما کلاس <strong><code>Tool</code></strong> را تعریف می‌کنیم که شامل موارد زیر است:</p>
+<ul>
+  <li><strong><code>name</code></strong> (<em>str</em>): نام ابزار.</li>
+  <li><strong><code>description</code></strong> (<em>str</em>): توضیح کوتاه درباره کاری که ابزار انجام می‌دهد.</li>
+  <li><strong><code>function</code></strong> (<em>callable</em>): تابعی که ابزار اجرا می‌کند.</li>
+  <li><strong><code>arguments</code></strong> (<em>list</em>): پارامترهای ورودی موردانتظار.</li>
+  <li><strong><code>outputs</code></strong> (<em>str</em> یا <em>list</em>): خروجی‌های موردانتظار ابزار.</li>
+  <li><strong><code>__call__()</code></strong>: هنگام فراخوانی نمونه ابزار، تابع را صدا می‌زند.</li>
+  <li><strong><code>to_string()</code></strong>: ویژگی‌های ابزار را به نمایش متنی تبدیل می‌کند.</li>
+</ul>
+<p>می‌توانیم با این کلاس و کدی شبیه زیر یک ابزار بسازیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">calculator_tool = Tool(
+    "calculator",                   # name
+    "Multiply two integers.",       # description
+    calculator,                     # function to call
+    [("a", "int"), ("b", "int")],   # inputs (names and types)
+    "int",                          # output
+)</code></pre></div>
+<p>اما می‌توانیم از ماژول <code>inspect</code> پایتون هم استفاده کنیم تا همه اطلاعات را برایمان بازیابی کند! این دقیقاً کاری است که دکوراتور <code>@tool</code> انجام می‌دهد.</p>
+<blockquote>اگر علاقه‌مندید، می‌توانید بخش زیر را باز کنید تا پیاده‌سازی دکوراتور را ببینید.</blockquote>
+<details>
+<summary>کد دکوراتور</summary>
+<div class="code"><pre dir="ltr"><code class="language-python">import inspect
+
+def tool(func):
+    """
+    A decorator that creates a Tool instance from the given function.
+    """
+    # Get the function signature
+    signature = inspect.signature(func)
+
+    # Extract (param_name, param_annotation) pairs for inputs
+    arguments = []
+    for param in signature.parameters.values():
+        annotation_name = (
+            param.annotation.__name__
+            if hasattr(param.annotation, '__name__')
+            else str(param.annotation)
+        )
+        arguments.append((param.name, annotation_name))
+
+    # Determine the return annotation
+    return_annotation = signature.return_annotation
+    if return_annotation is inspect._empty:
+        outputs = "No return annotation"
+    else:
+        outputs = (
+            return_annotation.__name__
+            if hasattr(return_annotation, '__name__')
+            else str(return_annotation)
+        )
+
+    # Use the function's docstring as the description (default if None)
+    description = func.__doc__ or "No description provided."
+
+    # The function name becomes the Tool name
+    name = func.__name__
+
+    # Return a new Tool instance
+    return Tool(
+        name=name,
+        description=description,
+        func=func,
+        arguments=arguments,
+        outputs=outputs
+    )</code></pre></div>
+</details>
+<p>برای تأکید دوباره، با این دکوراتور می‌توانیم ابزارمان را این‌طور پیاده‌سازی کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">@tool
+def calculator(a: int, b: int) -&gt; int:
+    """Multiply two integers."""
+    return a * b
+
+print(calculator.to_string())</code></pre></div>
+<p>و می‌توانیم از متد <code>to_string</code> خود <code>Tool</code> استفاده کنیم تا به‌طور خودکار متنی را بازیابی کنیم که برای توضیح ابزار به LLM مناسب است:</p>
+<div class="code"><pre dir="ltr"><code class="language-text">Tool Name: calculator, Description: Multiply two integers., Arguments: a: int, b: int, Outputs: int</code></pre></div>
+<p>این توضیح در پرامپت سیستمی <strong>تزریق (Inject)</strong> می‌شود. با همان مثالی که این بخش را با آن شروع کردیم، پس از جایگزین کردن <code>tools_description</code> این‌طور به نظر می‌رسد:</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/Agent_system_prompt_tools.png" alt="پرامپت سیستمی برای ابزارها" width="100%"/>
+</div>
+<p>در بخش <a href="09 - اقدام‌ها و رویکرد Stop and Parse.html">اقدام‌ها (Actions)</a> بیشتر یاد می‌گیریم که یک ایجنت چگونه می‌تواند این ابزاری را که ساختیم <strong>فراخوانی (Call)</strong> کند.</p>
+
+<h3>پروتکل زمینه مدل (MCP): یک رابط یکپارچه برای ابزارها</h3>
+<p>پروتکل زمینه مدل (Model Context Protocol یا MCP) یک <strong>پروتکل متن‌باز</strong> است که نحوه <strong>ارائه ابزارها به LLMها</strong> توسط برنامه‌ها را استاندارد می‌کند. MCP این امکانات را فراهم می‌کند:</p>
+<ul>
+  <li>فهرستی رو‌به‌رشد از یکپارچگی‌های آماده که LLM شما می‌تواند مستقیماً به آن‌ها متصل شود</li>
+  <li>انعطاف برای جابه‌جایی میان ارائه‌دهندگان و فروشندگان مختلف LLM</li>
+  <li>بهترین شیوه‌ها برای ایمن نگه داشتن داده‌هایتان در زیرساخت خودتان</li>
+</ul>
+<p>این یعنی <strong>هر فریم‌ورکی که MCP را پیاده‌سازی کند می‌تواند از ابزارهای تعریف‌شده در این پروتکل بهره ببرد</strong> و دیگر نیازی نیست رابط یکسان ابزار را برای هر فریم‌ورک دوباره پیاده‌سازی کنید.</p>
+<p>اگر می‌خواهید درباره MCP عمیق‌تر شوید، می‌توانید <a href="https://huggingface.co/learn/mcp-course/" target="_blank">دوره رایگان MCP</a> ما را ببینید.</p>
+<hr>
+<p>ابزارها نقش حیاتی در ارتقای توانمندی‌های ایجنت‌های هوش مصنوعی دارند.</p>
+<p>به طور خلاصه یاد گرفتیم:</p>
+<ul>
+  <li><em>ابزارها چه هستند:</em> توابعی که به LLMها قابلیت‌های اضافه می‌دهند، مثل انجام محاسبات یا دسترسی به داده‌های خارجی.</li>
+  <li><em>چگونه یک ابزار تعریف کنیم:</em> با ارائه یک توضیح متنی روشن، ورودی‌ها، خروجی‌ها و یک تابع قابل فراخوانی.</li>
+  <li><em>چرا ابزارها ضروری‌اند:</em> آن‌ها ایجنت‌ها را قادر می‌سازند بر محدودیت‌های آموزش ایستای مدل غلبه کنند، وظایف بلادرنگ را مدیریت کنند و اقدام‌های تخصصی انجام دهند.</li>
+</ul>
+<p>حالا می‌توانیم به سراغ <a href="07 - چرخه تفکر، اقدام و مشاهده.html">جریان کاری ایجنت (Agent Workflow)</a> برویم؛ جایی که می‌بینید ایجنت چگونه مشاهده می‌کند، فکر می‌کند و اقدام می‌کند. این بخش <strong>همه آنچه تا اینجا پوشش داده‌ایم را کنار هم می‌آورد</strong> و زمینه را برای ساخت ایجنت هوش مصنوعی کاملاً کاربردی خودتان فراهم می‌کند.</p>
+<p>اما قبل از آن، وقت یک آزمون کوتاه دیگر است!</p>
+<nav class="pager"><a href="05 - پیام‌ها و توکن‌های ویژه.html"><span>درس قبلی</span><strong>→ پیام‌ها و توکن‌های ویژه</strong></a><a class="next" href="07 - چرخه تفکر، اقدام و مشاهده.html"><span>درس بعدی</span><strong>چرخه تفکر، اقدام و مشاهده ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>
