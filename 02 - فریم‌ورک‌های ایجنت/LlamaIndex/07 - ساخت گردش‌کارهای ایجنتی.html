@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ساخت گردش‌کارهای ایجنتی | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="stylesheet" href="../../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../../assets/vendor/highlight.min.js"></script>
+<script defer src="../../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۲.۲</div>
+    <div class="chapter-name">فریم‌ورک LlamaIndex</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۲.۲</span><span class="toc-title">ایجنت‌ها در LlamaIndex</span><span class="toc-count">۹</span></summary>
+      <ol><li><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html">۰۰ - مقدمه فریم‌ورک‌ها</a></li><li><a href="01 - مقدمه‌ای بر LlamaIndex.html">۰۱ - مقدمه‌ای بر LlamaIndex</a></li><li><a href="02 - آشنایی با LlamaHub.html">۰۲ - آشنایی با LlamaHub</a></li><li><a href="03 - کامپوننت‌ها در LlamaIndex.html">۰۳ - کامپوننت‌ها در LlamaIndex</a></li><li><a href="04 - ابزارها در LlamaIndex.html">۰۴ - ابزارها در LlamaIndex</a></li><li><a href="05 - آزمون کوتاه ۱.html">۰۵ - آزمون کوتاه ۱</a></li><li><a href="06 - ایجنت‌ها در LlamaIndex.html">۰۶ - ایجنت‌ها در LlamaIndex</a></li><li><a href="07 - ساخت گردش‌کارهای ایجنتی.html" class="active">۰۷ - ساخت گردش‌کارهای ایجنتی</a></li><li><a href="08 - آزمون کوتاه ۲.html">۰۸ - آزمون کوتاه ۲</a></li><li><a href="09 - جمع‌بندی LlamaIndex.html">۰۹ - جمع‌بندی LlamaIndex</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../../index.html">خانه</a><span>/</span><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html">۰۲ — فریم‌ورک‌های ایجنت</a><span>/</span><span>LlamaIndex</span><span>/</span><span>ساخت گردش‌کارهای ایجنتی</span></div>
+<h1>ساخت گردش‌کارهای ایجنتی در LlamaIndex</h1>
+<p>یک گردش‌کار (Workflow) در LlamaIndex راهی ساختارمند برای سازمان‌دهی کد شما در قالب گام‌های ترتیبی و قابل‌مدیریت فراهم می‌کند.</p>
+<p>چنین گردش‌کاری با تعریف <code>Steps</code> (گام‌ها) ساخته می‌شود که توسط <code>Events</code> (رویدادها) فعال می‌شوند و خودشان نیز برای فعال‌کردن گام‌های بعدی <code>Events</code> منتشر می‌کنند. بیایید ببینیم آلفرد یک گردش‌کار LlamaIndex را برای یک وظیفه‌ی RAG نشان می‌دهد.</p>
+
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/llama-index/workflows.png" alt="طرح کلی گردش‌کار" width="100%"/>
+</div>
+
+<p><strong>گردش‌کارها مزیت‌های کلیدی متعددی دارند:</strong></p>
+<ul>
+  <li>سازمان‌دهی روشن کد در قالب گام‌های مجزا</li>
+  <li>معماری رویدادمحور (Event-driven) برای جریان کنترل انعطاف‌پذیر</li>
+  <li>ارتباط ایمن از نظر نوع (Type-safe) بین گام‌ها</li>
+  <li>مدیریت وضعیت (State) داخلی</li>
+  <li>پشتیبانی از تعامل‌های ساده و پیچیده‌ی ایجنتی</li>
+</ul>
+<p>همان‌طور که شاید حدس زده باشید، <strong>گردش‌کارها تعادل خوبی میان خودمختاری ایجنت‌ها و حفظ کنترل بر کل گردش‌کار برقرار می‌کنند.</strong></p>
+<p>پس بیایید یاد بگیریم چگونه خودمان یک گردش‌کار بسازیم!</p>
+
+<h2>ساخت گردش‌کارها</h2>
+<div class="callout">
+  <div class="callout-title">💡 نکته</div>
+  <p>می‌توانید کد را در <a href="https://huggingface.co/agents-course/notebooks/blob/main/unit2/llama-index/workflows.ipynb" target="_blank" rel="noopener">این نوت‌بوک</a> دنبال کنید که با Google Colab قابل اجراست.</p>
+</div>
+
+<h3>ساخت یک گردش‌کار پایه</h3>
+<details>
+<summary>نصب پکیج Workflow</summary>
+<p>همان‌طور که در <a href="02 - آشنایی با LlamaHub.html">بخش LlamaHub</a> معرفی شد، می‌توانیم پکیج Workflow را با دستور زیر نصب کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-bash">pip install llama-index-utils-workflow</code></pre></div>
+</details>
+
+<p>می‌توانیم یک گردش‌کار تک‌گامی را با تعریف کلاسی که از <code>Workflow</code> ارث‌بری می‌کند و تزئین (Decorate) توابع با <code>@step</code> بسازیم. همچنین باید <code>StartEvent</code> و <code>StopEvent</code> را اضافه کنیم؛ رویدادهای ویژه‌ای که برای نشان‌دادن شروع و پایان گردش‌کار استفاده می‌شوند.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from llama_index.core.workflow import StartEvent, StopEvent, Workflow, step
+
+class MyWorkflow(Workflow):
+    @step
+    async def my_step(self, ev: StartEvent) -&gt; StopEvent:
+        # اینجا کاری انجام بده
+        return StopEvent(result="Hello, world!")
+
+
+w = MyWorkflow(timeout=10, verbose=False)
+result = await w.run()</code></pre></div>
+
+<p>همان‌طور که می‌بینید، اکنون می‌توانیم با فراخوانی <code>w.run()</code> گردش‌کار را اجرا کنیم.</p>
+
+<h3>اتصال چند گام</h3>
+<p>برای اتصال چند گام، <strong>رویدادهای سفارشی می‌سازیم که داده را بین گام‌ها منتقل می‌کنند.</strong> برای این کار باید یک <code>Event</code> اضافه کنیم که بین گام‌ها رد و بدل می‌شود و خروجی گام اول را به گام دوم منتقل می‌کند.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from llama_index.core.workflow import Event
+
+class ProcessingEvent(Event):
+    intermediate_result: str
+
+class MultiStepWorkflow(Workflow):
+    @step
+    async def step_one(self, ev: StartEvent) -&gt; ProcessingEvent:
+        # پردازش داده‌ی اولیه
+        return ProcessingEvent(intermediate_result="Step 1 complete")
+
+    @step
+    async def step_two(self, ev: ProcessingEvent) -&gt; StopEvent:
+        # استفاده از نتیجه‌ی میانی
+        final_result = f"Finished processing: {ev.intermediate_result}"
+        return StopEvent(result=final_result)
+
+w = MultiStepWorkflow(timeout=10, verbose=False)
+result = await w.run()
+result</code></pre></div>
+
+<p>Type hinting در اینجا مهم است، چون اجرای درست گردش‌کار را تضمین می‌کند. بیایید کمی کار را پیچیده‌تر کنیم!</p>
+
+<h3>حلقه‌ها و انشعاب‌ها</h3>
+<p>Type hinting قدرتمندترین بخش گردش‌کارهاست، چون به ما اجازه می‌دهد انشعاب (Branch)، حلقه (Loop) و اتصال (Join) بسازیم تا گردش‌کارهای پیچیده‌تر را تسهیل کنیم.</p>
+<p>بیایید نمونه‌ای از <strong>ساخت یک حلقه</strong> را با استفاده از عملگر union یعنی <code>|</code> نشان دهیم. در مثال زیر می‌بینیم که <code>LoopEvent</code> به‌عنوان ورودی گام گرفته می‌شود و می‌تواند به‌عنوان خروجی هم برگردانده شود.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from llama_index.core.workflow import Event
+import random
+
+
+class ProcessingEvent(Event):
+    intermediate_result: str
+
+
+class LoopEvent(Event):
+    loop_output: str
+
+
+class MultiStepWorkflow(Workflow):
+    @step
+    async def step_one(self, ev: StartEvent | LoopEvent) -&gt; ProcessingEvent | LoopEvent:
+        if random.randint(0, 1) == 0:
+            print("Bad thing happened")
+            return LoopEvent(loop_output="Back to step one.")
+        else:
+            print("Good thing happened")
+            return ProcessingEvent(intermediate_result="First step complete.")
+
+    @step
+    async def step_two(self, ev: ProcessingEvent) -&gt; StopEvent:
+        # استفاده از نتیجه‌ی میانی
+        final_result = f"Finished processing: {ev.intermediate_result}"
+        return StopEvent(result=final_result)
+
+
+w = MultiStepWorkflow(verbose=False)
+result = await w.run()
+result</code></pre></div>
+
+<h3>رسم گردش‌کارها</h3>
+<p>همچنین می‌توانیم گردش‌کارها را رسم کنیم. بیایید از تابع <code>draw_all_possible_flows</code> برای رسم گردش‌کار استفاده کنیم. این تابع گردش‌کار را در یک فایل HTML ذخیره می‌کند.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from llama_index.utils.workflow import draw_all_possible_flows
+
+w = ... # همان‌طور که در بخش قبل تعریف شد
+draw_all_possible_flows(w, "flow.html")</code></pre></div>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/llama-index/workflow-draw.png" alt="رسم گردش‌کار" width="100%"/>
+</div>
+
+<p>یک ترفند جالب دیگر هم هست که در این دوره پوشش می‌دهیم: امکان افزودن وضعیت (State) به گردش‌کار.</p>
+
+<h3>مدیریت وضعیت (State Management)</h3>
+<p>مدیریت وضعیت زمانی مفید است که بخواهید وضعیت گردش‌کار را دنبال کنید تا هر گام به همان وضعیت دسترسی داشته باشد. این کار را می‌توان با استفاده از type hint به نام <code>Context</code> روی یکی از پارامترهای تابع گام انجام داد.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from llama_index.core.workflow import Context, StartEvent, StopEvent
+
+
+@step
+async def query(self, ctx: Context, ev: StartEvent) -&gt; StopEvent:
+    # ذخیره‌ی کوئری در context
+    await ctx.store.set("query", "What is the capital of France?")
+
+    # انجام کاری با context و event
+    val = ...
+
+    # بازیابی کوئری از context
+    query = await ctx.store.get("query")
+
+    return StopEvent(result=val)</code></pre></div>
+
+<p>عالی! اکنون می‌دانید چگونه گردش‌کارهای پایه را در LlamaIndex بسازید!</p>
+<div class="callout">
+  <div class="callout-title">💡 نکته</div>
+  <p>نکات ظریف‌تر و پیچیده‌تری درباره‌ی گردش‌کارها وجود دارد که می‌توانید در <a href="https://docs.llamaindex.ai/en/stable/understanding/workflows/" target="_blank" rel="noopener">مستندات LlamaIndex</a> درباره‌ی آن‌ها بخوانید.</p>
+</div>
+
+<p>با این حال، راه دیگری هم برای ساخت گردش‌کارها وجود دارد که بر کلاس <code>AgentWorkflow</code> تکیه دارد. بیایید ببینیم چگونه می‌توانیم از آن برای ساخت یک گردش‌کار چندایجنتی استفاده کنیم.</p>
+
+<h2>خودکارسازی گردش‌کارها با گردش‌کارهای چندایجنتی</h2>
+<p>به‌جای ساخت دستی گردش‌کار، می‌توانیم از <strong>کلاس <code>AgentWorkflow</code> برای ساخت یک گردش‌کار چندایجنتی</strong> استفاده کنیم. <code>AgentWorkflow</code> از Workflow Agentها استفاده می‌کند تا به شما اجازه دهد سیستمی از یک یا چند ایجنت بسازید که بر اساس قابلیت‌های تخصصی‌شان بتوانند با هم همکاری کنند و وظایف را به یکدیگر واگذار کنند. این امر ساخت سیستم‌های ایجنتی پیچیده را ممکن می‌کند که در آن ایجنت‌های مختلف جنبه‌های مختلف یک وظیفه را مدیریت می‌کنند. به‌جای ایمپورت کلاس‌ها از <code>llama_index.core.agent</code>، کلاس‌های ایجنت را از <code>llama_index.core.agent.workflow</code> ایمپورت می‌کنیم. یک ایجنت باید در سازنده‌ی <code>AgentWorkflow</code> به‌عنوان ایجنت ریشه (Root Agent) تعیین شود. هنگامی که پیام کاربر می‌رسد، ابتدا به ایجنت ریشه هدایت می‌شود.</p>
+<p>هر ایجنت سپس می‌تواند:</p>
+<ul>
+  <li>درخواست را مستقیماً با ابزارهای خود مدیریت کند</li>
+  <li>کار را به ایجنت دیگری که برای وظیفه مناسب‌تر است واگذار (Handoff) کند</li>
+  <li>پاسخی به کاربر برگرداند</li>
+</ul>
+<p>بیایید ببینیم چگونه یک گردش‌کار چندایجنتی بسازیم.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from llama_index.core.agent.workflow import AgentWorkflow, ReActAgent
+from llama_index.llms.huggingface_api import HuggingFaceInferenceAPI
+
+# تعریف چند ابزار
+def add(a: int, b: int) -&gt; int:
+    """Add two numbers."""
+    return a + b
+
+def multiply(a: int, b: int) -&gt; int:
+    """Multiply two numbers."""
+    return a * b
+
+llm = HuggingFaceInferenceAPI(model_name="Qwen/Qwen2.5-Coder-32B-Instruct")
+
+# می‌توانیم توابع را مستقیماً بدون FunctionTool بدهیم -- تابع/docstring برای نام/توضیح پارس می‌شود
+multiply_agent = ReActAgent(
+    name="multiply_agent",
+    description="Is able to multiply two integers",
+    system_prompt="A helpful assistant that can use a tool to multiply numbers.",
+    tools=[multiply],
+    llm=llm,
+)
+
+addition_agent = ReActAgent(
+    name="add_agent",
+    description="Is able to add two integers",
+    system_prompt="A helpful assistant that can use a tool to add numbers.",
+    tools=[add],
+    llm=llm,
+)
+
+# ساخت گردش‌کار
+workflow = AgentWorkflow(
+    agents=[multiply_agent, addition_agent],
+    root_agent="multiply_agent",
+)
+
+# اجرای سیستم
+response = await workflow.run(user_msg="Can you add 5 and 3?")</code></pre></div>
+
+<p>ابزارهای ایجنت می‌توانند وضعیت گردش‌کار را هم که پیش‌تر اشاره شد تغییر دهند. پیش از شروع گردش‌کار، می‌توانیم یک دیکشنری وضعیت اولیه بدهیم که در دسترس همه‌ی ایجنت‌ها خواهد بود. وضعیت در کلید state از کانتکست گردش‌کار ذخیره می‌شود. این وضعیت در <code>state_prompt</code> تزریق می‌شود که هر پیام جدید کاربر را تقویت می‌کند.</p>
+<p>بیایید با تغییر مثال قبلی، یک شمارنده برای شمارش فراخوانی‌های تابع تزریق کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from llama_index.core.workflow import Context
+
+# تعریف چند ابزار
+async def add(ctx: Context, a: int, b: int) -&gt; int:
+    """Add two numbers."""
+    # به‌روزرسانی شمارنده
+    cur_state = await ctx.store.get("state")
+    cur_state["num_fn_calls"] += 1
+    await ctx.store.set("state", cur_state)
+
+    return a + b
+
+async def multiply(ctx: Context, a: int, b: int) -&gt; int:
+    """Multiply two numbers."""
+    # به‌روزرسانی شمارنده
+    cur_state = await ctx.store.get("state")
+    cur_state["num_fn_calls"] += 1
+    await ctx.store.set("state", cur_state)
+
+    return a * b
+
+...
+
+workflow = AgentWorkflow(
+    agents=[multiply_agent, addition_agent],
+    root_agent="multiply_agent",
+    initial_state={"num_fn_calls": 0},
+    state_prompt="Current state: {state}. User message: {msg}",
+)
+
+# اجرای گردش‌کار به‌همراه context
+ctx = Context(workflow)
+response = await workflow.run(user_msg="Can you add 5 and 3?", ctx=ctx)
+
+# بیرون کشیدن و بررسی وضعیت
+state = await ctx.store.get("state")
+print(state["num_fn_calls"])</code></pre></div>
+
+<p>تبریک! اکنون مبانی ایجنت‌ها در LlamaIndex را فرا گرفته‌اید! 🎉</p>
+<p>بیایید با یک آزمون پایانی دانش خود را تثبیت کنیم! 🚀</p>
+<nav class="pager"><a href="06 - ایجنت‌ها در LlamaIndex.html"><span>درس قبلی</span><strong>→ ایجنت‌ها در LlamaIndex</strong></a><a class="next" href="08 - آزمون کوتاه ۲.html"><span>درس بعدی</span><strong>آزمون کوتاه ۲ ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

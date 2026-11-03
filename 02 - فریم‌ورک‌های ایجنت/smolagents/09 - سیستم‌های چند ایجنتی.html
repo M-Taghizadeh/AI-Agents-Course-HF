@@ -1,0 +1,364 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>سیستم‌های چند ایجنتی | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="stylesheet" href="../../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../../assets/vendor/highlight.min.js"></script>
+<script defer src="../../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۲.۱</div>
+    <div class="chapter-name">فریم‌ورک smolagents</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۲.۱</span><span class="toc-title">توسعه ایجنت با smolagents</span><span class="toc-count">۱۲</span></summary>
+      <ol><li><a href="01 - مقدمه‌ای بر smolagents.html">مقدمه‌ای بر smolagents</a></li><li><a href="02 - چرا smolagents؟.html">چرا smolagents؟</a></li><li><a href="03 - آزمون کوتاه ۱.html">آزمون کوتاه ۱</a></li><li><a href="04 - ساخت ایجنت‌های کد.html">ساخت ایجنت‌های کد</a></li><li><a href="05 - ایجنت‌های فراخوان ابزار.html">ایجنت‌های فراخوان ابزار</a></li><li><a href="06 - ابزارها در smolagents.html">ابزارها در smolagents</a></li><li><a href="07 - ایجنت‌های بازیابی و RAG.html">ایجنت‌های بازیابی و RAG</a></li><li><a href="08 - آزمون کوتاه ۲.html">آزمون کوتاه ۲</a></li><li><a href="09 - سیستم‌های چند ایجنتی.html" class="active">سیستم‌های چند ایجنتی</a></li><li><a href="10 - ایجنت‌های بینایی و مرورگر.html">ایجنت‌های بینایی و مرورگر</a></li><li><a href="11 - آزمون پایانی smolagents.html">آزمون پایانی smolagents</a></li><li><a href="12 - جمع‌بندی smolagents.html">جمع‌بندی smolagents</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../../index.html">خانه</a><span>/</span><span>۰۲.۱ — فریم‌ورک smolagents</span><span>/</span><span>سیستم‌های چند ایجنتی</span></div>
+<p>📓 <a href="https://colab.research.google.com/#fileId=https://huggingface.co/agents-course/notebooks/blob/main/unit2/smolagents/multiagent_notebook.ipynb" target="_blank">اجرا در Google Colab</a> · 💬 <a href="http://hf.co/join/discord" target="_blank">کمک گرفتن در دیسکورد</a></p>
+<h1>سیستم‌های چند ایجنتی (Multi-Agent Systems)</h1>
+<p>سیستم‌های چند ایجنتی امکان می‌دهند <strong>ایجنت‌های متخصص روی تسک‌های پیچیده با هم همکاری کنند</strong> و ماژولار بودن، مقیاس‌پذیری و استحکام را بهبود می‌بخشند. به جای تکیه بر یک ایجنت، تسک‌ها بین ایجنت‌هایی با قابلیت‌های متمایز توزیع می‌شوند.</p>
+<p>در <strong>smolagents</strong> می‌توان ایجنت‌های مختلف را برای تولید کد پایتون، فراخوانی ابزارهای خارجی، جستجوی وب و موارد دیگر ترکیب کرد. با هماهنگ‌سازی این ایجنت‌ها می‌توانیم گردش‌های کاری قدرتمندی بسازیم.</p>
+<p>یک ساختار معمول می‌تواند شامل این‌ها باشد:</p>
+<ul>
+  <li>یک <strong>ایجنت مدیر (Manager Agent)</strong> برای تفویض تسک</li>
+  <li>یک <strong>ایجنت مفسر کد (Code Interpreter Agent)</strong> برای اجرای کد</li>
+  <li>یک <strong>ایجنت جستجوی وب (Web Search Agent)</strong> برای بازیابی اطلاعات</li>
+</ul>
+<p>نمودار زیر یک معماری چند ایجنتی ساده را نشان می‌دهد که در آن یک <strong>ایجنت مدیر</strong> یک <strong>ابزار مفسر کد</strong> و یک <strong>ایجنت جستجوی وب</strong> را هماهنگ می‌کند؛ ایجنت جستجوی وب نیز خود از ابزارهایی مانند <code>DuckDuckGoSearchTool</code> و <code>VisitWebpageTool</code> برای جمع‌آوری اطلاعات مرتبط استفاده می‌کند.</p>
+<img src="https://mermaid.ink/img/pako:eNp1kc1qhTAQRl9FUiQb8wIpdNO76eKubrmFks1oRg3VSYgjpYjv3lFL_2hnMWQOJwn5sqgmelRWleUSKLAtFs09jqhtoWuYUFfFAa6QA9QDTnpzamheuhxn8pt40-6l13UtS0ddhtQXj6dbR4XUGQg6zEYasTF393KjeSDGnDJKNxzj8I_7hLW5IOSmP9CH9hv_NL-d94d4DVNg84p1EnK4qlIj5hGClySWbadT-6OdsrL02MI8sFOOVkciw8zx8kaNspxnrJQE0fXKtjBMMs3JA-MpgOQwftIE9Bzj14w-cMznI_39E9Z3p0uFoA?type=png" alt="معماری چند ایجنتی" style="background: white; max-width:100%">
+
+<h2>سیستم‌های چند ایجنتی در عمل</h2>
+<p>یک سیستم چند ایجنتی از چند ایجنت متخصص تشکیل شده که زیر نظر یک <strong>ایجنت هماهنگ‌کننده (Orchestrator Agent)</strong> با هم کار می‌کنند. این رویکرد با توزیع تسک‌ها بین ایجنت‌هایی با نقش‌های متمایز، گردش‌های کاری پیچیده را ممکن می‌سازد.</p>
+<p>برای مثال، یک <strong>سیستم RAG چند ایجنتی</strong> می‌تواند این‌ها را یکپارچه کند:</p>
+<ul>
+  <li>یک <strong>ایجنت وب (Web Agent)</strong> برای گشت‌وگذار در اینترنت.</li>
+  <li>یک <strong>ایجنت بازیاب (Retriever Agent)</strong> برای واکشی اطلاعات از پایگاه‌های دانش.</li>
+  <li>یک <strong>ایجنت تولید تصویر (Image Generation Agent)</strong> برای ساخت محتوای بصری.</li>
+</ul>
+<p>همه این ایجنت‌ها زیر نظر یک هماهنگ‌کننده کار می‌کنند که تفویض تسک و تعامل را مدیریت می‌کند.</p>
+
+<h2>حل یک تسک پیچیده با سلسله‌مراتب چند ایجنتی</h2>
+<blockquote><p><strong>نکته:</strong> می‌توانید کد را در <a href="https://huggingface.co/agents-course/notebooks/blob/main/unit2/smolagents/multiagent_notebook.ipynb" target="_blank">این نوت‌بوک</a> که با Google Colab قابل اجراست دنبال کنید.</p></blockquote>
+<p>مراسم پذیرایی نزدیک است! با کمک شما، آلفرد اکنون تقریباً آماده‌سازی‌ها را تمام کرده است.</p>
+<p>اما حالا مشکلی پیش آمده: بت‌موبیل ناپدید شده است. آلفرد باید یک جایگزین پیدا کند، و سریع.</p>
+<p>خوشبختانه چند فیلم زندگی‌نامه‌ای درباره زندگی بروس وین ساخته شده است؛ شاید آلفرد بتواند خودرویی را که در یکی از لوکیشن‌های فیلم‌ها جا مانده تهیه کند و آن را مطابق استانداردهای مدرن بازسازی کند، که قطعاً شامل گزینه رانندگی خودران کامل هم می‌شود.</p>
+<p>اما این خودرو می‌تواند در هر کجا از لوکیشن‌های فیلمبرداری سراسر جهان باشد ــ که ممکن است متعدد باشند.</p>
+<p>پس آلفرد از شما کمک می‌خواهد. می‌توانید ایجنتی بسازید که این تسک را حل کند؟</p>
+<blockquote><p>👉 همه لوکیشن‌های فیلمبرداری بتمن در جهان را پیدا کن، زمان انتقال با قایق به آنجا را محاسبه کن، و آن‌ها را روی یک نقشه نمایش بده، با رنگی که بر اساس زمان انتقال با قایق تغییر می‌کند. همچنین چند کارخانه ابرخودرو را با همان زمان انتقال با قایق روی نقشه نشان بده.</p></blockquote>
+<p>بیایید آن را بسازیم!</p>
+<p>این مثال به چند بسته اضافی نیاز دارد، پس ابتدا آن‌ها را نصب می‌کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-bash">pip install 'smolagents[litellm]' plotly geopandas shapely kaleido -q</code></pre></div>
+
+<h3>ابتدا ابزاری برای محاسبه زمان انتقال با هواپیمای باری می‌سازیم.</h3>
+<div class="code"><pre dir="ltr"><code class="language-python">import math
+from typing import Optional, Tuple
+
+from smolagents import tool
+
+
+@tool
+def calculate_cargo_travel_time(
+    origin_coords: Tuple[float, float],
+    destination_coords: Tuple[float, float],
+    cruising_speed_kmh: Optional[float] = 750.0,  # Average speed for cargo planes
+) -&gt; float:
+    """
+    Calculate the travel time for a cargo plane between two points on Earth using great-circle distance.
+
+    Args:
+        origin_coords: Tuple of (latitude, longitude) for the starting point
+        destination_coords: Tuple of (latitude, longitude) for the destination
+        cruising_speed_kmh: Optional cruising speed in km/h (defaults to 750 km/h for typical cargo planes)
+
+    Returns:
+        float: The estimated travel time in hours
+
+    Example:
+        &gt;&gt;&gt; # Chicago (41.8781° N, 87.6298° W) to Sydney (33.8688° S, 151.2093° E)
+        &gt;&gt;&gt; result = calculate_cargo_travel_time((41.8781, -87.6298), (-33.8688, 151.2093))
+    """
+
+    def to_radians(degrees: float) -&gt; float:
+        return degrees * (math.pi / 180)
+
+    # Extract coordinates
+    lat1, lon1 = map(to_radians, origin_coords)
+    lat2, lon2 = map(to_radians, destination_coords)
+
+    # Earth's radius in kilometers
+    EARTH_RADIUS_KM = 6371.0
+
+    # Calculate great-circle distance using the haversine formula
+    dlon = lon2 - lon1
+    dlat = lat2 - lat1
+
+    a = (
+        math.sin(dlat / 2) ** 2
+        + math.cos(lat1) * math.cos(lat2) * math.sin(dlon / 2) ** 2
+    )
+    c = 2 * math.asin(math.sqrt(a))
+    distance = EARTH_RADIUS_KM * c
+
+    # Add 10% to account for non-direct routes and air traffic controls
+    actual_distance = distance * 1.1
+
+    # Calculate flight time
+    # Add 1 hour for takeoff and landing procedures
+    flight_time = (actual_distance / cruising_speed_kmh) + 1.0
+
+    # Format the results
+    return round(flight_time, 2)
+
+
+print(calculate_cargo_travel_time((41.8781, -87.6298), (-33.8688, 151.2093)))</code></pre></div>
+
+<h3>راه‌اندازی ایجنت</h3>
+<p>برای ارائه‌دهنده مدل از Together AI استفاده می‌کنیم؛ یکی از <a href="https://huggingface.co/blog/inference-providers">ارائه‌دهندگان استنتاج جدید روی Hub</a>!</p>
+<p><code>GoogleSearchTool</code> برای جستجو در وب از <a href="https://serper.dev">Serper API</a> استفاده می‌کند، بنابراین لازم است یا متغیر محیطی <code>SERPAPI_API_KEY</code> را تنظیم کنید و <code>provider="serpapi"</code> را بدهید، یا <code>SERPER_API_KEY</code> را داشته باشید و <code>provider=serper</code> را بدهید.</p>
+<p>اگر هیچ ارائه‌دهنده Serp API تنظیم نکرده‌اید، می‌توانید از <code>DuckDuckGoSearchTool</code> استفاده کنید، اما حواستان باشد که محدودیت نرخ (rate limit) دارد.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">import os
+from PIL import Image
+from smolagents import CodeAgent, GoogleSearchTool, InferenceClientModel, VisitWebpageTool
+
+model = InferenceClientModel(model_id="Qwen/Qwen2.5-Coder-32B-Instruct", provider="together")</code></pre></div>
+<p>می‌توانیم با ساخت یک ایجنت ساده به عنوان خط پایه (baseline) شروع کنیم تا یک گزارش ساده به ما بدهد.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">task = """Find all Batman filming locations in the world, calculate the time to transfer via cargo plane to here (we're in Gotham, 40.7128° N, 74.0060° W), and return them to me as a pandas dataframe.
+Also give me some supercar factories with the same cargo plane transfer time."""</code></pre></div>
+<div class="code"><pre dir="ltr"><code class="language-python">agent = CodeAgent(
+    model=model,
+    tools=[GoogleSearchTool("serper"), VisitWebpageTool(), calculate_cargo_travel_time],
+    additional_authorized_imports=["pandas"],
+    max_steps=20,
+)</code></pre></div>
+<div class="code"><pre dir="ltr"><code class="language-python">result = agent.run(task)</code></pre></div>
+<div class="code"><pre dir="ltr"><code class="language-python">result</code></pre></div>
+<p>در مورد ما، این خروجی تولید می‌شود:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">|  | Location                                             | Travel Time to Gotham (hours) |
+|--|------------------------------------------------------|------------------------------|
+| 0  | Necropolis Cemetery, Glasgow, Scotland, UK         | 8.60                         |
+| 1  | St. George's Hall, Liverpool, England, UK         | 8.81                         |
+| 2  | Two Temple Place, London, England, UK             | 9.17                         |
+| 3  | Wollaton Hall, Nottingham, England, UK           | 9.00                         |
+| 4  | Knebworth House, Knebworth, Hertfordshire, UK    | 9.15                         |
+| 5  | Acton Lane Power Station, Acton Lane, Acton, UK  | 9.16                         |
+| 6  | Queensboro Bridge, New York City, USA            | 1.01                         |
+| 7  | Wall Street, New York City, USA                  | 1.00                         |
+| 8  | Mehrangarh Fort, Jodhpur, Rajasthan, India       | 18.34                        |
+| 9  | Turda Gorge, Turda, Romania                      | 11.89                        |
+| 10 | Chicago, USA                                     | 2.68                         |
+| 11 | Hong Kong, China                                 | 19.99                        |
+| 12 | Cardington Studios, Northamptonshire, UK        | 9.10                         |
+| 13 | Warner Bros. Leavesden Studios, Hertfordshire, UK | 9.13                         |
+| 14 | Westwood, Los Angeles, CA, USA                  | 6.79                         |
+| 15 | Woking, UK (McLaren)                             | 9.13                         |</code></pre></div>
+<p>می‌توانیم با افزودن چند مرحله برنامه‌ریزی اختصاصی و پرامپت‌نویسی بیشتر، این نتیجه را کمی بهبود دهیم.</p>
+<p>مراحل برنامه‌ریزی (planning steps) به ایجنت اجازه می‌دهند پیشاپیش فکر کند و مراحل بعدی‌اش را برنامه‌ریزی کند، که برای تسک‌های پیچیده‌تر می‌تواند مفید باشد.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">agent.planning_interval = 4
+
+detailed_report = agent.run(f"""
+You're an expert analyst. You make comprehensive reports after visiting many websites.
+Don't hesitate to search for many queries at once in a for loop.
+For each data point that you find, visit the source url to confirm numbers.
+
+{task}
+""")
+
+print(detailed_report)</code></pre></div>
+<div class="code"><pre dir="ltr"><code class="language-python">detailed_report</code></pre></div>
+<p>در مورد ما، این خروجی تولید می‌شود:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">|  | Location                                         | Travel Time (hours) |
+|--|--------------------------------------------------|---------------------|
+| 0  | Bridge of Sighs, Glasgow Necropolis, Glasgow, UK | 8.6                 |
+| 1  | Wishart Street, Glasgow, Scotland, UK         | 8.6                 |</code></pre></div>
+<p>به لطف همین تغییرات سریع، تنها با دادن یک پرامپت دقیق و قابلیت برنامه‌ریزی به ایجنت، گزارشی بسیار موجزتر به دست آوردیم!</p>
+<p>پنجره زمینه (context window) مدل به‌سرعت پر می‌شود. بنابراین <strong>اگر از ایجنت بخواهیم نتایج یک جستجوی دقیق را با جستجوی دیگری ترکیب کند، کندتر خواهد شد و توکن‌ها و هزینه‌ها به‌سرعت بالا می‌روند</strong>.</p>
+<p>➡️ باید ساختار سیستم خود را بهبود دهیم.</p>
+
+<h3>✌️ تقسیم تسک بین دو ایجنت</h3>
+<p>ساختارهای چند ایجنتی اجازه می‌دهند حافظه‌ها بین زیرتسک‌های مختلف جدا شوند، که دو مزیت بزرگ دارد:</p>
+<ul>
+  <li>هر ایجنت روی تسک اصلی خود متمرکزتر است و در نتیجه عملکرد بهتری دارد.</li>
+  <li>جداسازی حافظه‌ها تعداد توکن‌های ورودی در هر مرحله را کاهش می‌دهد و در نتیجه تأخیر و هزینه کمتر می‌شود.</li>
+</ul>
+<p>بیایید تیمی بسازیم که شامل یک ایجنت جستجوی وب اختصاصی باشد که توسط ایجنت دیگری مدیریت می‌شود.</p>
+<p>ایجنت مدیر برای نوشتن گزارش نهایی‌اش باید قابلیت ترسیم نمودار داشته باشد؛ پس importهای اضافی از جمله <code>plotly</code>، و <code>geopandas</code> + <code>shapely</code> را برای ترسیم فضایی در اختیارش می‌گذاریم.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">model = InferenceClientModel(
+    "Qwen/Qwen2.5-Coder-32B-Instruct", provider="together", max_tokens=8096
+)
+
+web_agent = CodeAgent(
+    model=model,
+    tools=[
+        GoogleSearchTool(provider="serper"),
+        VisitWebpageTool(),
+        calculate_cargo_travel_time,
+    ],
+    name="web_agent",
+    description="Browses the web to find information",
+    verbosity_level=0,
+    max_steps=10,
+)</code></pre></div>
+<p>ایجنت مدیر باید کار فکری سنگینی انجام دهد.</p>
+<p>پس مدل قوی‌تر <a href="https://huggingface.co/deepseek-ai/DeepSeek-R1">DeepSeek-R1</a> را به آن می‌دهیم و یک <code>planning_interval</code> هم به ترکیب اضافه می‌کنیم.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents.utils import encode_image_base64, make_image_url
+from smolagents import OpenAIServerModel
+
+
+def check_reasoning_and_plot(final_answer, agent_memory):
+    multimodal_model = OpenAIServerModel("gpt-4o", max_tokens=8096)
+    filepath = "saved_map.png"
+    assert os.path.exists(filepath), "Make sure to save the plot under saved_map.png!"
+    image = Image.open(filepath)
+    prompt = (
+        f"Here is a user-given task and the agent steps: {agent_memory.get_succinct_steps()}. Now here is the plot that was made."
+        "Please check that the reasoning process and plot are correct: do they correctly answer the given task?"
+        "First list reasons why yes/no, then write your final decision: PASS in caps lock if it is satisfactory, FAIL if it is not."
+        "Don't be harsh: if the plot mostly solves the task, it should pass."
+        "To pass, a plot should be made using px.scatter_map and not any other method (scatter_map looks nicer)."
+    )
+    messages = [
+        {
+            "role": "user",
+            "content": [
+                {
+                    "type": "text",
+                    "text": prompt,
+                },
+                {
+                    "type": "image_url",
+                    "image_url": {"url": make_image_url(encode_image_base64(image))},
+                },
+            ],
+        }
+    ]
+    output = multimodal_model(messages).content
+    print("Feedback: ", output)
+    if "FAIL" in output:
+        raise Exception(output)
+    return True
+
+
+manager_agent = CodeAgent(
+    model=InferenceClientModel("deepseek-ai/DeepSeek-R1", provider="together", max_tokens=8096),
+    tools=[calculate_cargo_travel_time],
+    managed_agents=[web_agent],
+    additional_authorized_imports=[
+        "geopandas",
+        "plotly",
+        "shapely",
+        "json",
+        "pandas",
+        "numpy",
+    ],
+    planning_interval=5,
+    verbosity_level=2,
+    final_answer_checks=[check_reasoning_and_plot],
+    max_steps=15,
+)</code></pre></div>
+<p>بیایید ببینیم این تیم چه شکلی است:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">manager_agent.visualize()</code></pre></div>
+<p>این کد چیزی شبیه خروجی زیر تولید می‌کند و به ما کمک می‌کند ساختار و رابطه بین ایجنت‌ها و ابزارهای مورد استفاده را بفهمیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-text">CodeAgent | deepseek-ai/DeepSeek-R1
+├── ✅ Authorized imports: ['geopandas', 'plotly', 'shapely', 'json', 'pandas', 'numpy']
+├── 🛠️ Tools:
+│   ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+│   ┃ Name                        ┃ Description                           ┃ Arguments                             ┃
+│   ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+│   │ calculate_cargo_travel_time │ Calculate the travel time for a cargo │ origin_coords (`array`): Tuple of     │
+│   │                             │ plane between two points on Earth     │ (latitude, longitude) for the         │
+│   │                             │ using great-circle distance.          │ starting point                        │
+│   │                             │                                       │ destination_coords (`array`): Tuple   │
+│   │                             │                                       │ of (latitude, longitude) for the      │
+│   │                             │                                       │ destination                           │
+│   │                             │                                       │ cruising_speed_kmh (`number`):        │
+│   │                             │                                       │ Optional cruising speed in km/h       │
+│   │                             │                                       │ (defaults to 750 km/h for typical     │
+│   │                             │                                       │ cargo planes)                         │
+│   │ final_answer                │ Provides a final answer to the given  │ answer (`any`): The final answer to   │
+│   │                             │ problem.                              │ the problem                           │
+│   └─────────────────────────────┴───────────────────────────────────────┴───────────────────────────────────────┘
+└── 🤖 Managed agents:
+    └── web_agent | CodeAgent | Qwen/Qwen2.5-Coder-32B-Instruct
+        ├── ✅ Authorized imports: []
+        ├── 📝 Description: Browses the web to find information
+        └── 🛠️ Tools:
+            ┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┓
+            ┃ Name                        ┃ Description                       ┃ Arguments                         ┃
+            ┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┩
+            │ web_search                  │ Performs a google web search for  │ query (`string`): The search      │
+            │                             │ your query then returns a string  │ query to perform.                 │
+            │                             │ of the top search results.        │ filter_year (`integer`):          │
+            │                             │                                   │ Optionally restrict results to a  │
+            │                             │                                   │ certain year                      │
+            │ visit_webpage               │ Visits a webpage at the given url │ url (`string`): The url of the    │
+            │                             │ and reads its content as a        │ webpage to visit.                 │
+            │                             │ markdown string. Use this to      │                                   │
+            │                             │ browse webpages.                  │                                   │
+            │ calculate_cargo_travel_time │ Calculate the travel time for a   │ origin_coords (`array`): Tuple of │
+            │                             │ cargo plane between two points on │ (latitude, longitude) for the     │
+            │                             │ Earth using great-circle          │ starting point                    │
+            │                             │ distance.                         │ destination_coords (`array`):     │
+            │                             │                                   │ Tuple of (latitude, longitude)    │
+            │                             │                                   │ for the destination               │
+            │                             │                                   │ cruising_speed_kmh (`number`):    │
+            │                             │                                   │ Optional cruising speed in km/h   │
+            │                             │                                   │ (defaults to 750 km/h for typical │
+            │                             │                                   │ cargo planes)                     │
+            │ final_answer                │ Provides a final answer to the    │ answer (`any`): The final answer  │
+            │                             │ given problem.                    │ to the problem                    │
+            └─────────────────────────────┴───────────────────────────────────┴───────────────────────────────────┘</code></pre></div>
+<div class="code"><pre dir="ltr"><code class="language-python">manager_agent.run("""
+Find all Batman filming locations in the world, calculate the time to transfer via cargo plane to here (we're in Gotham, 40.7128° N, 74.0060° W).
+Also give me some supercar factories with the same cargo plane transfer time. You need at least 6 points in total.
+Represent this as spatial map of the world, with the locations represented as scatter points with a color that depends on the travel time, and save it to saved_map.png!
+
+Here's an example of how to plot and return a map:
+import plotly.express as px
+df = px.data.carshare()
+fig = px.scatter_map(df, lat="centroid_lat", lon="centroid_lon", text="name", color="peak_hour", size=100,
+     color_continuous_scale=px.colors.sequential.Magma, size_max=15, zoom=1)
+fig.show()
+fig.write_image("saved_image.png")
+final_answer(fig)
+
+Never try to process strings using code: when you have a string to read, just print it and you'll see it.
+""")</code></pre></div>
+<p>نمی‌دانم اجرای شما چطور پیش رفت، اما در اجرای من، ایجنت مدیر ماهرانه تسک‌ها را به ایجنت وب تقسیم کرد: <code>۱. جستجوی لوکیشن‌های فیلمبرداری بتمن</code>، سپس <code>۲. یافتن کارخانه‌های ابرخودرو</code>، و پس از آن فهرست‌ها را ترکیب کرد و نقشه را ترسیم کرد.</p>
+<p>بیایید نقشه را مستقیماً از state ایجنت بررسی کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">manager_agent.python_executor.state["fig"]</code></pre></div>
+<p>این کد نقشه را خروجی می‌دهد:</p>
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/smolagents/output_map.png" alt="خروجی نمونه سیستم چند ایجنتی (نقشه)" width="100%"/>
+
+<h2>منابع</h2>
+<ul>
+  <li><a href="https://huggingface.co/docs/smolagents/main/en/examples/multiagents">Multi-Agent Systems</a> – مرور سیستم‌های چند ایجنتی.</li>
+  <li><a href="https://weaviate.io/blog/what-is-agentic-rag">What is Agentic RAG?</a> – مقدمه‌ای بر Agentic RAG.</li>
+  <li><a href="https://huggingface.co/learn/cookbook/multiagent_rag_system">Multi-Agent RAG System 🤖🤝🤖 Recipe</a> – راهنمای گام‌به‌گام ساخت یک سیستم RAG چند ایجنتی.</li>
+</ul>
+<nav class="pager"><a href="08 - آزمون کوتاه ۲.html"><span>درس قبلی</span><strong>→ آزمون کوتاه ۲</strong></a><a class="next" href="10 - ایجنت‌های بینایی و مرورگر.html"><span>درس بعدی</span><strong>ایجنت‌های بینایی و مرورگر ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

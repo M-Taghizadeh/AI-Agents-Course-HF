@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ایجنت‌های بینایی و مرورگر | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="stylesheet" href="../../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../../assets/vendor/highlight.min.js"></script>
+<script defer src="../../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۲.۱</div>
+    <div class="chapter-name">فریم‌ورک smolagents</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۲.۱</span><span class="toc-title">توسعه ایجنت با smolagents</span><span class="toc-count">۱۲</span></summary>
+      <ol><li><a href="01 - مقدمه‌ای بر smolagents.html">مقدمه‌ای بر smolagents</a></li><li><a href="02 - چرا smolagents؟.html">چرا smolagents؟</a></li><li><a href="03 - آزمون کوتاه ۱.html">آزمون کوتاه ۱</a></li><li><a href="04 - ساخت ایجنت‌های کد.html">ساخت ایجنت‌های کد</a></li><li><a href="05 - ایجنت‌های فراخوان ابزار.html">ایجنت‌های فراخوان ابزار</a></li><li><a href="06 - ابزارها در smolagents.html">ابزارها در smolagents</a></li><li><a href="07 - ایجنت‌های بازیابی و RAG.html">ایجنت‌های بازیابی و RAG</a></li><li><a href="08 - آزمون کوتاه ۲.html">آزمون کوتاه ۲</a></li><li><a href="09 - سیستم‌های چند ایجنتی.html">سیستم‌های چند ایجنتی</a></li><li><a href="10 - ایجنت‌های بینایی و مرورگر.html" class="active">ایجنت‌های بینایی و مرورگر</a></li><li><a href="11 - آزمون پایانی smolagents.html">آزمون پایانی smolagents</a></li><li><a href="12 - جمع‌بندی smolagents.html">جمع‌بندی smolagents</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../../index.html">خانه</a><span>/</span><span>۰۲.۱ — فریم‌ورک smolagents</span><span>/</span><span>ایجنت‌های بینایی و مرورگر</span></div>
+<p>📓 <a href="https://colab.research.google.com/#fileId=https://huggingface.co/agents-course/notebooks/blob/main/unit2/smolagents/vision_agents.ipynb" target="_blank">اجرا در Google Colab</a> · 💬 <a href="http://hf.co/join/discord" target="_blank">کمک گرفتن در دیسکورد</a></p>
+<h1>ایجنت‌های بینایی با smolagents</h1>
+<blockquote><p><strong>هشدار:</strong> مثال‌های این بخش به دسترسی به یک مدل VLM قدرتمند نیاز دارند. ما آن‌ها را با API مدل GPT-4o آزمایش کرده‌ایم. با این حال، بخش <a href="02 - چرا smolagents؟.html">چرا smolagents؟</a> راهکارهای جایگزین پشتیبانی‌شده توسط smolagents و Hugging Face را بررسی می‌کند. اگر می‌خواهید گزینه‌های دیگر را کاوش کنید، حتماً آن بخش را ببینید.</p></blockquote>
+<p>توانمندسازی ایجنت‌ها با قابلیت‌های بصری برای حل تسک‌هایی که فراتر از پردازش متن هستند حیاتی است. بسیاری از چالش‌های دنیای واقعی، مانند وب‌گردی یا درک اسناد، نیازمند تحلیل محتوای بصری غنی‌اند. خوشبختانه <code>smolagents</code> پشتیبانی داخلی از مدل‌های زبانی-دیداری (VLMs) دارد و ایجنت‌ها را قادر می‌سازد تصاویر را به‌طور مؤثر پردازش و تفسیر کنند.</p>
+<p>در این مثال تصور کنید آلفرد، پیشخدمت عمارت وین، مأمور شده هویت مهمانان حاضر در مهمانی را تأیید کند. همان‌طور که می‌توانید تصور کنید، ممکن است آلفرد همه کسانی را که وارد می‌شوند نشناسد. برای کمک به او می‌توانیم از ایجنتی استفاده کنیم که با جستجوی اطلاعات بصری درباره ظاهر افراد و با کمک یک VLM هویت آن‌ها را تأیید می‌کند. این کار به آلفرد امکان می‌دهد تصمیم‌های آگاهانه‌ای درباره اجازه ورود افراد بگیرد. بیایید این مثال را بسازیم!</p>
+
+<h2>ارائه تصاویر در ابتدای اجرای ایجنت</h2>
+<blockquote><p><strong>نکته:</strong> می‌توانید کد را در <a href="https://huggingface.co/agents-course/notebooks/blob/main/unit2/smolagents/vision_agents.ipynb" target="_blank">این نوت‌بوک</a> که با Google Colab قابل اجراست دنبال کنید.</p></blockquote>
+<p>در این رویکرد، تصاویر در ابتدا به ایجنت داده می‌شوند و به صورت <code>task_images</code> در کنار پرامپت تسک ذخیره می‌شوند. سپس ایجنت این تصاویر را در طول اجرا پردازش می‌کند.</p>
+<p>موردی را در نظر بگیرید که آلفرد می‌خواهد هویت ابرقهرمانان حاضر در مهمانی را تأیید کند. او از قبل مجموعه‌داده‌ای از تصاویر مهمانی‌های قبلی همراه با نام مهمانان دارد. با دریافت تصویر یک بازدیدکننده جدید، ایجنت می‌تواند آن را با مجموعه‌داده موجود مقایسه کند و درباره اجازه ورود او تصمیم بگیرد.</p>
+<p>در این مورد، مهمانی در تلاش برای ورود است و آلفرد گمان می‌کند این بازدیدکننده ممکن است جوکر باشد که خود را به جای وندرومن (Wonder Woman) جا زده است. آلفرد باید هویت او را تأیید کند تا از ورود افراد ناخواسته جلوگیری شود.</p>
+<p>بیایید مثال را بسازیم. ابتدا تصاویر بارگذاری می‌شوند. در این مثال برای کوتاه ماندن، از تصاویر ویکی‌پدیا استفاده می‌کنیم، اما کاربردهای ممکن آن را تصور کنید!</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from PIL import Image
+import requests
+from io import BytesIO
+
+image_urls = [
+    "https://upload.wikimedia.org/wikipedia/commons/e/e8/The_Joker_at_Wax_Museum_Plus.jpg", # Joker image
+    "https://upload.wikimedia.org/wikipedia/en/9/98/Joker_%28DC_Comics_character%29.jpg" # Joker image
+]
+
+images = []
+for url in image_urls:
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" 
+    }
+    response = requests.get(url,headers=headers)
+    image = Image.open(BytesIO(response.content)).convert("RGB")
+    images.append(image)</code></pre></div>
+<p>حالا که تصاویر را داریم، ایجنت به ما می‌گوید مهمان در واقع یک ابرقهرمان (وندرومن) است یا یک شرور (جوکر).</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents import CodeAgent, OpenAIServerModel
+
+model = OpenAIServerModel(model_id="gpt-4o")
+
+# Instantiate the agent
+agent = CodeAgent(
+    tools=[],
+    model=model,
+    max_steps=20,
+    verbosity_level=2
+)
+
+response = agent.run(
+    """
+    Describe the costume and makeup that the comic character in these photos is wearing and return the description.
+    Tell me if the guest is The Joker or Wonder Woman.
+    """,
+    images=images
+)</code></pre></div>
+<p>در اجرای من، خروجی به صورت زیر بود، هرچند همان‌طور که قبلاً بحث کردیم ممکن است در مورد شما متفاوت باشد:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">    {
+        'Costume and Makeup - First Image': (
+            'Purple coat and a purple silk-like cravat or tie over a mustard-yellow shirt.',
+            'White face paint with exaggerated features, dark eyebrows, blue eye makeup, red lips forming a wide smile.'
+        ),
+        'Costume and Makeup - Second Image': (
+            'Dark suit with a flower on the lapel, holding a playing card.',
+            'Pale skin, green hair, very red lips with an exaggerated grin.'
+        ),
+        'Character Identity': 'This character resembles known depictions of The Joker from comic book media.'
+    }</code></pre></div>
+<p>در این مورد، خروجی نشان می‌دهد که آن فرد خود را به جای شخص دیگری جا زده است، بنابراین می‌توانیم از ورود جوکر به مهمانی جلوگیری کنیم!</p>
+
+<h2>ارائه تصاویر با بازیابی پویا</h2>
+<blockquote><p><strong>نکته:</strong> می‌توانید کد را در <a href="https://huggingface.co/agents-course/notebooks/blob/main/unit2/smolagents/vision_web_browser.py" target="_blank">این فایل پایتون</a> دنبال کنید.</p></blockquote>
+<p>رویکرد قبلی ارزشمند است و کاربردهای بالقوه فراوانی دارد. با این حال، در شرایطی که مهمان در پایگاه داده نیست، باید راه‌های دیگری برای شناسایی او بررسی کنیم. یک راه‌حل ممکن، بازیابی پویای تصاویر و اطلاعات از منابع خارجی، مثلاً گشت‌وگذار در وب برای یافتن جزئیات است.</p>
+<p>در این رویکرد، تصاویر در حین اجرا به‌صورت پویا به حافظه ایجنت اضافه می‌شوند. همان‌طور که می‌دانیم، ایجنت‌ها در <code>smolagents</code> بر پایه کلاس <code>MultiStepAgent</code> هستند که انتزاعی از چارچوب ReAct است. این کلاس در یک چرخه ساختاریافته عمل می‌کند که در آن متغیرها و دانش مختلف در مراحل گوناگون ثبت می‌شوند:</p>
+<ol>
+  <li><strong>SystemPromptStep:</strong> پرامپت سیستم را ذخیره می‌کند.</li>
+  <li><strong>TaskStep:</strong> پرسش کاربر و هر ورودی ارائه‌شده را ثبت می‌کند.</li>
+  <li><strong>ActionStep:</strong> لاگ‌های اکشن‌های ایجنت و نتایج آن‌ها را ثبت می‌کند.</li>
+</ol>
+<p>این رویکرد ساختاریافته به ایجنت‌ها اجازه می‌دهد اطلاعات بصری را به‌صورت پویا وارد کنند و با تسک‌های در حال تحول به‌صورت تطبیقی واکنش نشان دهند. نمودار زیر، که قبلاً دیده‌ایم، گردش کار پویا و چگونگی ادغام مراحل مختلف در چرخه عمر ایجنت را نشان می‌دهد. هنگام وب‌گردی، ایجنت می‌تواند اسکرین‌شات بگیرد و آن‌ها را به صورت <code>observation_images</code> در <code>ActionStep</code> ذخیره کند.</p>
+<img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/blog/smolagents-can-see/diagram_adding_vlms_smolagents.png" alt="بازیابی پویای تصویر" width="100%"/>
+<p>حالا که نیاز را فهمیدیم، بیایید مثال کامل خود را بسازیم. در این مورد، آلفرد کنترل کامل فرایند تأیید مهمان را می‌خواهد، بنابراین جستجو در وب برای یافتن جزئیات راه‌حلی عملی است. برای تکمیل این مثال به مجموعه جدیدی از ابزارها برای ایجنت نیاز داریم. علاوه بر این از Selenium و Helium استفاده می‌کنیم که ابزارهای خودکارسازی مرورگرند. این کار به ما اجازه می‌دهد ایجنتی بسازیم که در وب کاوش کند، جزئیات یک مهمان بالقوه را جستجو کند و اطلاعات تأیید هویت را بازیابی کند. بیایید ابزارهای لازم را نصب کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-bash">pip install "smolagents[all]" helium selenium python-dotenv</code></pre></div>
+<p>به مجموعه‌ای از ابزارهای ایجنت نیاز داریم که مخصوص مرورگر طراحی شده‌اند، مانند <code>search_item_ctrl_f</code>، <code>go_back</code> و <code>close_popups</code>. این ابزارها به ایجنت اجازه می‌دهند مانند یک انسان در وب حرکت کند.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">@tool
+def search_item_ctrl_f(text: str, nth_result: int = 1) -&gt; str:
+    """
+    Searches for text on the current page via Ctrl + F and jumps to the nth occurrence.
+    Args:
+        text: The text to search for
+        nth_result: Which occurrence to jump to (default: 1)
+    """
+    elements = driver.find_elements(By.XPATH, f"//*[contains(text(), '{text}')]")
+    if nth_result &gt; len(elements):
+        raise Exception(f"Match n°{nth_result} not found (only {len(elements)} matches found)")
+    result = f"Found {len(elements)} matches for '{text}'."
+    elem = elements[nth_result - 1]
+    driver.execute_script("arguments[0].scrollIntoView(true);", elem)
+    result += f"Focused on element {nth_result} of {len(elements)}"
+    return result
+
+
+@tool
+def go_back() -&gt; None:
+    """Goes back to previous page."""
+    driver.back()
+
+
+@tool
+def close_popups() -&gt; str:
+    """
+    Closes any visible modal or pop-up on the page. Use this to dismiss pop-up windows! This does not work on cookie consent banners.
+    """
+    webdriver.ActionChains(driver).send_keys(Keys.ESCAPE).perform()</code></pre></div>
+<p>همچنین به قابلیت ذخیره اسکرین‌شات نیاز داریم، زیرا این بخش اساسی چیزی است که ایجنت VLM ما برای تکمیل تسک استفاده می‌کند. این قابلیت اسکرین‌شات را می‌گیرد و در <code>step_log.observations_images = [image.copy()]</code> ذخیره می‌کند و به ایجنت اجازه می‌دهد هنگام حرکت در وب، تصاویر را به‌صورت پویا ذخیره و پردازش کند.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">def save_screenshot(step_log: ActionStep, agent: CodeAgent) -&gt; None:
+    sleep(1.0)  # Let JavaScript animations happen before taking the screenshot
+    driver = helium.get_driver()
+    current_step = step_log.step_number
+    if driver is not None:
+        for step_logs in agent.logs:  # Remove previous screenshots from logs for lean processing
+            if isinstance(step_log, ActionStep) and step_log.step_number &lt;= current_step - 2:
+                step_logs.observations_images = None
+        png_bytes = driver.get_screenshot_as_png()
+        image = Image.open(BytesIO(png_bytes))
+        print(f"Captured a browser screenshot: {image.size} pixels")
+        step_log.observations_images = [image.copy()]  # Create a copy to ensure it persists, important!
+
+    # Update observations with current URL
+    url_info = f"Current url: {driver.current_url}"
+    step_log.observations = url_info if step_logs.observations is None else step_log.observations + "\n" + url_info
+    return</code></pre></div>
+<p>این تابع به عنوان <code>step_callback</code> به ایجنت داده می‌شود، زیرا در پایان هر مرحله از اجرای ایجنت فراخوانی می‌شود. به این ترتیب ایجنت می‌تواند در طول فرایند خود به‌صورت پویا اسکرین‌شات بگیرد و ذخیره کند.</p>
+<p>حالا می‌توانیم ایجنت بینایی خود را برای وب‌گردی بسازیم و ابزارهایی را که ساختیم به همراه <code>DuckDuckGoSearchTool</code> برای کاوش در وب در اختیارش بگذاریم. این ابزار به ایجنت کمک می‌کند اطلاعات لازم برای تأیید هویت مهمانان را بر اساس نشانه‌های بصری بازیابی کند.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents import CodeAgent, OpenAIServerModel, DuckDuckGoSearchTool
+model = OpenAIServerModel(model_id="gpt-4o")
+
+agent = CodeAgent(
+    tools=[DuckDuckGoSearchTool(), go_back, close_popups, search_item_ctrl_f],
+    model=model,
+    additional_authorized_imports=["helium"],
+    step_callbacks=[save_screenshot],
+    max_steps=20,
+    verbosity_level=2,
+)</code></pre></div>
+<p>با این پیکربندی، آلفرد آماده است هویت مهمانان را بررسی کند و درباره اجازه ورود آن‌ها به مهمانی تصمیم آگاهانه بگیرد:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">agent.run("""
+I am Alfred, the butler of Wayne Manor, responsible for verifying the identity of guests at party. A superhero has arrived at the entrance claiming to be Wonder Woman, but I need to confirm if she is who she says she is.
+
+Please search for images of Wonder Woman and generate a detailed visual description based on those images. Additionally, navigate to Wikipedia to gather key details about her appearance. With this information, I can determine whether to grant her access to the event.
+""" + helium_instructions)</code></pre></div>
+<p>می‌بینید که <code>helium_instructions</code> را به عنوان بخشی از تسک گنجانده‌ایم. این پرامپت ویژه برای کنترل ناوبری ایجنت طراحی شده تا اطمینان یابد ایجنت هنگام وب‌گردی مراحل درست را دنبال می‌کند.</p>
+<p>بیایید در ویدیوی زیر ببینیم این روش چگونه کار می‌کند:</p>
+<iframe width="560" height="315" src="https://www.youtube.com/embed/rObJel7-OLc?si=TnNwQ8rqXqun_pqE" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen style="max-width:100%"></iframe>
+<p>این خروجی نهایی است:</p>
+<div class="code"><pre dir="ltr"><code class="language-text">Final answer: Wonder Woman is typically depicted wearing a red and gold bustier, blue shorts or skirt with white stars, a golden tiara, silver bracelets, and a golden Lasso of Truth. She is Princess Diana of Themyscira, known as Diana Prince in the world of men.</code></pre></div>
+<p>با همه این‌ها، با موفقیت تأییدکننده هویت مهمانی خود را ساختیم! آلفرد حالا ابزار لازم را دارد تا مطمئن شود فقط مهمانان درست از در وارد می‌شوند. همه‌چیز آماده است تا در عمارت وین به همه خوش بگذرد!</p>
+
+<h2>مطالعه بیشتر</h2>
+<ul>
+  <li><a href="https://huggingface.co/blog/smolagents-can-see">We just gave sight to smolagents</a> — وبلاگی درباره قابلیت ایجنت‌های بینایی.</li>
+  <li><a href="https://huggingface.co/docs/smolagents/examples/web_browser">Web Browser Automation with Agents 🤖🌐</a> — مثال وب‌گردی با استفاده از ایجنت بینایی.</li>
+  <li><a href="https://github.com/huggingface/smolagents/blob/main/src/smolagents/vision_web_browser.py">Web Browser Vision Agent Example</a> — مثال وب‌گردی با استفاده از ایجنت بینایی.</li>
+</ul>
+<nav class="pager"><a href="09 - سیستم‌های چند ایجنتی.html"><span>درس قبلی</span><strong>→ سیستم‌های چند ایجنتی</strong></a><a class="next" href="11 - آزمون پایانی smolagents.html"><span>درس بعدی</span><strong>آزمون پایانی smolagents ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

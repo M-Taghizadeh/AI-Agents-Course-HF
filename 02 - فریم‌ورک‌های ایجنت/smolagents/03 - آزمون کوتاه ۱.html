@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>آزمون کوتاه ۱ | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="stylesheet" href="../../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../../assets/vendor/highlight.min.js"></script>
+<script defer src="../../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۲.۱</div>
+    <div class="chapter-name">فریم‌ورک smolagents</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۲.۱</span><span class="toc-title">توسعه ایجنت با smolagents</span><span class="toc-count">۱۲</span></summary>
+      <ol><li><a href="01 - مقدمه‌ای بر smolagents.html">مقدمه‌ای بر smolagents</a></li><li><a href="02 - چرا smolagents؟.html">چرا smolagents؟</a></li><li><a href="03 - آزمون کوتاه ۱.html" class="active">آزمون کوتاه ۱</a></li><li><a href="04 - ساخت ایجنت‌های کد.html">ساخت ایجنت‌های کد</a></li><li><a href="05 - ایجنت‌های فراخوان ابزار.html">ایجنت‌های فراخوان ابزار</a></li><li><a href="06 - ابزارها در smolagents.html">ابزارها در smolagents</a></li><li><a href="07 - ایجنت‌های بازیابی و RAG.html">ایجنت‌های بازیابی و RAG</a></li><li><a href="08 - آزمون کوتاه ۲.html">آزمون کوتاه ۲</a></li><li><a href="09 - سیستم‌های چند ایجنتی.html">سیستم‌های چند ایجنتی</a></li><li><a href="10 - ایجنت‌های بینایی و مرورگر.html">ایجنت‌های بینایی و مرورگر</a></li><li><a href="11 - آزمون پایانی smolagents.html">آزمون پایانی smolagents</a></li><li><a href="12 - جمع‌بندی smolagents.html">جمع‌بندی smolagents</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../../index.html">خانه</a><span>/</span><span>۰۲.۱ — فریم‌ورک smolagents</span><span>/</span><span>آزمون کوتاه ۱</span></div>
+<h1>آزمون کوتاه ۱ (بدون نمره): سنجش فلسفه smolagents</h1>
+<p>بیایید با یک آزمون کوتاه درک خود از <code>smolagents</code> را بسنجیم! به یاد داشته باشید که خودآزمایی به تثبیت یادگیری و شناسایی بخش‌هایی که نیاز به مرور دارند کمک می‌کند.</p>
+<p>این آزمون اختیاری است و نمره‌ای ندارد.</p>
+<hr>
+<h3>سوال ۱: یکی از مزیت‌های اصلی انتخاب <code>smolagents</code> نسبت به سایر فریم‌ورک‌ها چیست؟</h3>
+<p>کدام گزاره بهترین توصیف از نقطه قوت اصلی رویکرد <code>smolagents</code> است؟</p>
+<div class="quiz">
+  <details class="choice no">
+    <summary>از فایل‌های پیکربندی بسیار تخصصی و منحنی یادگیری تند استفاده می‌کند تا فقط توسعه‌دهندگان خبره بتوانند از آن بهره ببرند.</summary>
+    <div class="explain"><b>نادرست:</b> smolagents برای سادگی و حداقل پیچیدگی کد طراحی شده است، نه منحنی یادگیری تند.</div>
+  </details>
+  <details class="choice ok">
+    <summary>از رویکرد کد-محور با حداقل انتزاع پشتیبانی می‌کند و به ایجنت‌ها اجازه می‌دهد مستقیماً از طریق فراخوانی توابع پایتون تعامل کنند.</summary>
+    <div class="explain"><b>درست است!</b> بله، smolagents بر طراحی ساده و کد-محور با حداقل انتزاع تأکید دارد.</div>
+  </details>
+  <details class="choice no">
+    <summary>بر اکشن‌های مبتنی بر JSON تمرکز دارد و نیاز به نوشتن هر گونه کد را از بین می‌برد.</summary>
+    <div class="explain"><b>نادرست:</b> هرچند smolagents از فراخوانی ابزار مبتنی بر JSON (ToolCallingAgents) پشتیبانی می‌کند، تأکید کتابخانه بر رویکردهای مبتنی بر کد با CodeAgents است.</div>
+  </details>
+  <details class="choice no">
+    <summary>عمیقاً با یک ارائه‌دهنده LLM و سخت‌افزار تخصصی یکپارچه شده است.</summary>
+    <div class="explain"><b>نادرست:</b> smolagents از چندین ارائه‌دهنده مدل پشتیبانی می‌کند و به سخت‌افزار تخصصی نیاز ندارد.</div>
+  </details>
+</div>
+<hr>
+<h3>سوال ۲: در کدام سناریو بیشترین بهره را از smolagents می‌برید؟</h3>
+<p>کدام وضعیت با نقطه قوت smolagents بیشتر هم‌خوانی دارد؟</p>
+<div class="quiz">
+  <details class="choice ok">
+    <summary>نمونه‌سازی یا آزمایش سریع منطق ایجنت، به‌ویژه وقتی برنامه نسبتاً ساده است.</summary>
+    <div class="explain"><b>درست است!</b> بله. smolagents برای ساخت ایجنت ساده و چابک، بدون سربار پیکربندی سنگین، طراحی شده است.</div>
+  </details>
+  <details class="choice no">
+    <summary>ساخت یک سیستم سازمانی بزرگ‌مقیاس که به ده‌ها میکروسرویس و خط لوله داده بلادرنگ نیاز دارد.</summary>
+    <div class="explain"><b>نادرست:</b> هرچند ممکن است، smolagents بیشتر بر آزمایش سبک و کد-محور تمرکز دارد تا زیرساخت‌های سنگین سازمانی.</div>
+  </details>
+  <details class="choice no">
+    <summary>نیاز به فریم‌ورکی که فقط از LLMهای ابری پشتیبانی کند و استنتاج محلی را ممنوع کند.</summary>
+    <div class="explain"><b>نادرست:</b> smolagents یکپارچه‌سازی منعطف با مدل‌های محلی یا میزبانی‌شده ارائه می‌دهد، نه فقط LLMهای ابری.</div>
+  </details>
+  <details class="choice no">
+    <summary>سناریویی که به هماهنگ‌سازی پیشرفته، ادراک چندوجهی و قابلیت‌های سازمانی آماده و داخلی نیاز دارد.</summary>
+    <div class="explain"><b>نادرست:</b> هرچند می‌توان قابلیت‌های پیشرفته را یکپارچه کرد، خود smolagents در هسته‌اش سبک و حداقلی است.</div>
+  </details>
+</div>
+<hr>
+<h3>سوال ۳: smolagents در یکپارچه‌سازی مدل‌ها انعطاف دارد. کدام گزاره بهتر رویکرد آن را نشان می‌دهد؟</h3>
+<p>دقیق‌ترین توصیف از نحوه تعامل smolagents با LLMها را انتخاب کنید.</p>
+<div class="quiz">
+  <details class="choice no">
+    <summary>فقط یک مدل داخلی ارائه می‌دهد و یکپارچه‌سازی سفارشی را اجازه نمی‌دهد.</summary>
+    <div class="explain"><b>نادرست:</b> smolagents از چندین بک‌اند مختلف و مدل‌های تعریف‌شده توسط کاربر پشتیبانی می‌کند.</div>
+  </details>
+  <details class="choice no">
+    <summary>برای هر استفاده از LLM باید کانکتور مدل خودتان را پیاده کنید.</summary>
+    <div class="explain"><b>نادرست:</b> کانکتورهای از پیش ساخته‌شده متعددی وجود دارد که یکپارچه‌سازی LLM را ساده می‌کنند.</div>
+  </details>
+  <details class="choice no">
+    <summary>فقط با LLMهای متن‌باز یکپارچه می‌شود، نه APIهای تجاری.</summary>
+    <div class="explain"><b>نادرست:</b> smolagents می‌تواند هم با LLMهای متن‌باز و هم با APIهای تجاری مدل یکپارچه شود.</div>
+  </details>
+  <details class="choice ok">
+    <summary>با طیف وسیعی از LLMها قابل استفاده است و کلاس‌های از پیش تعریف‌شده‌ای مانند TransformersModel، InferenceClientModel و LiteLLMModel ارائه می‌دهد.</summary>
+    <div class="explain"><b>درست است!</b> درست است. smolagents از طریق کلاس‌های مختلف از یکپارچه‌سازی منعطف مدل پشتیبانی می‌کند.</div>
+  </details>
+</div>
+<hr>
+<h3>سوال ۴: smolagents بحث اکشن‌های مبتنی بر کد در برابر اکشن‌های مبتنی بر JSON را چگونه مدیریت می‌کند؟</h3>
+<p>کدام گزاره فلسفه smolagents درباره قالب اکشن‌ها را درست توصیف می‌کند؟</p>
+<div class="quiz">
+  <details class="choice no">
+    <summary>برای همه تسک‌های ایجنت فقط اکشن‌های JSON را مجاز می‌داند و برای استخراج فراخوانی ابزارها به پارسر نیاز دارد.</summary>
+    <div class="explain"><b>نادرست:</b> ToolCallingAgent از فراخوانی‌های مبتنی بر JSON استفاده می‌کند، اما smolagents یک گزینه اصلی یعنی CodeAgent را هم دارد که کد پایتون می‌نویسد.</div>
+  </details>
+  <details class="choice ok">
+    <summary>با CodeAgent بر اکشن‌های مبتنی بر کد تمرکز دارد، اما با ToolCallingAgent از فراخوانی ابزار مبتنی بر JSON هم پشتیبانی می‌کند.</summary>
+    <div class="explain"><b>درست است!</b> بله، smolagents در درجه اول اکشن‌های مبتنی بر کد را توصیه می‌کند، اما برای کسانی که JSON را ترجیح می‌دهند یا به آن نیاز دارند، جایگزین JSON هم دارد.</div>
+  </details>
+  <details class="choice no">
+    <summary>هر گونه فراخوانی تابع خارجی را ممنوع می‌کند و می‌خواهد کل منطق درون LLM باشد.</summary>
+    <div class="explain"><b>نادرست:</b> smolagents دقیقاً برای این طراحی شده که به LLMها توانایی فراخوانی ابزارها یا کد خارجی را بدهد.</div>
+  </details>
+  <details class="choice no">
+    <summary>از کاربران می‌خواهد پیش از اجرای ایجنت هر قطعه کد را دستی به یک شیء JSON تبدیل کنند.</summary>
+    <div class="explain"><b>نادرست:</b> smolagents می‌تواند تولید قطعه‌کد را در مسیر CodeAgent به‌طور خودکار مدیریت کند و تبدیل دستی به JSON لازم نیست.</div>
+  </details>
+</div>
+<hr>
+<h3>سوال ۵: smolagents برای دستیابی به مزایای بیشتر چگونه با Hugging Face Hub یکپارچه می‌شود؟</h3>
+<p>کدام گزاره یکی از مزیت‌های اصلی یکپارچگی با Hub را درست توصیف می‌کند؟</p>
+<div class="quiz">
+  <details class="choice no">
+    <summary>همه مدل‌های عمومی را به‌طور خودکار به سطوح مجوز تجاری ارتقا می‌دهد.</summary>
+    <div class="explain"><b>نادرست:</b> یکپارچگی با Hub سطح مجوز مدل‌ها یا ابزارها را تغییر نمی‌دهد.</div>
+  </details>
+  <details class="choice no">
+    <summary>استنتاج محلی را کاملاً غیرفعال می‌کند و فقط استفاده از مدل راه دور را ممکن می‌سازد.</summary>
+    <div class="explain"><b>نادرست:</b> کاربران در صورت تمایل همچنان می‌توانند استنتاج محلی انجام دهند؛ انتشار روی Hub استفاده محلی را لغو نمی‌کند.</div>
+  </details>
+  <details class="choice ok">
+    <summary>امکان انتشار و اشتراک‌گذاری ایجنت‌ها یا ابزارها را می‌دهد تا برای سایر توسعه‌دهندگان به‌آسانی قابل کشف و استفاده مجدد باشند.</summary>
+    <div class="explain"><b>درست است!</b> smolagents از آپلود ایجنت‌ها و ابزارها روی HF Hub برای استفاده مجدد دیگران پشتیبانی می‌کند.</div>
+  </details>
+  <details class="choice no">
+    <summary>همه ایجنت‌های کد-محور شما را برای همیشه ذخیره می‌کند و جلوی هرگونه به‌روزرسانی یا نسخه‌بندی را می‌گیرد.</summary>
+    <div class="explain"><b>نادرست:</b> مخازن Hub از به‌روزرسانی و کنترل نسخه پشتیبانی می‌کنند، بنابراین هر زمان می‌توانید ایجنت‌های کد-محور خود را بازنگری کنید.</div>
+  </details>
+</div>
+<hr>
+<p>تبریک بابت تکمیل این آزمون! 🎉 اگر به برخی سوال‌ها درست پاسخ نداده‌اید، بخش «چرا smolagents؟» را برای درک عمیق‌تر مرور کنید. اگر عملکرد خوبی داشتید، آماده‌اید که سراغ مباحث پیشرفته‌تر smolagents بروید!</p>
+<nav class="pager"><a href="02 - چرا smolagents؟.html"><span>درس قبلی</span><strong>→ چرا smolagents؟</strong></a><a class="next" href="04 - ساخت ایجنت‌های کد.html"><span>درس بعدی</span><strong>ساخت ایجنت‌های کد ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

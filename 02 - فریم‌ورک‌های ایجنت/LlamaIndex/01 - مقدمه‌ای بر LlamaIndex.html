@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مقدمه‌ای بر LlamaIndex | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="stylesheet" href="../../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../../assets/vendor/highlight.min.js"></script>
+<script defer src="../../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۲.۲</div>
+    <div class="chapter-name">فریم‌ورک LlamaIndex</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۲.۲</span><span class="toc-title">ایجنت‌ها در LlamaIndex</span><span class="toc-count">۹</span></summary>
+      <ol><li><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html">۰۰ - مقدمه فریم‌ورک‌ها</a></li><li><a href="01 - مقدمه‌ای بر LlamaIndex.html" class="active">۰۱ - مقدمه‌ای بر LlamaIndex</a></li><li><a href="02 - آشنایی با LlamaHub.html">۰۲ - آشنایی با LlamaHub</a></li><li><a href="03 - کامپوننت‌ها در LlamaIndex.html">۰۳ - کامپوننت‌ها در LlamaIndex</a></li><li><a href="04 - ابزارها در LlamaIndex.html">۰۴ - ابزارها در LlamaIndex</a></li><li><a href="05 - آزمون کوتاه ۱.html">۰۵ - آزمون کوتاه ۱</a></li><li><a href="06 - ایجنت‌ها در LlamaIndex.html">۰۶ - ایجنت‌ها در LlamaIndex</a></li><li><a href="07 - ساخت گردش‌کارهای ایجنتی.html">۰۷ - ساخت گردش‌کارهای ایجنتی</a></li><li><a href="08 - آزمون کوتاه ۲.html">۰۸ - آزمون کوتاه ۲</a></li><li><a href="09 - جمع‌بندی LlamaIndex.html">۰۹ - جمع‌بندی LlamaIndex</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../../index.html">خانه</a><span>/</span><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html">۰۲ — فریم‌ورک‌های ایجنت</a><span>/</span><span>LlamaIndex</span><span>/</span><span>مقدمه‌ای بر LlamaIndex</span></div>
+<h1>مقدمه‌ای بر LlamaIndex</h1>
+<p>به این ماژول خوش آمدید! در اینجا یاد می‌گیرید چگونه با جعبه‌ابزار <a href="https://www.llamaindex.ai/" target="_blank" rel="noopener">LlamaIndex</a> ایجنت‌های مبتنی بر LLM بسازید.</p>
+<p>LlamaIndex <strong>یک جعبه‌ابزار کامل برای ساخت ایجنت‌های مبتنی بر LLM روی داده‌های شماست، با استفاده از Indexها و Workflowها</strong>. در این دوره بر سه بخش اصلی تمرکز می‌کنیم که به ساخت ایجنت در LlamaIndex کمک می‌کنند: <strong>کامپوننت‌ها (Components)</strong>، <strong>ایجنت‌ها و ابزارها (Agents and Tools)</strong> و <strong>گردش‌کارها (Workflows)</strong>.</p>
+
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/llama-index/thumbnail.png" alt="LlamaIndex" width="100%"/>
+</div>
+
+<p>بیایید نگاهی به این بخش‌های کلیدی LlamaIndex بیندازیم و ببینیم چگونه به ایجنت‌ها کمک می‌کنند:</p>
+<ul>
+  <li><strong>کامپوننت‌ها (Components):</strong> بلوک‌های سازنده‌ی پایه‌ای هستند که در LlamaIndex استفاده می‌کنید. این‌ها شامل چیزهایی مانند پرامپت‌ها، مدل‌ها و پایگاه‌های داده می‌شوند. کامپوننت‌ها اغلب به اتصال LlamaIndex به سایر ابزارها و کتابخانه‌ها کمک می‌کنند.</li>
+  <li><strong>ابزارها (Tools):</strong> ابزارها کامپوننت‌هایی هستند که قابلیت‌های خاصی مانند جستجو، محاسبه یا دسترسی به سرویس‌های خارجی ارائه می‌دهند. آن‌ها بلوک‌های سازنده‌ای هستند که ایجنت‌ها را قادر به انجام وظایف می‌کنند.</li>
+  <li><strong>ایجنت‌ها (Agents):</strong> ایجنت‌ها کامپوننت‌های خودمختاری هستند که می‌توانند از ابزارها استفاده کنند و تصمیم بگیرند. آن‌ها استفاده از ابزارها را هماهنگ می‌کنند تا به اهداف پیچیده برسند.</li>
+  <li><strong>گردش‌کارها (Workflows):</strong> فرایندهای گام‌به‌گامی هستند که منطق را کنار هم پردازش می‌کنند. گردش‌کارها یا گردش‌کارهای ایجنتی (Agentic Workflows) راهی برای ساختاردهی رفتار ایجنتی بدون استفاده‌ی صریح از ایجنت‌ها هستند.</li>
+</ul>
+
+<h2>چه چیزی LlamaIndex را خاص می‌کند؟</h2>
+<p>اگرچه LlamaIndex برخی کارها را شبیه فریم‌ورک‌های دیگر مانند smolagents انجام می‌دهد، مزیت‌های کلیدی‌ای دارد:</p>
+<ul>
+  <li><strong>سیستم گردش‌کار شفاف (Clear Workflow System):</strong> گردش‌کارها با استفاده از یک سینتکس رویدادمحور (Event-driven) و ناهمگام‌محور (Async-first) به شکستن گام‌به‌گام نحوه‌ی تصمیم‌گیری ایجنت‌ها کمک می‌کنند. این امر به شما کمک می‌کند منطق خود را به‌روشنی ترکیب و سازمان‌دهی کنید.</li>
+  <li><strong>پارس پیشرفته‌ی اسناد با LlamaParse:</strong> LlamaParse به‌طور مشخص برای LlamaIndex ساخته شده است، بنابراین یکپارچگی آن بی‌نقص است، اگرچه یک قابلیت پولی است.</li>
+  <li><strong>کامپوننت‌های آماده‌ی فراوان:</strong> LlamaIndex مدت‌هاست وجود دارد، بنابراین با فریم‌ورک‌های بسیار دیگری کار می‌کند. این یعنی کامپوننت‌های آزموده و قابل‌اعتماد زیادی دارد، مانند LLMها، Retrieverها، Indexها و موارد دیگر.</li>
+  <li><strong>LlamaHub:</strong> یک رجیستری شامل صدها کامپوننت، ایجنت و ابزار است که می‌توانید در LlamaIndex استفاده کنید.</li>
+</ul>
+
+<p>همه‌ی این مفاهیم در سناریوهای مختلف برای ساخت ایجنت‌های مفید لازم‌اند. در بخش‌های بعد، هر یک از این مفاهیم را به‌تفصیل بررسی می‌کنیم. پس از تسلط بر این مفاهیم، آموخته‌هایمان را برای <strong>ساخت کاربردهای عملی با ایجنت آلفرد</strong> به‌کار می‌بریم!</p>
+
+<p>به‌کار گرفتن LlamaIndex هیجان‌انگیز است، درست است؟ پس منتظر چه هستیم؟ بیایید با <strong>پیدا کردن و نصب ادغام‌های (Integrations) موردنیاز با استفاده از LlamaHub شروع کنیم! 🚀</strong></p>
+<nav class="pager"><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html"><span>درس قبلی</span><strong>→ مقدمه فریم‌ورک‌های ایجنت</strong></a><a class="next" href="02 - آشنایی با LlamaHub.html"><span>درس بعدی</span><strong>آشنایی با LlamaHub ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

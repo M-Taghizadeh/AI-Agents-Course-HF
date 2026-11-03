@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ساخت ایجنت‌های کد | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="stylesheet" href="../../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../../assets/vendor/highlight.min.js"></script>
+<script defer src="../../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۲.۱</div>
+    <div class="chapter-name">فریم‌ورک smolagents</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۲.۱</span><span class="toc-title">توسعه ایجنت با smolagents</span><span class="toc-count">۱۲</span></summary>
+      <ol><li><a href="01 - مقدمه‌ای بر smolagents.html">مقدمه‌ای بر smolagents</a></li><li><a href="02 - چرا smolagents؟.html">چرا smolagents؟</a></li><li><a href="03 - آزمون کوتاه ۱.html">آزمون کوتاه ۱</a></li><li><a href="04 - ساخت ایجنت‌های کد.html" class="active">ساخت ایجنت‌های کد</a></li><li><a href="05 - ایجنت‌های فراخوان ابزار.html">ایجنت‌های فراخوان ابزار</a></li><li><a href="06 - ابزارها در smolagents.html">ابزارها در smolagents</a></li><li><a href="07 - ایجنت‌های بازیابی و RAG.html">ایجنت‌های بازیابی و RAG</a></li><li><a href="08 - آزمون کوتاه ۲.html">آزمون کوتاه ۲</a></li><li><a href="09 - سیستم‌های چند ایجنتی.html">سیستم‌های چند ایجنتی</a></li><li><a href="10 - ایجنت‌های بینایی و مرورگر.html">ایجنت‌های بینایی و مرورگر</a></li><li><a href="11 - آزمون پایانی smolagents.html">آزمون پایانی smolagents</a></li><li><a href="12 - جمع‌بندی smolagents.html">جمع‌بندی smolagents</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../../index.html">خانه</a><span>/</span><span>۰۲.۱ — فریم‌ورک smolagents</span><span>/</span><span>ساخت ایجنت‌های کد</span></div>
+<p>📓 <a href="https://colab.research.google.com/#fileId=https://huggingface.co/agents-course/notebooks/blob/main/unit2/smolagents/code_agents.ipynb" target="_blank">اجرا در Google Colab</a> · 💬 <a href="http://hf.co/join/discord" target="_blank">کمک گرفتن در دیسکورد</a></p>
+<h1>ساخت ایجنت‌هایی که از کد استفاده می‌کنند</h1>
+<p>ایجنت‌های کد (Code Agents) نوع پیش‌فرض ایجنت در <code>smolagents</code> هستند. آن‌ها برای انجام اکشن‌ها فراخوانی‌های ابزار را به صورت کد پایتون تولید می‌کنند و به نمایش‌هایی از اکشن می‌رسند که کارآمد، گویا و دقیق است.</p>
+<p>رویکرد ساده آن‌ها تعداد اکشن‌های لازم را کاهش می‌دهد، عملیات پیچیده را ساده می‌کند و امکان استفاده مجدد از توابع موجود را فراهم می‌سازد. <code>smolagents</code> یک فریم‌ورک سبک برای ساخت ایجنت‌های کد ارائه می‌دهد که در حدود ۱۰۰۰ خط کد پیاده شده است.</p>
+<img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/transformers/code_vs_json_actions.png" alt="اکشن‌های کد در برابر JSON" width="100%"/>
+<p>تصویر از مقاله <a href="https://huggingface.co/papers/2402.01030">Executable Code Actions Elicit Better LLM Agents</a></p>
+<blockquote><p><strong>نکته:</strong> اگر می‌خواهید بیشتر درباره دلیل اثربخشی ایجنت‌های کد بدانید، <a href="https://huggingface.co/docs/smolagents/en/conceptual_guides/intro_agents#code-agents" target="_blank">این راهنما</a> را در مستندات smolagents ببینید.</p></blockquote>
+
+<h2>چرا ایجنت‌های کد؟</h2>
+<p>در یک فرایند ایجنتی چندمرحله‌ای، LLM اکشن‌ها را که معمولاً شامل فراخوانی ابزارهای خارجی است می‌نویسد و اجرا می‌کند. رویکردهای سنتی از قالب JSON برای مشخص کردن نام ابزار و آرگومان‌ها به صورت رشته استفاده می‌کنند، <strong>که سیستم باید آن‌ها را پارس کند تا بفهمد کدام ابزار را اجرا کند</strong>.</p>
+<p>با این حال، پژوهش‌ها نشان می‌دهد <strong>LLMهای فراخوان‌کننده ابزار وقتی مستقیماً با کد کار کنند مؤثرتر عمل می‌کنند</strong>. این یک اصل بنیادین <code>smolagents</code> است، همان‌طور که در نمودار بالا از مقاله <a href="https://huggingface.co/papers/2402.01030">Executable Code Actions Elicit Better LLM Agents</a> می‌بینید.</p>
+<p>نوشتن اکشن‌ها به صورت کد به جای JSON مزایای کلیدی متعددی دارد:</p>
+<ul>
+  <li><strong>ترکیب‌پذیری (Composability):</strong> ترکیب و استفاده مجدد از اکشن‌ها به‌سادگی ممکن است.</li>
+  <li><strong>مدیریت اشیا (Object Management):</strong> کار مستقیم با ساختارهای پیچیده مانند تصاویر.</li>
+  <li><strong>عمومیت (Generality):</strong> بیان هر کار قابل محاسبه.</li>
+  <li><strong>طبیعی بودن برای LLMها:</strong> کد باکیفیت پیش‌تر در داده‌های آموزشی LLMها وجود دارد.</li>
+</ul>
+
+<h2>یک ایجنت کد چگونه کار می‌کند؟</h2>
+<img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/smolagents/codeagent_docs.png" alt="نحوه کار CodeAgent" width="100%"/>
+<p>نمودار بالا نشان می‌دهد <code>CodeAgent.run()</code> چگونه کار می‌کند و از چارچوب ReAct که در واحد ۱ اشاره کردیم پیروی می‌کند. انتزاع اصلی ایجنت‌ها در <code>smolagents</code> کلاس <code>MultiStepAgent</code> است که بلوک سازنده هسته‌ای به شمار می‌رود. همان‌طور که در مثالی در ادامه می‌بینیم، <code>CodeAgent</code> نوع خاصی از <code>MultiStepAgent</code> است.</p>
+<p>یک <code>CodeAgent</code> اکشن‌ها را در قالب چرخه‌ای از مراحل انجام می‌دهد؛ در این چرخه متغیرها و دانش موجود به زمینه (context) ایجنت اضافه می‌شوند و در یک لاگ اجرا نگه‌داری می‌شوند:</p>
+<ol>
+  <li>پرامپت سیستم در یک <code>SystemPromptStep</code> ذخیره و پرسش کاربر در یک <code>TaskStep</code> ثبت می‌شود.</li>
+  <li>سپس حلقه while زیر اجرا می‌شود:
+    <ol>
+      <li>متد <code>agent.write_memory_to_messages()</code> لاگ‌های ایجنت را در فهرستی از <a href="https://huggingface.co/docs/transformers/main/en/chat_templating">پیام‌های چت</a> قابل خواندن برای LLM می‌نویسد.</li>
+      <li>این پیام‌ها به یک <code>Model</code> فرستاده می‌شوند که یک تکمیل (completion) تولید می‌کند.</li>
+      <li>تکمیل پارس می‌شود تا اکشن استخراج شود؛ در مورد ما چون با <code>CodeAgent</code> کار می‌کنیم، این اکشن باید یک قطعه‌کد باشد.</li>
+      <li>اکشن اجرا می‌شود.</li>
+      <li>نتایج در حافظه و در یک <code>ActionStep</code> ثبت می‌شوند.</li>
+    </ol>
+  </li>
+</ol>
+<p>در پایان هر مرحله، اگر ایجنت فراخوانی تابعی داشته باشد (در <code>agent.step_callback</code>)، آن‌ها اجرا می‌شوند.</p>
+
+<h2>بیایید چند مثال ببینیم</h2>
+<blockquote><p><strong>نکته:</strong> می‌توانید کد را در <a href="https://huggingface.co/agents-course/notebooks/blob/main/unit2/smolagents/code_agents.ipynb" target="_blank">این نوت‌بوک</a> که با Google Colab قابل اجراست دنبال کنید.</p></blockquote>
+<p>آلفرد در حال برنامه‌ریزی یک مهمانی در عمارت خانواده وین است و برای اینکه همه‌چیز بی‌نقص پیش برود به کمک شما نیاز دارد. برای کمک به او، آنچه درباره نحوه کار یک <code>CodeAgent</code> چندمرحله‌ای آموختیم به کار می‌بریم.</p>
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/smolagents/alfred-party.jpg" alt="مهمانی آلفرد" width="100%"/>
+<p>اگر هنوز <code>smolagents</code> را نصب نکرده‌اید، با دستور زیر نصب کنید:</p>
+<div class="code"><pre dir="ltr"><code class="language-bash">pip install smolagents -U</code></pre></div>
+<p>همچنین برای دسترسی به Serverless Inference API وارد Hugging Face Hub می‌شویم:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from huggingface_hub import login
+
+login()</code></pre></div>
+
+<h3>انتخاب پلی‌لیست مهمانی با <code>smolagents</code></h3>
+<p>موسیقی بخش اساسی یک مهمانی موفق است! آلفرد برای انتخاب پلی‌لیست به کمک نیاز دارد. خوشبختانه <code>smolagents</code> کنارمان است! می‌توانیم ایجنتی بسازیم که با DuckDuckGo در وب جستجو کند. برای اینکه ایجنت به این ابزار دسترسی داشته باشد، هنگام ساخت ایجنت آن را در فهرست ابزارها قرار می‌دهیم.</p>
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/smolagents/alfred-playlist.jpg" alt="پلی‌لیست آلفرد" width="100%"/>
+<p>برای مدل از <code>InferenceClientModel</code> استفاده می‌کنیم که دسترسی به <a href="https://huggingface.co/docs/api-inference/index">Serverless Inference API</a> شرکت Hugging Face را فراهم می‌کند. مدل پیش‌فرض <code>"Qwen/Qwen2.5-Coder-32B-Instruct"</code> است که کارآمد است و برای استنتاج سریع در دسترس قرار دارد، اما می‌توانید هر مدل سازگار دیگری را از Hub انتخاب کنید.</p>
+<p>اجرای یک ایجنت کاملاً ساده است:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents import CodeAgent, DuckDuckGoSearchTool, InferenceClientModel
+
+agent = CodeAgent(tools=[DuckDuckGoSearchTool()], model=InferenceClientModel())
+
+agent.run("Search for the best music recommendations for a party at the Wayne's mansion.")</code></pre></div>
+<p>وقتی این مثال را اجرا کنید، خروجی <strong>ردی از مراحل اجرای گردش کار را نمایش می‌دهد</strong>. همچنین کد پایتون متناظر را با این پیام چاپ می‌کند:</p>
+<div class="code"><pre dir="ltr"><code class="language-text"> ─ Executing parsed code: ──────────────────────────────────────────────────────────────────────────────────────── 
+  results = web_search(query="best music for a Batman party")                                                      
+  print(results)                                                                                                   
+ ───────────────────────────────────────────────────────────────────────────────────────────────────────────────── </code></pre></div>
+<p>پس از چند مرحله، پلی‌لیست تولیدشده را می‌بینید که آلفرد می‌تواند در مهمانی استفاده کند! 🎵</p>
+
+<h3>استفاده از یک ابزار سفارشی برای تهیه منو</h3>
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/smolagents/alfred-menu.jpg" alt="منوی آلفرد" width="100%"/>
+<p>حالا که پلی‌لیست را انتخاب کردیم، باید منوی مهمانان را سازماندهی کنیم. آلفرد باز هم می‌تواند از <code>smolagents</code> کمک بگیرد. اینجا با دکوراتور <code>@tool</code> یک تابع سفارشی تعریف می‌کنیم که نقش ابزار را دارد. ساخت ابزار را بعداً با جزئیات بیشتری پوشش می‌دهیم؛ فعلاً کافی است کد را اجرا کنیم.</p>
+<p>همان‌طور که در مثال زیر می‌بینید، با دکوراتور <code>@tool</code> یک ابزار می‌سازیم و آن را در فهرست <code>tools</code> قرار می‌دهیم.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents import CodeAgent, tool, InferenceClientModel
+
+# Tool to suggest a menu based on the occasion
+@tool
+def suggest_menu(occasion: str) -&gt; str:
+    """
+    Suggests a menu based on the occasion.
+    Args:
+        occasion (str): The type of occasion for the party. Allowed values are:
+                        - "casual": Menu for casual party.
+                        - "formal": Menu for formal party.
+                        - "superhero": Menu for superhero party.
+                        - "custom": Custom menu.
+    """
+    if occasion == "casual":
+        return "Pizza, snacks, and drinks."
+    elif occasion == "formal":
+        return "3-course dinner with wine and dessert."
+    elif occasion == "superhero":
+        return "Buffet with high-energy and healthy food."
+    else:
+        return "Custom menu for the butler."
+
+# Alfred, the butler, preparing the menu for the party
+agent = CodeAgent(tools=[suggest_menu], model=InferenceClientModel())
+
+# Preparing the menu for the party
+agent.run("Prepare a formal menu for the party.")</code></pre></div>
+<p>ایجنت چند مرحله اجرا می‌شود تا پاسخ را پیدا کند. مشخص کردن مقادیر مجاز در docstring به ایجنت کمک می‌کند آرگومان <code>occasion</code> را با مقادیر موجود پر کند و توهم (hallucination) را محدود می‌کند.</p>
+<p>منو آماده است! 🥗</p>
+
+<h3>استفاده از import در پایتون داخل ایجنت</h3>
+<p>پلی‌لیست و منو آماده‌اند، اما یک جزئیات حیاتی دیگر مانده که باید بررسی کنیم: زمان آماده‌سازی!</p>
+<p>آلفرد باید محاسبه کند اگر همین الان آماده‌سازی را شروع کند، همه‌چیز چه ساعتی آماده می‌شود؛ مخصوصاً اگر به کمک سایر ابرقهرمانان نیاز پیدا کنند.</p>
+<p><code>smolagents</code> در ایجنت‌هایی تخصص دارد که قطعه‌کدهای پایتون را می‌نویسند و اجرا می‌کنند، و برای امنیت، اجرای ایزوله (sandboxed) ارائه می‌دهد.</p>
+<p><strong>اجرای کد دارای تدابیر امنیتی سخت‌گیرانه است</strong> ــ importهای خارج از یک فهرست امن از پیش تعریف‌شده به صورت پیش‌فرض مسدود هستند. با این حال می‌توانید importهای اضافی را با ارسال آن‌ها به صورت رشته در <code>additional_authorized_imports</code> مجاز کنید. برای جزئیات بیشتر درباره اجرای امن کد، <a href="https://huggingface.co/docs/smolagents/tutorials/secure_code_execution">راهنمای رسمی</a> را ببینید.</p>
+<p>هنگام ساخت ایجنت، با <code>additional_authorized_imports</code> اجازه import ماژول <code>datetime</code> را می‌دهیم.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents import CodeAgent, InferenceClientModel
+import numpy as np
+import time
+import datetime
+
+agent = CodeAgent(tools=[], model=InferenceClientModel(), additional_authorized_imports=['datetime'])
+
+agent.run(
+    """
+    Alfred needs to prepare for the party. Here are the tasks:
+    1. Prepare the drinks - 30 minutes
+    2. Decorate the mansion - 60 minutes
+    3. Set up the menu - 45 minutes
+    4. Prepare the music and playlist - 45 minutes
+
+    If we start right now, at what time will the party be ready?
+    """
+)</code></pre></div>
+<p>این مثال‌ها فقط آغاز کار با ایجنت‌های کد هستند و همین حالا هم مفید بودنشان را در آماده‌سازی مهمانی می‌بینیم. برای آموختن بیشتر درباره ساخت ایجنت‌های کد می‌توانید به <a href="https://huggingface.co/docs/smolagents">مستندات smolagents</a> مراجعه کنید.</p>
+<p>در مجموع، <code>smolagents</code> در ایجنت‌هایی تخصص دارد که قطعه‌کدهای پایتون را می‌نویسند و اجرا می‌کنند و برای امنیت، اجرای ایزوله ارائه می‌دهد. این کتابخانه هم از مدل‌های زبانی محلی و هم مبتنی بر API پشتیبانی می‌کند و با محیط‌های توسعه گوناگون سازگار است.</p>
+
+<h3>اشتراک‌گذاری ایجنت «آماده‌ساز مهمانی» ما در Hub</h3>
+<p>آیا <strong>اشتراک‌گذاری ایجنت آلفرد با جامعه</strong> فوق‌العاده نیست؟ با این کار هر کسی می‌تواند ایجنت را مستقیماً از Hub دانلود و استفاده کند و بهترین برنامه‌ریز مهمانی گاتهام را در اختیار داشته باشد! بیایید این کار را انجام دهیم! 🎉</p>
+<p>کتابخانه <code>smolagents</code> این امکان را می‌دهد که یک ایجنت کامل را با جامعه به اشتراک بگذارید و ایجنت‌های دیگران را برای استفاده فوری دانلود کنید. به سادگی زیر:</p>
+<div class="code"><pre dir="ltr"><code class="language-python"># Change to your username and repo name
+agent.push_to_hub('sergiopaniego/AlfredAgent')</code></pre></div>
+<p>برای دانلود دوباره ایجنت، از کد زیر استفاده کنید:</p>
+<div class="code"><pre dir="ltr"><code class="language-python"># Change to your username and repo name
+alfred_agent = agent.from_hub('sergiopaniego/AlfredAgent', trust_remote_code=True)
+
+alfred_agent.run("Give me the best playlist for a party at Wayne's mansion. The party idea is a 'villain masquerade' theme")  </code></pre></div>
+<p>نکته جالب دیگر اینکه ایجنت‌های به اشتراک گذاشته‌شده مستقیماً به صورت Hugging Face Space در دسترس‌اند و می‌توانید به‌صورت بلادرنگ با آن‌ها تعامل کنید. می‌توانید ایجنت‌های دیگر را <a href="https://huggingface.co/spaces/davidberenstein1957/smolagents-and-tools">اینجا</a> ببینید.</p>
+<p>برای مثال، <em>AlfredAgent</em> <a href="https://huggingface.co/spaces/sergiopaniego/AlfredAgent">اینجا</a> در دسترس است. می‌توانید مستقیماً در پایین امتحانش کنید:</p>
+<iframe src="https://sergiopaniego-alfredagent.hf.space/" frameborder="0" width="850" height="450" style="max-width:100%"></iframe>
+<p>شاید بپرسید آلفرد چگونه چنین ایجنتی را با <code>smolagents</code> ساخته است؟ او با ادغام چند ابزار می‌تواند ایجنت را به صورت زیر بسازد. فعلاً نگران ابزارها نباشید، چون بعداً در همین واحد بخش جداگانه‌ای برای بررسی دقیق آن‌ها داریم:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents import CodeAgent, DuckDuckGoSearchTool, FinalAnswerTool, InferenceClientModel, Tool, tool, VisitWebpageTool
+
+@tool
+def suggest_menu(occasion: str) -&gt; str:
+    """
+    Suggests a menu based on the occasion.
+    Args:
+        occasion: The type of occasion for the party.
+    """
+    if occasion == "casual":
+        return "Pizza, snacks, and drinks."
+    elif occasion == "formal":
+        return "3-course dinner with wine and dessert."
+    elif occasion == "superhero":
+        return "Buffet with high-energy and healthy food."
+    else:
+        return "Custom menu for the butler."
+
+@tool
+def catering_service_tool(query: str) -&gt; str:
+    """
+    This tool returns the highest-rated catering service in Gotham City.
+    
+    Args:
+        query: A search term for finding catering services.
+    """
+    # Example list of catering services and their ratings
+    services = {
+        "Gotham Catering Co.": 4.9,
+        "Wayne Manor Catering": 4.8,
+        "Gotham City Events": 4.7,
+    }
+    
+    # Find the highest rated catering service (simulating search query filtering)
+    best_service = max(services, key=services.get)
+    
+    return best_service
+
+class SuperheroPartyThemeTool(Tool):
+    name = "superhero_party_theme_generator"
+    description = """
+    This tool suggests creative superhero-themed party ideas based on a category.
+    It returns a unique party theme idea."""
+    
+    inputs = {
+        "category": {
+            "type": "string",
+            "description": "The type of superhero party (e.g., 'classic heroes', 'villain masquerade', 'futuristic Gotham').",
+        }
+    }
+    
+    output_type = "string"
+
+    def forward(self, category: str):
+        themes = {
+            "classic heroes": "Justice League Gala: Guests come dressed as their favorite DC heroes with themed cocktails like 'The Kryptonite Punch'.",
+            "villain masquerade": "Gotham Rogues' Ball: A mysterious masquerade where guests dress as classic Batman villains.",
+            "futuristic gotham": "Neo-Gotham Night: A cyberpunk-style party inspired by Batman Beyond, with neon decorations and futuristic gadgets."
+        }
+        
+        return themes.get(category.lower(), "Themed party idea not found. Try 'classic heroes', 'villain masquerade', or 'futuristic Gotham'.")
+
+
+# Alfred, the butler, preparing the menu for the party
+agent = CodeAgent(
+    tools=[
+        DuckDuckGoSearchTool(), 
+        VisitWebpageTool(),
+        suggest_menu,
+        catering_service_tool,
+        SuperheroPartyThemeTool(),
+	FinalAnswerTool()
+    ], 
+    model=InferenceClientModel(),
+    max_steps=10,
+    verbosity_level=2
+)
+
+agent.run("Give me the best playlist for a party at the Wayne's mansion. The party idea is a 'villain masquerade' theme")</code></pre></div>
+<p>همان‌طور که می‌بینید، یک <code>CodeAgent</code> با چند ابزار ساخته‌ایم که قابلیت‌های ایجنت را افزایش می‌دهند و آن را به برنامه‌ریز نهایی مهمانی تبدیل می‌کنند که آماده اشتراک‌گذاری با جامعه است! 🎉</p>
+<p>حالا نوبت شماست: با دانشی که همین الان آموختید، ایجنت خودتان را بسازید و با جامعه به اشتراک بگذارید! 🕵️‍♂️💡</p>
+<blockquote><p><strong>نکته:</strong> اگر می‌خواهید پروژه ایجنت خود را به اشتراک بگذارید، یک Space بسازید و <a href="https://huggingface.co/agents-course">agents-course</a> را روی Hugging Face Hub تگ کنید. دوست داریم ببینیم چه ساخته‌اید!</p></blockquote>
+
+<h3>بازرسی ایجنت آماده‌ساز مهمانی با OpenTelemetry و Langfuse 📡</h3>
+<p>همان‌طور که آلفرد ایجنت آماده‌ساز مهمانی را بهبود می‌دهد، از دیباگ کردن اجراهایش خسته می‌شود. ایجنت‌ها ذاتاً غیرقابل‌پیش‌بینی هستند و بازرسی‌شان دشوار است. اما چون او می‌خواهد بهترین ایجنت آماده‌ساز مهمانی را بسازد و در محیط عملیاتی (production) مستقر کند، برای پایش و تحلیل‌های آینده به ردیابی‌پذیری (traceability) مطمئن نیاز دارد.</p>
+<p>باز هم <code>smolagents</code> به کمک می‌آید! این کتابخانه استاندارد <a href="https://opentelemetry.io/">OpenTelemetry</a> را برای ابزارگذاری (instrumentation) اجرای ایجنت‌ها پشتیبانی می‌کند و بازرسی و ثبت روان را ممکن می‌سازد. با کمک <a href="https://langfuse.com/">Langfuse</a> و <code>SmolagentsInstrumentor</code>، آلفرد می‌تواند به‌آسانی رفتار ایجنتش را ردیابی و تحلیل کند.</p>
+<p>راه‌اندازی آن ساده است!</p>
+<p>ابتدا باید وابستگی‌های لازم را نصب کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-bash">pip install opentelemetry-sdk opentelemetry-exporter-otlp openinference-instrumentation-smolagents langfuse</code></pre></div>
+<p>سپس، آلفرد پیش‌تر در Langfuse حساب ساخته و کلیدهای API‌اش را آماده دارد. اگر هنوز این کار را نکرده‌اید، می‌توانید <a href="https://cloud.langfuse.com/">اینجا</a> در Langfuse Cloud ثبت‌نام کنید یا <a href="https://huggingface.co/docs/smolagents/tutorials/inspect_runs">جایگزین‌ها</a> را بررسی کنید.</p>
+<p>پس از دریافت کلیدهای API، باید آن‌ها را به صورت زیر پیکربندی کنید:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">import os
+
+# Get keys for your project from the project settings page: https://cloud.langfuse.com
+os.environ["LANGFUSE_PUBLIC_KEY"] = "pk-lf-..." 
+os.environ["LANGFUSE_SECRET_KEY"] = "sk-lf-..." 
+os.environ["LANGFUSE_HOST"] = "https://cloud.langfuse.com" # 🇪🇺 EU region
+# os.environ["LANGFUSE_HOST"] = "https://us.cloud.langfuse.com" # 🇺🇸 US region</code></pre></div>
+<p>با تنظیم متغیرهای محیطی، حالا می‌توانیم کلاینت Langfuse را مقداردهی اولیه کنیم. <code>get_client()</code> کلاینت Langfuse را با اعتبارنامه‌های موجود در متغیرهای محیطی راه‌اندازی می‌کند.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from langfuse import get_client
+ 
+langfuse = get_client()
+ 
+# Verify connection
+if langfuse.auth_check():
+    print("Langfuse client is authenticated and ready!")
+else:
+    print("Authentication failed. Please check your credentials and host.")</code></pre></div>
+<p>در نهایت، آلفرد آماده است <code>SmolagentsInstrumentor</code> را مقداردهی اولیه کند و ردیابی عملکرد ایجنتش را آغاز کند.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from openinference.instrumentation.smolagents import SmolagentsInstrumentor
+
+SmolagentsInstrumentor().instrument()</code></pre></div>
+<p>آلفرد حالا متصل است 🔌! اجراهای <code>smolagents</code> در Langfuse ثبت می‌شوند و دید کاملی از رفتار ایجنت به او می‌دهند. با این پیکربندی، او آماده است اجراهای قبلی را مرور کند و ایجنت آماده‌ساز مهمانی‌اش را باز هم بهبود دهد.</p>
+<blockquote><p><strong>نکته:</strong> برای آموختن بیشتر درباره ردیابی ایجنت‌ها و استفاده از داده‌های جمع‌آوری‌شده برای ارزیابی عملکردشان، <a href="https://huggingface.co/learn/agents-course/bonus-unit2/introduction">واحد جایزه ۲</a> را ببینید.</p></blockquote>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents import CodeAgent, InferenceClientModel
+
+agent = CodeAgent(tools=[], model=InferenceClientModel())
+alfred_agent = agent.from_hub('sergiopaniego/AlfredAgent', trust_remote_code=True)
+alfred_agent.run("Give me the best playlist for a party at Wayne's mansion. The party idea is a 'villain masquerade' theme")  </code></pre></div>
+<p>آلفرد حالا می‌تواند این لاگ‌ها را <a href="https://cloud.langfuse.com/project/cm7bq0abj025rad078ak3luwi/traces/995fc019255528e4f48cf6770b0ce27b?timestamp=2025-02-19T10%3A28%3A36.929Z">اینجا</a> مرور و تحلیل کند.</p>
+<blockquote><p><strong>نکته:</strong> در واقع هنگام اجرا یک خطای کوچک رخ داده است. می‌توانید آن را در لاگ‌ها پیدا کنید؟ سعی کنید ردیابی کنید ایجنت چگونه آن را مدیریت می‌کند و همچنان پاسخی معتبر برمی‌گرداند. <a href="https://cloud.langfuse.com/project/cm7bq0abj025rad078ak3luwi/traces/995fc019255528e4f48cf6770b0ce27b?timestamp=2025-02-19T10%3A28%3A36.929Z&observation=80ca57ace4f69b52">اینجا</a> لینک مستقیم خطا برای راستی‌آزمایی پاسخ شماست. البته این خطا در این فاصله رفع شده است؛ جزئیات بیشتر در <a href="https://github.com/huggingface/smolagents/issues/838">این issue</a> آمده است.</p></blockquote>
+<p>در همین حال، <a href="https://open.spotify.com/playlist/0gZMMHjuxMrrybQ7wTMTpw">پلی‌لیست پیشنهادی</a> حال‌وهوای عالی‌ای برای آماده‌سازی مهمانی می‌سازد. جالب است، نه؟ 🎶</p>
+<hr>
+<p>حالا که اولین ایجنت کد خود را ساختیم، بیایید <strong>یاد بگیریم چگونه ایجنت‌های فراخوان ابزار بسازیم</strong>، یعنی نوع دوم ایجنت موجود در <code>smolagents</code>.</p>
+
+<h2>منابع</h2>
+<ul>
+  <li><a href="https://huggingface.co/blog/smolagents">وبلاگ smolagents</a> — معرفی smolagents و تعامل مبتنی بر کد</li>
+  <li><a href="https://huggingface.co/docs/smolagents/tutorials/building_good_agents">smolagents: Building Good Agents</a> — بهترین شیوه‌ها برای ایجنت‌های قابل اتکا</li>
+  <li><a href="https://www.anthropic.com/research/building-effective-agents">Building Effective Agents - Anthropic</a> — اصول طراحی ایجنت</li>
+  <li><a href="https://huggingface.co/docs/smolagents/tutorials/inspect_runs">Sharing runs with OpenTelemetry</a> — جزئیات راه‌اندازی OpenTelemetry برای ردیابی ایجنت‌ها</li>
+</ul>
+<nav class="pager"><a href="03 - آزمون کوتاه ۱.html"><span>درس قبلی</span><strong>→ آزمون کوتاه ۱</strong></a><a class="next" href="05 - ایجنت‌های فراخوان ابزار.html"><span>درس بعدی</span><strong>ایجنت‌های فراخوان ابزار ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

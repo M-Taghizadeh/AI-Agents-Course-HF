@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>اجزای بنیادین LangGraph | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="stylesheet" href="../../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../../assets/vendor/highlight.min.js"></script>
+<script defer src="../../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۲.۳</div>
+    <div class="chapter-name">فریم‌ورک LangGraph</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۲.۳</span><span class="toc-title">اورکستریشن با LangGraph</span><span class="toc-count">۶</span></summary>
+      <ol><li><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html">۰۰ - مقدمه فریم‌ورک‌ها</a></li><li><a href="01 - معرفی LangGraph.html">۰۱ - معرفی LangGraph</a></li><li><a href="02 - اجزای بنیادین LangGraph.html" class="active">۰۲ - اجزای بنیادین LangGraph</a></li><li><a href="03 - ساخت اولین گراف با LangGraph.html">۰۳ - ساخت اولین گراف با LangGraph</a></li><li><a href="04 - گراف تحلیل اسناد و ReAct.html">۰۴ - گراف تحلیل اسناد و ReAct</a></li><li><a href="05 - آزمون LangGraph.html">۰۵ - آزمون LangGraph</a></li><li><a href="06 - جمع‌بندی LangGraph.html">۰۶ - جمع‌بندی LangGraph</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../../index.html">خانه</a><span>/</span><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html">۰۲ — فریم‌ورک‌های ایجنت</a><span>/</span><span>LangGraph</span><span>/</span><span>اجزای بنیادین LangGraph</span></div>
+<h1>اجزای بنیادین LangGraph (Building Blocks)</h1>
+<p>برای ساخت اپلیکیشن با LangGraph باید اجزای هسته‌ی آن را بشناسید. بیایید بلوک‌های بنیادینی را که یک اپلیکیشن LangGraph را می‌سازند بررسی کنیم.</p>
+
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/LangGraph/Building_blocks.png" alt="اجزای سازنده LangGraph" width="70%"/>
+</div>
+
+<p>یک اپلیکیشن در LangGraph از یک <strong>نقطه ورود (Entrypoint)</strong> شروع می‌شود و بسته به نحوه‌ی اجرا، جریان ممکن است به یک تابع یا تابع دیگر برود تا به <code>END</code> برسد.</p>
+
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/LangGraph/application.png" alt="نمایی از یک اپلیکیشن LangGraph" width="100%"/>
+</div>
+
+<h2>۱. وضعیت (State)</h2>
+<p><strong>State</strong> مفهوم محوری در LangGraph است. این بخش تمام اطلاعاتی را که در اپلیکیشن شما جریان دارد نمایش می‌دهد.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from typing_extensions import TypedDict
+
+class State(TypedDict):
+    graph_state: str</code></pre></div>
+
+<p>وضعیت <strong>توسط کاربر تعریف می‌شود</strong>، بنابراین فیلدها را باید با دقت طراحی کنید تا شامل تمام داده‌های لازم برای فرایند تصمیم‌گیری باشند!</p>
+<div class="callout">
+  <div class="callout-title">💡 نکته</div>
+  <p>به‌دقت فکر کنید که اپلیکیشن شما باید چه اطلاعاتی را بین مراحل ردیابی کند.</p>
+</div>
+
+<h2>۲. نودها (Nodes)</h2>
+<p><strong>نودها</strong> توابع پایتون هستند. هر نود:</p>
+<ul>
+  <li>وضعیت (State) را به‌عنوان ورودی می‌گیرد.</li>
+  <li>عملیاتی را انجام می‌دهد.</li>
+  <li>به‌روزرسانی‌های وضعیت را برمی‌گرداند.</li>
+</ul>
+<div class="code"><pre dir="ltr"><code class="language-python">def node_1(state):
+    print("---Node 1---")
+    return {"graph_state": state['graph_state'] +" I am"}
+
+def node_2(state):
+    print("---Node 2---")
+    return {"graph_state": state['graph_state'] +" happy!"}
+
+def node_3(state):
+    print("---Node 3---")
+    return {"graph_state": state['graph_state'] +" sad!"}</code></pre></div>
+
+<p>برای مثال، نودها می‌توانند شامل موارد زیر باشند:</p>
+<ul>
+  <li><strong>فراخوانی LLM:</strong> تولید متن یا گرفتن تصمیم.</li>
+  <li><strong>فراخوانی ابزار:</strong> تعامل با سیستم‌های خارجی.</li>
+  <li><strong>منطق شرطی:</strong> تعیین گام‌های بعدی.</li>
+  <li><strong>مداخله‌ی انسان:</strong> دریافت ورودی از کاربران.</li>
+</ul>
+<div class="callout">
+  <div class="callout-title">💡 اطلاعات</div>
+  <p>برخی نودهای ضروری برای کل جریان کاری، مانند <code>START</code> و <code>END</code>، مستقیماً توسط خود LangGraph ارائه می‌شوند.</p>
+</div>
+
+<h2>۳. یال‌ها (Edges)</h2>
+<p><strong>یال‌ها</strong> نودها را به هم وصل می‌کنند و مسیرهای ممکن در گراف شما را تعریف می‌کنند:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">import random
+from typing import Literal
+
+def decide_mood(state) -&gt; Literal["node_2", "node_3"]:
+    
+    # اغلب از state برای تصمیم‌گیری درباره‌ی نود بعدی استفاده می‌کنیم
+    user_input = state['graph_state'] 
+    
+    # اینجا فقط یک تقسیم ۵۰ / ۵۰ بین نودهای ۲ و ۳ انجام می‌دهیم
+    if random.random() &lt; 0.5:
+
+        # در ۵۰٪ مواقع نود ۲ را برمی‌گردانیم
+        return "node_2"
+    
+    # در ۵۰٪ مواقع نود ۳ را برمی‌گردانیم
+    return "node_3"</code></pre></div>
+
+<p>یال‌ها می‌توانند از این نوع باشند:</p>
+<ul>
+  <li><strong>مستقیم (Direct):</strong> همیشه از نود A به نود B می‌روند.</li>
+  <li><strong>شرطی (Conditional):</strong> نود بعدی را بر اساس وضعیت فعلی انتخاب می‌کنند.</li>
+</ul>
+
+<h2>۴. گراف وضعیت (StateGraph)</h2>
+<p><strong>StateGraph</strong> کانتینری است که کل جریان کاری ایجنت شما را در خود نگه می‌دارد:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from IPython.display import Image, display
+from langgraph.graph import StateGraph, START, END
+
+# ساخت گراف
+builder = StateGraph(State)
+builder.add_node("node_1", node_1)
+builder.add_node("node_2", node_2)
+builder.add_node("node_3", node_3)
+
+# منطق
+builder.add_edge(START, "node_1")
+builder.add_conditional_edges("node_1", decide_mood)
+builder.add_edge("node_2", END)
+builder.add_edge("node_3", END)
+
+# کامپایل
+graph = builder.compile()</code></pre></div>
+
+<p>که سپس می‌توان آن را بصری‌سازی کرد!</p>
+<div class="code"><pre dir="ltr"><code class="language-python"># نمایش
+display(Image(graph.get_graph().draw_mermaid_png()))</code></pre></div>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/LangGraph/basic_graph.jpeg" alt="بصری‌سازی گراف ساده" width="50%"/>
+</div>
+
+<p>اما مهم‌تر از همه، می‌توان آن را اجرا (invoke) کرد:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">graph.invoke({"graph_state" : "Hi, this is Lance."})</code></pre></div>
+
+<p>خروجی:</p>
+<div class="code"><pre dir="ltr"><code class="language-plaintext">---Node 1---
+---Node 3---
+{'graph_state': 'Hi, this is Lance. I am sad!'}</code></pre></div>
+
+<h2>گام بعدی چیست؟</h2>
+<p>در بخش بعد، این مفاهیم را با ساخت اولین گراف خودمان عملی می‌کنیم. این گراف به آلفرد اجازه می‌دهد ایمیل‌های شما را دریافت کند، آن‌ها را دسته‌بندی کند و اگر ایمیل واقعی و معتبر بود، یک پاسخ اولیه تهیه کند.</p>
+<nav class="pager"><a href="01 - معرفی LangGraph.html"><span>درس قبلی</span><strong>→ معرفی LangGraph</strong></a><a class="next" href="03 - ساخت اولین گراف با LangGraph.html"><span>درس بعدی</span><strong>ساخت اولین گراف با LangGraph ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

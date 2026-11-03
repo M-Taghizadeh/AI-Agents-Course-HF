@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>آزمون کوتاه ۱ | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="stylesheet" href="../../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../../assets/vendor/highlight.min.js"></script>
+<script defer src="../../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۲.۲</div>
+    <div class="chapter-name">فریم‌ورک LlamaIndex</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۲.۲</span><span class="toc-title">ایجنت‌ها در LlamaIndex</span><span class="toc-count">۹</span></summary>
+      <ol><li><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html">۰۰ - مقدمه فریم‌ورک‌ها</a></li><li><a href="01 - مقدمه‌ای بر LlamaIndex.html">۰۱ - مقدمه‌ای بر LlamaIndex</a></li><li><a href="02 - آشنایی با LlamaHub.html">۰۲ - آشنایی با LlamaHub</a></li><li><a href="03 - کامپوننت‌ها در LlamaIndex.html">۰۳ - کامپوننت‌ها در LlamaIndex</a></li><li><a href="04 - ابزارها در LlamaIndex.html">۰۴ - ابزارها در LlamaIndex</a></li><li><a href="05 - آزمون کوتاه ۱.html" class="active">۰۵ - آزمون کوتاه ۱</a></li><li><a href="06 - ایجنت‌ها در LlamaIndex.html">۰۶ - ایجنت‌ها در LlamaIndex</a></li><li><a href="07 - ساخت گردش‌کارهای ایجنتی.html">۰۷ - ساخت گردش‌کارهای ایجنتی</a></li><li><a href="08 - آزمون کوتاه ۲.html">۰۸ - آزمون کوتاه ۲</a></li><li><a href="09 - جمع‌بندی LlamaIndex.html">۰۹ - جمع‌بندی LlamaIndex</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../../index.html">خانه</a><span>/</span><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html">۰۲ — فریم‌ورک‌های ایجنت</a><span>/</span><span>LlamaIndex</span><span>/</span><span>آزمون کوتاه ۱</span></div>
+<h1>آزمون کوتاه (بدون نمره)</h1>
+<p>تا اینجا درباره‌ی کامپوننت‌ها و ابزارهای کلیدی LlamaIndex بحث کرده‌ایم. وقت یک آزمون کوتاه است، چون <strong>خودآزمایی</strong> بهترین راه یادگیری است و از «توهم تسلط» (<a href="https://www.coursera.org/lecture/learning-how-to-learn/illusions-of-competence-BuFzf" target="_blank" rel="noopener">Illusion of Competence</a>) جلوگیری می‌کند. این آزمون به شما کمک می‌کند بفهمید <strong>کجا باید دانش خود را تقویت کنید</strong>.</p>
+<p>این آزمون اختیاری است و نمره‌ای ندارد. روی گزینه‌ها کلیک کنید تا توضیح آن‌ها را ببینید.</p>
+<hr>
+<h3>سوال ۱: QueryEngine چیست؟</h3>
+<p>کدام گزینه به بهترین شکل کامپوننت QueryEngine را توصیف می‌کند؟</p>
+<div class="quiz">
+  <details class="choice no">
+    <summary>سیستمی که فقط متن ایستا را بدون هیچ قابلیت بازیابی پردازش می‌کند.</summary>
+    <div class="explain"><b>نادرست:</b> یک QueryEngine باید بتواند اطلاعات مرتبط را بازیابی و پردازش کند.</div>
+  </details>
+  <details class="choice ok">
+    <summary>کامپوننتی که به‌عنوان بخشی از فرایند RAG، اطلاعات مرتبط را پیدا و بازیابی می‌کند.</summary>
+    <div class="explain"><b>درست است!</b> این گزینه هدف اصلی کامپوننت QueryEngine را نشان می‌دهد.</div>
+  </details>
+  <details class="choice no">
+    <summary>ابزاری که فقط امبدینگ‌های برداری را بدون قابلیت جستجو ذخیره می‌کند.</summary>
+    <div class="explain"><b>نادرست:</b> QueryEngine بیش از ذخیره‌ی امبدینگ‌ها کار می‌کند؛ فعالانه اطلاعات را جستجو و بازیابی می‌کند.</div>
+  </details>
+  <details class="choice no">
+    <summary>کامپوننتی که فقط کیفیت پاسخ را ارزیابی می‌کند.</summary>
+    <div class="explain"><b>نادرست:</b> ارزیابی از هدف اصلی بازیابیِ QueryEngine جداست.</div>
+  </details>
+</div>
+<hr>
+<h3>سوال ۲: هدف FunctionToolها چیست؟</h3>
+<p>چرا FunctionToolها برای یک ایجنت مهم هستند؟</p>
+<div class="quiz">
+  <details class="choice no">
+    <summary>برای مدیریت حجم زیاد ذخیره‌سازی داده.</summary>
+    <div class="explain"><b>نادرست:</b> FunctionToolها اساساً برای ذخیره‌سازی داده نیستند.</div>
+  </details>
+  <details class="choice ok">
+    <summary>برای تبدیل توابع پایتون به ابزارهایی که ایجنت بتواند از آن‌ها استفاده کند.</summary>
+    <div class="explain"><b>درست است!</b> FunctionToolها توابع پایتون را می‌پوشانند تا برای ایجنت‌ها در دسترس شوند.</div>
+  </details>
+  <details class="choice no">
+    <summary>برای اینکه ایجنت‌ها بتوانند تعریف توابع تصادفی بسازند.</summary>
+    <div class="explain"><b>نادرست:</b> FunctionToolها هدف مشخصی دارند: در دسترس قرار دادن توابع برای ایجنت‌ها.</div>
+  </details>
+  <details class="choice no">
+    <summary>فقط برای پردازش داده‌های متنی.</summary>
+    <div class="explain"><b>نادرست:</b> FunctionToolها با انواع مختلف توابع کار می‌کنند، نه فقط پردازش متن.</div>
+  </details>
+</div>
+<hr>
+<h3>سوال ۳: Toolspecها در LlamaIndex چیستند؟</h3>
+<p>هدف اصلی Toolspecها چیست؟</p>
+<div class="quiz">
+  <details class="choice no">
+    <summary>کامپوننت‌هایی زائد که قابلیتی اضافه نمی‌کنند.</summary>
+    <div class="explain"><b>نادرست:</b> Toolspecها هدف مهمی در اکوسیستم LlamaIndex دارند.</div>
+  </details>
+  <details class="choice ok">
+    <summary>مجموعه‌هایی از ابزارهای ساخته‌شده توسط جامعه که قابلیت‌های ایجنت را گسترش می‌دهند.</summary>
+    <div class="explain"><b>درست است!</b> Toolspecها به جامعه اجازه می‌دهند ابزارها را به اشتراک بگذارد و دوباره استفاده کند.</div>
+  </details>
+  <details class="choice no">
+    <summary>فقط برای مدیریت حافظه استفاده می‌شوند.</summary>
+    <div class="explain"><b>نادرست:</b> Toolspecها درباره‌ی ارائه‌ی ابزار هستند، نه مدیریت حافظه.</div>
+  </details>
+  <details class="choice no">
+    <summary>فقط با پردازش متن کار می‌کنند.</summary>
+    <div class="explain"><b>نادرست:</b> Toolspecها می‌توانند انواع مختلف ابزار را شامل شوند، نه فقط پردازش متن.</div>
+  </details>
+</div>
+<hr>
+<h3>سوال ۴: برای ساخت یک ابزار چه چیزی لازم است؟</h3>
+<p>هنگام ساخت یک ابزار چه اطلاعاتی باید گنجانده شود؟</p>
+<div class="quiz">
+  <details class="choice no">
+    <summary>باید یک تابع، یک نام و یک توضیح تعریف شود.</summary>
+    <div class="explain"><b>نادرست:</b> اگرچه این‌ها همگی یک ابزار را می‌سازند، نام و توضیح را می‌توان از خود تابع و docstring آن استخراج کرد.</div>
+  </details>
+  <details class="choice no">
+    <summary>فقط نام لازم است.</summary>
+    <div class="explain"><b>نادرست:</b> یک تابع و توضیح/docstring هم برای مستندسازی مناسب ابزار لازم است.</div>
+  </details>
+  <details class="choice no">
+    <summary>فقط توضیح لازم است.</summary>
+    <div class="explain"><b>نادرست:</b> یک تابع لازم است تا وقتی ایجنت ابزاری را انتخاب می‌کند کدی برای اجرا وجود داشته باشد.</div>
+  </details>
+  <details class="choice ok">
+    <summary>فقط تابع لازم است.</summary>
+    <div class="explain"><b>درست است!</b> نام و توضیح به‌صورت پیش‌فرض از نام تابع و docstring تابع داده‌شده برداشته می‌شوند.</div>
+  </details>
+</div>
+<hr>
+<p>بابت تکمیل این آزمون تبریک 🥳! اگر بعضی موارد را اشتباه پاسخ دادید، وقت بگذارید و فصل را دوباره بخوانید تا دانش‌تان تقویت شود. اگر آن را با موفقیت گذراندید، آماده‌اید عمیق‌تر به ساخت با این کامپوننت‌ها بپردازید!</p>
+<nav class="pager"><a href="04 - ابزارها در LlamaIndex.html"><span>درس قبلی</span><strong>→ ابزارها در LlamaIndex</strong></a><a class="next" href="06 - ایجنت‌ها در LlamaIndex.html"><span>درس بعدی</span><strong>ایجنت‌ها در LlamaIndex ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

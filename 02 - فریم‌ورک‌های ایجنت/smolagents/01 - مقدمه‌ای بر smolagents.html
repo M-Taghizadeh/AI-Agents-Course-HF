@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مقدمه‌ای بر smolagents | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="stylesheet" href="../../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../../assets/vendor/highlight.min.js"></script>
+<script defer src="../../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۲.۱</div>
+    <div class="chapter-name">فریم‌ورک smolagents</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۲.۱</span><span class="toc-title">توسعه ایجنت با smolagents</span><span class="toc-count">۱۲</span></summary>
+      <ol><li><a href="01 - مقدمه‌ای بر smolagents.html" class="active">مقدمه‌ای بر smolagents</a></li><li><a href="02 - چرا smolagents؟.html">چرا smolagents؟</a></li><li><a href="03 - آزمون کوتاه ۱.html">آزمون کوتاه ۱</a></li><li><a href="04 - ساخت ایجنت‌های کد.html">ساخت ایجنت‌های کد</a></li><li><a href="05 - ایجنت‌های فراخوان ابزار.html">ایجنت‌های فراخوان ابزار</a></li><li><a href="06 - ابزارها در smolagents.html">ابزارها در smolagents</a></li><li><a href="07 - ایجنت‌های بازیابی و RAG.html">ایجنت‌های بازیابی و RAG</a></li><li><a href="08 - آزمون کوتاه ۲.html">آزمون کوتاه ۲</a></li><li><a href="09 - سیستم‌های چند ایجنتی.html">سیستم‌های چند ایجنتی</a></li><li><a href="10 - ایجنت‌های بینایی و مرورگر.html">ایجنت‌های بینایی و مرورگر</a></li><li><a href="11 - آزمون پایانی smolagents.html">آزمون پایانی smolagents</a></li><li><a href="12 - جمع‌بندی smolagents.html">جمع‌بندی smolagents</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../../index.html">خانه</a><span>/</span><span>۰۲.۱ — فریم‌ورک smolagents</span><span>/</span><span>مقدمه‌ای بر smolagents</span></div>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/smolagents/thumbnail.jpg" alt="تصویر شاخص ماژول ۲.۱" width="100%"/>
+</div>
+<h1>مقدمه‌ای بر کتابخانه smolagents</h1>
+<p>به این ماژول خوش آمدید! در اینجا یاد می‌گیرید چگونه با استفاده از کتابخانه <a href="https://github.com/huggingface/smolagents"><code>smolagents</code></a> <strong>ایجنت‌های کارآمد بسازید</strong>؛ کتابخانه‌ای که یک فریم‌ورک سبک برای ساخت ایجنت‌های هوش مصنوعی توانمند در اختیارتان می‌گذارد.</p>
+<p><code>smolagents</code> یکی از کتابخانه‌های Hugging Face است؛ بنابراین ممنون می‌شویم با <strong>ستاره دادن</strong> به <a href="https://github.com/huggingface/smolagents">مخزن گیت‌هاب</a> آن از ما حمایت کنید:</p>
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/smolagents/star_smolagents.gif" alt="ستاره دادن به smolagents" width="100%"/>
+
+<h2>مرور کلی ماژول</h2>
+<p>این ماژول مروری جامع بر مفاهیم کلیدی و راهکارهای عملی ساخت ایجنت‌های هوشمند با <code>smolagents</code> ارائه می‌دهد.</p>
+<p>با وجود فریم‌ورک‌های متن‌باز فراوان، لازم است اجزا و قابلیت‌هایی که <code>smolagents</code> را به گزینه‌ای مفید تبدیل می‌کنند بشناسیم و بدانیم چه زمانی راهکار دیگری مناسب‌تر است.</p>
+<p>انواع مهم ایجنت‌ها را بررسی می‌کنیم: ایجنت‌های کد (Code Agents) که برای کارهای نرم‌افزاری طراحی شده‌اند، ایجنت‌های فراخوان ابزار (Tool Calling Agents) برای ساخت جریان‌های کاری ماژولار و تابع‌محور، و ایجنت‌های بازیابی (Retrieval Agents) که اطلاعات را جستجو و ترکیب می‌کنند.</p>
+<p>علاوه بر این، به هماهنگ‌سازی چند ایجنت و همچنین افزودن قابلیت‌های بینایی و وب‌گردی می‌پردازیم که امکان ساخت برنامه‌های پویا و آگاه از زمینه را فراهم می‌کنند.</p>
+<p>در این واحد، آلفرد (Alfred)، ایجنتی که در واحد ۱ دیدیم، دوباره برمی‌گردد؛ این بار با فریم‌ورک <code>smolagents</code> به عنوان موتور درونی‌اش. آلفرد در حال برگزاری یک مهمانی در عمارت وین (Wayne Manor) است، در حالی که خانواده وین 🦇 در سفرند و کارهای زیادی برای انجام دارد. همراه ما باشید تا ببینید او چگونه با <code>smolagents</code> این کارها را پیش می‌برد!</p>
+<blockquote><p><strong>نکته:</strong> در این واحد یاد می‌گیرید با کتابخانه <code>smolagents</code> ایجنت‌های هوش مصنوعی بسازید. ایجنت‌های شما می‌توانند داده جستجو کنند، کد اجرا کنند و با صفحات وب تعامل داشته باشند. همچنین یاد می‌گیرید چند ایجنت را با هم ترکیب کنید تا سیستم‌های قدرتمندتری بسازید.</p></blockquote>
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit1/this-is-alfred.jpg" alt="آلفرد، ایجنت ما" width="100%"/>
+
+<h2>سرفصل‌ها</h2>
+<p>در این واحد درباره <code>smolagents</code> موارد زیر را پوشش می‌دهیم:</p>
+
+<h3>۱️⃣ <a href="02 - چرا smolagents؟.html">چرا smolagents؟</a></h3>
+<p><code>smolagents</code> یکی از فریم‌ورک‌های متن‌باز متعدد برای توسعه برنامه‌های ایجنتی است. گزینه‌های دیگری مانند <code>LlamaIndex</code> و <code>LangGraph</code> نیز وجود دارند که در ماژول‌های دیگر این دوره پوشش داده شده‌اند. <code>smolagents</code> ویژگی‌های کلیدی‌ای دارد که آن را برای برخی کاربردها گزینه‌ای عالی می‌کند، اما هنگام انتخاب فریم‌ورک همیشه باید همه گزینه‌ها را بسنجیم. در این بخش مزایا و معایب استفاده از <code>smolagents</code> را بررسی می‌کنیم تا بتوانید بر اساس نیازهای پروژه‌تان تصمیم آگاهانه بگیرید.</p>
+
+<h3>۲️⃣ <a href="04 - ساخت ایجنت‌های کد.html">CodeAgents</a></h3>
+<p><code>CodeAgents</code> نوع اصلی ایجنت در <code>smolagents</code> هستند. این ایجنت‌ها به جای تولید JSON یا متن، برای انجام اکشن‌ها کد پایتون تولید می‌کنند. در این بخش هدف، سازوکار و نحوه کار آن‌ها را همراه با مثال‌های عملی بررسی می‌کنیم.</p>
+
+<h3>۳️⃣ <a href="05 - ایجنت‌های فراخوان ابزار.html">ToolCallingAgents</a></h3>
+<p><code>ToolCallingAgents</code> دومین نوع ایجنت پشتیبانی‌شده در <code>smolagents</code> هستند. بر خلاف <code>CodeAgents</code> که کد پایتون تولید می‌کنند، این ایجنت‌ها از بلوک‌های JSON/متنی استفاده می‌کنند که سیستم باید آن‌ها را پارس و تفسیر کند تا اکشن‌ها اجرا شوند. این بخش نحوه کار آن‌ها، تفاوت‌های کلیدی‌شان با <code>CodeAgents</code> و یک مثال کاربردی را پوشش می‌دهد.</p>
+
+<h3>۴️⃣ <a href="06 - ابزارها در smolagents.html">ابزارها (Tools)</a></h3>
+<p>همان‌طور که در واحد ۱ دیدیم، ابزارها توابعی هستند که یک LLM می‌تواند در یک سیستم ایجنتی از آن‌ها استفاده کند و بلوک‌های سازنده رفتار ایجنت به شمار می‌روند. این بخش نحوه ساخت ابزار، ساختار آن و روش‌های مختلف پیاده‌سازی با کلاس <code>Tool</code> یا دکوراتور <code>@tool</code> را پوشش می‌دهد. همچنین با جعبه‌ابزار پیش‌فرض، روش اشتراک‌گذاری ابزارها با جامعه و نحوه بارگذاری ابزارهای ساخته‌شده توسط دیگران آشنا می‌شوید.</p>
+
+<h3>۵️⃣ <a href="07 - ایجنت‌های بازیابی و RAG.html">ایجنت‌های بازیابی (Retrieval Agents)</a></h3>
+<p>ایجنت‌های بازیابی به مدل‌ها امکان دسترسی به پایگاه‌های دانش را می‌دهند و جستجو، ترکیب و بازیابی اطلاعات از منابع مختلف را ممکن می‌کنند. آن‌ها برای بازیابی کارآمد از «ذخیره‌ساز برداری» (vector store) بهره می‌برند و الگوهای <strong>تولید افزوده با بازیابی (RAG)</strong> را پیاده می‌کنند. این ایجنت‌ها به‌ویژه برای ترکیب جستجوی وب با پایگاه‌های دانش سفارشی، همراه با حفظ زمینه گفتگو از طریق سیستم‌های حافظه، مفیدند. این بخش راهبردهای پیاده‌سازی، از جمله سازوکارهای جایگزین (fallback) برای بازیابی مطمئن اطلاعات را بررسی می‌کند.</p>
+
+<h3>۶️⃣ <a href="09 - سیستم‌های چند ایجنتی.html">سیستم‌های چند ایجنتی (Multi-Agent Systems)</a></h3>
+<p>هماهنگ‌سازی مؤثر چند ایجنت برای ساخت سیستم‌های چند ایجنتی قدرتمند حیاتی است. با ترکیب ایجنت‌هایی با قابلیت‌های متفاوت ــ مثلاً یک ایجنت جستجوی وب و یک ایجنت اجرای کد ــ می‌توانید راهکارهای پیچیده‌تری بسازید. این بخش بر طراحی، پیاده‌سازی و مدیریت سیستم‌های چند ایجنتی برای دستیابی به بیشترین کارایی و اطمینان‌پذیری تمرکز دارد.</p>
+
+<h3>۷️⃣ <a href="10 - ایجنت‌های بینایی و مرورگر.html">ایجنت‌های بینایی و مرورگر (Vision and Browser agents)</a></h3>
+<p>ایجنت‌های بینایی با افزودن <strong>مدل‌های زبانی-دیداری (VLMs)</strong> توانایی پردازش و تفسیر اطلاعات بصری را به ایجنت‌های سنتی اضافه می‌کنند. این بخش نشان می‌دهد چگونه ایجنت‌های مبتنی بر VLM را طراحی و ادغام کنیم و قابلیت‌هایی مانند استدلال بر پایه تصویر، تحلیل داده‌های بصری و تعامل چندوجهی را باز کنیم. همچنین با استفاده از ایجنت‌های بینایی، یک ایجنت مرورگر می‌سازیم که می‌تواند در وب گشت بزند و از آن اطلاعات استخراج کند.</p>
+
+<h2>منابع</h2>
+<ul>
+  <li><a href="https://huggingface.co/docs/smolagents">مستندات smolagents</a> — مستندات رسمی کتابخانه smolagents</li>
+  <li><a href="https://www.anthropic.com/research/building-effective-agents">Building Effective Agents</a> — مقاله پژوهشی درباره معماری ایجنت‌ها</li>
+  <li><a href="https://huggingface.co/docs/smolagents/tutorials/building_good_agents">راهنمای ساخت ایجنت‌ها</a> — بهترین شیوه‌ها برای ساخت ایجنت‌های قابل اتکا</li>
+  <li><a href="https://langchain-ai.github.io/langgraph/">LangGraph Agents</a> — نمونه‌های بیشتر از پیاده‌سازی ایجنت‌ها</li>
+  <li><a href="https://platform.openai.com/docs/guides/function-calling">Function Calling Guide</a> — آشنایی با فراخوانی تابع در LLMها</li>
+  <li><a href="https://www.pinecone.io/learn/retrieval-augmented-generation/">RAG Best Practices</a> — راهنمای پیاده‌سازی مؤثر RAG</li>
+</ul>
+<nav class="pager"><span></span><a class="next" href="02 - چرا smolagents؟.html"><span>درس بعدی</span><strong>چرا smolagents؟ ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

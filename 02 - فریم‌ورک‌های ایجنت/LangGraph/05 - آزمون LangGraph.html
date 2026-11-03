@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>آزمون LangGraph | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="stylesheet" href="../../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../../assets/vendor/highlight.min.js"></script>
+<script defer src="../../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۲.۳</div>
+    <div class="chapter-name">فریم‌ورک LangGraph</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۲.۳</span><span class="toc-title">اورکستریشن با LangGraph</span><span class="toc-count">۶</span></summary>
+      <ol><li><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html">۰۰ - مقدمه فریم‌ورک‌ها</a></li><li><a href="01 - معرفی LangGraph.html">۰۱ - معرفی LangGraph</a></li><li><a href="02 - اجزای بنیادین LangGraph.html">۰۲ - اجزای بنیادین LangGraph</a></li><li><a href="03 - ساخت اولین گراف با LangGraph.html">۰۳ - ساخت اولین گراف با LangGraph</a></li><li><a href="04 - گراف تحلیل اسناد و ReAct.html">۰۴ - گراف تحلیل اسناد و ReAct</a></li><li><a href="05 - آزمون LangGraph.html" class="active">۰۵ - آزمون LangGraph</a></li><li><a href="06 - جمع‌بندی LangGraph.html">۰۶ - جمع‌بندی LangGraph</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../../index.html">خانه</a><span>/</span><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html">۰۲ — فریم‌ورک‌های ایجنت</a><span>/</span><span>LangGraph</span><span>/</span><span>آزمون LangGraph</span></div>
+<h1>آزمون سنجش درک شما از LangGraph (Quiz)</h1>
+<p>بیایید با یک آزمون کوتاه، درک خود از <code>LangGraph</code> را بسنجیم! این آزمون به تثبیت مفاهیم کلیدی‌ای که تاکنون پوشش داده‌ایم کمک می‌کند.</p>
+<p>این آزمون <strong>اختیاری</strong> است و نمره‌ای ندارد. روی گزینه‌ها کلیک کنید تا توضیح آن‌ها را ببینید:</p>
+
+<hr>
+<h3>سوال ۱: هدف اصلی LangGraph چیست؟</h3>
+<p>کدام گزاره به بهترین شکل توصیف می‌کند که LangGraph برای چه کاری طراحی شده است؟</p>
+<div class="quiz">
+  <details class="choice ok">
+    <summary>فریم‌ورکی برای ساخت جریان‌های کنترل (Control Flow) برای اپلیکیشن‌هایی که شامل LLM هستند.</summary>
+    <div class="explain"><b>درست است!</b> LangGraph به‌طور مشخص برای کمک به ساخت و مدیریت جریان کنترل اپلیکیشن‌هایی طراحی شده که از LLM استفاده می‌کنند.</div>
+  </details>
+  <details class="choice no">
+    <summary>کتابخانه‌ای که رابط‌هایی برای تعامل با مدل‌های مختلف LLM فراهم می‌کند.</summary>
+    <div class="explain"><b>نادرست:</b> این گزاره بیشتر نقش LangChain را توصیف می‌کند که رابط‌های استاندارد برای تعامل با مدل را ارائه می‌دهد. تمرکز LangGraph بر جریان کنترل است.</div>
+  </details>
+  <details class="choice no">
+    <summary>یک کتابخانه‌ی ایجنت برای فراخوانی ابزار (Tool Calling).</summary>
+    <div class="explain"><b>نادرست:</b> اگرچه LangGraph با ایجنت‌ها کار می‌کند، هدف اصلی آن «ارکستراسیون (Orchestration)» است.</div>
+  </details>
+</div>
+
+<hr>
+<h3>سوال ۲: در بده‌بستان «کنترل در برابر آزادی عمل»، جایگاه LangGraph کجاست؟</h3>
+<p>کدام گزاره به بهترین شکل رویکرد LangGraph در طراحی ایجنت را توصیف می‌کند؟</p>
+<div class="quiz">
+  <details class="choice no">
+    <summary>LangGraph آزادی عمل را به حداکثر می‌رساند و به LLMها اجازه می‌دهد همه‌ی تصمیم‌ها را مستقل بگیرند.</summary>
+    <div class="explain"><b>نادرست:</b> LangGraph در واقع بیش از آزادی عمل بر کنترل تمرکز دارد و برای جریان‌های کاری LLM ساختار فراهم می‌کند.</div>
+  </details>
+  <details class="choice ok">
+    <summary>LangGraph کنترل قوی بر جریان اجرا فراهم می‌کند و در عین حال از قابلیت‌های LLM برای تصمیم‌گیری بهره می‌برد.</summary>
+    <div class="explain"><b>درست است!</b> LangGraph زمانی می‌درخشد که روی اجرای ایجنت خود کنترل می‌خواهید و از طریق جریان‌های کاری ساختارمند، رفتار قابل‌پیش‌بینی فراهم می‌کند.</div>
+  </details>
+</div>
+
+<hr>
+<h3>سوال ۳: وضعیت (State) در LangGraph چه نقشی دارد؟</h3>
+<p>دقیق‌ترین توصیف از State در LangGraph را انتخاب کنید.</p>
+<div class="quiz">
+  <details class="choice no">
+    <summary>State آخرین خروجی تولیدشده توسط LLM است.</summary>
+    <div class="explain"><b>نادرست:</b> State یک کلاس تعریف‌شده توسط کاربر در LangGraph است و توسط LLM تولید نمی‌شود. فیلدهای آن را کاربر تعریف می‌کند، اما مقادیرشان می‌تواند توسط LLM پر شود.</div>
+  </details>
+  <details class="choice no">
+    <summary>State فقط برای ردیابی خطاها در حین اجرا استفاده می‌شود.</summary>
+    <div class="explain"><b>نادرست:</b> State کاربردی بسیار گسترده‌تر از ردیابی خطا دارد. هرچند همین کاربرد هم مفید است.</div>
+  </details>
+  <details class="choice ok">
+    <summary>State نمایانگر اطلاعاتی است که در اپلیکیشن ایجنتی شما جریان دارد.</summary>
+    <div class="explain"><b>درست است!</b> State در LangGraph محوری است و تمام اطلاعات لازم برای تصمیم‌گیری بین مراحل را در خود دارد. شما فیلدهای موردنیاز برای محاسبات را تعریف می‌کنید و نودها می‌توانند مقادیر را تغییر دهند تا درباره‌ی انشعاب تصمیم بگیرند.</div>
+  </details>
+  <details class="choice no">
+    <summary>State فقط زمانی کاربرد دارد که با APIهای خارجی کار می‌کنید.</summary>
+    <div class="explain"><b>نادرست:</b> State برای تمام اپلیکیشن‌های LangGraph اساسی است، نه فقط آن‌هایی که با APIهای خارجی کار می‌کنند.</div>
+  </details>
+</div>
+
+<hr>
+<h3>سوال ۴: یال شرطی (Conditional Edge) در LangGraph چیست؟</h3>
+<p>دقیق‌ترین توصیف را انتخاب کنید.</p>
+<div class="quiz">
+  <details class="choice ok">
+    <summary>یالی که بر اساس ارزیابی یک شرط تعیین می‌کند کدام نود بعداً اجرا شود.</summary>
+    <div class="explain"><b>درست است!</b> یال‌های شرطی به گراف شما اجازه می‌دهند بر اساس وضعیت فعلی تصمیمات مسیریابی پویا بگیرد و منطق انشعاب را در جریان کاری شما ایجاد کنند.</div>
+  </details>
+  <details class="choice no">
+    <summary>یالی که فقط زمانی دنبال می‌شود که یک شرط خاص رخ دهد.</summary>
+    <div class="explain"><b>نادرست:</b> یال‌های شرطی جریان اپلیکیشن را بر اساس خروجی‌های آن کنترل می‌کنند، نه ورودی‌اش.</div>
+  </details>
+  <details class="choice no">
+    <summary>یالی که پیش از ادامه نیاز به تأیید کاربر دارد.</summary>
+    <div class="explain"><b>نادرست:</b> یال‌های شرطی بر پایه‌ی شرط‌های برنامه‌نویسی‌شده کار می‌کنند، نه الزام به تعامل کاربر.</div>
+  </details>
+</div>
+
+<hr>
+<h3>سوال ۵: LangGraph چگونه به مسئله‌ی توهم (Hallucination) در LLMها کمک می‌کند؟</h3>
+<p>بهترین پاسخ را انتخاب کنید.</p>
+<div class="quiz">
+  <details class="choice no">
+    <summary>LangGraph با محدود کردن پاسخ‌های LLM، توهم را به‌طور کامل از بین می‌برد.</summary>
+    <div class="explain"><b>نادرست:</b> هیچ فریم‌ورکی نمی‌تواند توهم را به‌طور کامل از LLMها حذف کند و LangGraph هم استثنا نیست.</div>
+  </details>
+  <details class="choice ok">
+    <summary>LangGraph جریان‌های کاری ساختارمندی فراهم می‌کند که می‌توانند خروجی LLM را اعتبارسنجی و راستی‌آزمایی کنند.</summary>
+    <div class="explain"><b>درست است!</b> LangGraph با ساخت جریان‌های کاری ساختارمند شامل مراحل اعتبارسنجی، نودهای راستی‌آزمایی و مسیرهای مدیریت خطا، به کاهش تأثیر توهم کمک می‌کند.</div>
+  </details>
+  <details class="choice no">
+    <summary>LangGraph هیچ تأثیری بر توهم ندارد.</summary>
+    <div class="explain"><b>نادرست:</b> رویکرد ساختارمند LangGraph به جریان‌های کاری می‌تواند به‌طور قابل‌توجهی در کاهش توهم کمک کند، البته به قیمت کاهش سرعت.</div>
+  </details>
+</div>
+
+<p>بابت تکمیل آزمون تبریک! 🎉 اگر به سوالی پاسخ نادرست دادید، مرور بخش‌های قبلی را برای تقویت درک خود در نظر بگیرید. در ادامه، قابلیت‌های پیشرفته‌تر LangGraph را بررسی می‌کنیم و می‌بینیم چگونه می‌توان جریان‌های کاری ایجنتی پیچیده‌تری ساخت.</p>
+<nav class="pager"><a href="04 - گراف تحلیل اسناد و ReAct.html"><span>درس قبلی</span><strong>→ گراف تحلیل اسناد و ReAct</strong></a><a class="next" href="06 - جمع‌بندی LangGraph.html"><span>درس بعدی</span><strong>جمع‌بندی LangGraph ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

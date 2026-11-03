@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>آزمون کوتاه ۲ | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="stylesheet" href="../../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../../assets/vendor/highlight.min.js"></script>
+<script defer src="../../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۲.۱</div>
+    <div class="chapter-name">فریم‌ورک smolagents</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۲.۱</span><span class="toc-title">توسعه ایجنت با smolagents</span><span class="toc-count">۱۲</span></summary>
+      <ol><li><a href="01 - مقدمه‌ای بر smolagents.html">مقدمه‌ای بر smolagents</a></li><li><a href="02 - چرا smolagents؟.html">چرا smolagents؟</a></li><li><a href="03 - آزمون کوتاه ۱.html">آزمون کوتاه ۱</a></li><li><a href="04 - ساخت ایجنت‌های کد.html">ساخت ایجنت‌های کد</a></li><li><a href="05 - ایجنت‌های فراخوان ابزار.html">ایجنت‌های فراخوان ابزار</a></li><li><a href="06 - ابزارها در smolagents.html">ابزارها در smolagents</a></li><li><a href="07 - ایجنت‌های بازیابی و RAG.html">ایجنت‌های بازیابی و RAG</a></li><li><a href="08 - آزمون کوتاه ۲.html" class="active">آزمون کوتاه ۲</a></li><li><a href="09 - سیستم‌های چند ایجنتی.html">سیستم‌های چند ایجنتی</a></li><li><a href="10 - ایجنت‌های بینایی و مرورگر.html">ایجنت‌های بینایی و مرورگر</a></li><li><a href="11 - آزمون پایانی smolagents.html">آزمون پایانی smolagents</a></li><li><a href="12 - جمع‌بندی smolagents.html">جمع‌بندی smolagents</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../../index.html">خانه</a><span>/</span><span>۰۲.۱ — فریم‌ورک smolagents</span><span>/</span><span>آزمون کوتاه ۲</span></div>
+<h1>آزمون کوتاه ۲ (بدون نمره): ابزارها و انواع ایجنت‌ها</h1>
+<p>وقت آن است که درک خود از بخش‌های <em>ایجنت‌های کد</em>، <em>ایجنت‌های فراخوان ابزار</em> و <em>ابزارها</em> را بسنجید. این آزمون اختیاری است و نمره ندارد.</p>
+<hr>
+<h3>سوال ۱: تفاوت کلیدی بین ساخت ابزار با دکوراتور <code>@tool</code> و ساخت زیرکلاس از <code>Tool</code> در smolagents چیست؟</h3>
+<p>کدام گزاره بهترین توصیف از تمایز بین این دو رویکرد برای تعریف ابزار است؟</p>
+<div class="quiz">
+  <details class="choice no">
+    <summary>استفاده از دکوراتور <code>@tool</code> برای ابزارهای مبتنی بر بازیابی اجباری است، در حالی که زیرکلاس‌های <code>Tool</code> فقط برای تسک‌های تولید متن‌اند.</summary>
+    <div class="explain"><b>نادرست:</b> هر دو رویکرد برای هر نوع ابزار، از جمله ابزارهای مبتنی بر بازیابی یا تولید متن، قابل استفاده‌اند.</div>
+  </details>
+  <details class="choice ok">
+    <summary>دکوراتور <code>@tool</code> برای ابزارهای ساده مبتنی بر تابع توصیه می‌شود، در حالی که زیرکلاس‌های <code>Tool</code> برای قابلیت‌های پیچیده یا فراداده سفارشی انعطاف بیشتری دارند.</summary>
+    <div class="explain"><b>درست است!</b> درست است. رویکرد دکوراتور ساده‌تر است، اما زیرکلاس‌سازی رفتار سفارشی‌تری را ممکن می‌کند.</div>
+  </details>
+  <details class="choice no">
+    <summary><code>@tool</code> فقط در سیستم‌های چند ایجنتی قابل استفاده است، در حالی که ساخت زیرکلاس <code>Tool</code> برای سناریوهای تک‌ایجنتی است.</summary>
+    <div class="explain"><b>نادرست:</b> همه ایجنت‌ها (تکی یا چندگانه) می‌توانند از هر دو رویکرد برای تعریف ابزار استفاده کنند؛ چنین محدودیتی وجود ندارد.</div>
+  </details>
+  <details class="choice no">
+    <summary>تزیین یک تابع با <code>@tool</code> نیاز به docstring را برطرف می‌کند، در حالی که زیرکلاس‌ها نباید docstring داشته باشند.</summary>
+    <div class="explain"><b>نادرست:</b> هر دو روش از docstring واضح بهره می‌برند. دکوراتور جایگزین آن نمی‌شود و زیرکلاس هم می‌تواند docstring داشته باشد.</div>
+  </details>
+</div>
+<hr>
+<h3>سوال ۲: یک CodeAgent با رویکرد ReAct (استدلال + اکشن) تسک‌های چندمرحله‌ای را چگونه مدیریت می‌کند؟</h3>
+<p>کدام گزاره درست توصیف می‌کند CodeAgent چگونه مجموعه‌ای از مراحل را برای حل یک تسک اجرا می‌کند؟</p>
+<div class="quiz">
+  <details class="choice no">
+    <summary>هر مرحله را به یک ایجنت متفاوت در سیستم چند ایجنتی می‌سپارد و سپس نتایج را ترکیب می‌کند.</summary>
+    <div class="explain"><b>نادرست:</b> هرچند سیستم‌های چند ایجنتی می‌توانند تسک‌ها را توزیع کنند، خود CodeAgent با ReAct می‌تواند چندین مرحله را به‌تنهایی مدیریت کند.</div>
+  </details>
+  <details class="choice no">
+    <summary>هر اکشن را برای پارس آسان در JSON ذخیره می‌کند و سپس همه را یکجا اجرا می‌کند.</summary>
+    <div class="explain"><b>نادرست:</b> این رفتار با رویکرد مبتنی بر JSON در ToolCallingAgent مطابقت دارد، نه CodeAgent.</div>
+  </details>
+  <details class="choice ok">
+    <summary>چرخه‌ای از نوشتن افکار درونی، تولید کد پایتون، اجرای کد و ثبت نتایج را طی می‌کند تا به پاسخ نهایی برسد.</summary>
+    <div class="explain"><b>درست است!</b> درست است. این همان الگوی ReAct است که CodeAgent به کار می‌برد، شامل استدلال تکرارشونده و اجرای کد.</div>
+  </details>
+  <details class="choice no">
+    <summary>پیش از رفتن به مرحله بعد، برای اعتبارسنجی خروجی کد به یک ماژول بینایی تکیه می‌کند.</summary>
+    <div class="explain"><b>نادرست:</b> قابلیت‌های بینایی در smolagents پشتیبانی می‌شوند، اما برای CodeAgent یا رویکرد ReAct یک الزام پیش‌فرض نیستند.</div>
+  </details>
+</div>
+<hr>
+<h3>سوال ۳: کدام مورد یکی از مزیت‌های اصلی اشتراک‌گذاری یک ابزار در Hugging Face Hub است؟</h3>
+<p>بهترین دلیل برای آپلود و اشتراک‌گذاری ابزار سفارشی توسط یک توسعه‌دهنده را انتخاب کنید.</p>
+<div class="quiz">
+  <details class="choice no">
+    <summary>ابزار را به‌طور خودکار برای تولید افزوده با بازیابی با یک MultiStepAgent یکپارچه می‌کند.</summary>
+    <div class="explain"><b>نادرست:</b> اشتراک‌گذاری ابزار به‌طور خودکار منطق بازیابی یا چندمرحله‌ای را راه‌اندازی نمی‌کند؛ فقط ابزار را در دسترس قرار می‌دهد.</div>
+  </details>
+  <details class="choice ok">
+    <summary>به دیگران اجازه می‌دهد ابزار شما را کشف، استفاده مجدد و در smolagents خود بدون راه‌اندازی اضافه یکپارچه کنند.</summary>
+    <div class="explain"><b>درست است!</b> بله. اشتراک‌گذاری در Hub ابزارها را برای همه (از جمله خودتان) قابل دانلود و استفاده مجدد سریع می‌کند.</div>
+  </details>
+  <details class="choice no">
+    <summary>تضمین می‌کند فقط CodeAgents می‌توانند ابزار را فراخوانی کنند و ToolCallingAgents نمی‌توانند.</summary>
+    <div class="explain"><b>نادرست:</b> هم CodeAgents و هم ToolCallingAgents می‌توانند ابزارهای به اشتراک گذاشته‌شده را فراخوانی کنند. محدودیتی بر اساس نوع ایجنت وجود ندارد.</div>
+  </details>
+  <details class="choice no">
+    <summary>ابزار شما را به تابعی کاملاً مجهز به قابلیت بینایی برای پردازش تصویر تبدیل می‌کند.</summary>
+    <div class="explain"><b>نادرست:</b> اشتراک‌گذاری ابزار عملکرد آن را تغییر نمی‌دهد و به‌طور خودکار قابلیت بینایی اضافه نمی‌کند.</div>
+  </details>
+</div>
+<hr>
+<h3>سوال ۴: ToolCallingAgent در نحوه اجرای اکشن‌ها با CodeAgent تفاوت دارد. کدام گزاره درست است؟</h3>
+<p>گزینه‌ای را انتخاب کنید که نحوه کار ToolCallingAgent را به‌درستی توصیف می‌کند.</p>
+<div class="quiz">
+  <details class="choice no">
+    <summary>ToolCallingAgent فقط با سیستم چند ایجنتی سازگار است، در حالی که CodeAgent می‌تواند مستقل اجرا شود.</summary>
+    <div class="explain"><b>نادرست:</b> هر یک از این ایجنت‌ها می‌توانند به‌تنهایی یا بخشی از یک سیستم چند ایجنتی استفاده شوند.</div>
+  </details>
+  <details class="choice no">
+    <summary>ToolCallingAgent کل استدلال را به یک ایجنت بازیابی جداگانه می‌سپارد و سپس پاسخ نهایی را برمی‌گرداند.</summary>
+    <div class="explain"><b>نادرست:</b> ToolCallingAgent همچنان برای استدلال از یک LLM اصلی استفاده می‌کند؛ فقط به ایجنت‌های بازیابی تکیه نمی‌کند.</div>
+  </details>
+  <details class="choice ok">
+    <summary>ToolCallingAgent دستورهای JSON خروجی می‌دهد که فراخوانی‌های ابزار و آرگومان‌ها را مشخص می‌کنند و پارس و اجرا می‌شوند.</summary>
+    <div class="explain"><b>درست است!</b> درست است. ToolCallingAgent برای تعریف فراخوانی‌های ابزار از رویکرد JSON استفاده می‌کند.</div>
+  </details>
+  <details class="choice no">
+    <summary>ToolCallingAgent فقط برای تسک‌های تک‌مرحله‌ای است و پس از فراخوانی یک ابزار به‌طور خودکار متوقف می‌شود.</summary>
+    <div class="explain"><b>نادرست:</b> ToolCallingAgent در صورت نیاز می‌تواند مانند CodeAgent چند مرحله را انجام دهد.</div>
+  </details>
+</div>
+<hr>
+<h3>سوال ۵: جعبه‌ابزار پیش‌فرض smolagents شامل چه مواردی است و چرا ممکن است از آن استفاده کنید؟</h3>
+<p>کدام گزاره بهترین توصیف از هدف و محتوای جعبه‌ابزار پیش‌فرض در smolagents است؟</p>
+<div class="quiz">
+  <details class="choice ok">
+    <summary>مجموعه‌ای از ابزارهای پرکاربرد مانند جستجوی DuckDuckGo، PythonInterpreterTool و یک ابزار پاسخ نهایی برای نمونه‌سازی سریع فراهم می‌کند.</summary>
+    <div class="explain"><b>درست است!</b> درست است. جعبه‌ابزار پیش‌فرض این ابزارهای آماده را برای یکپارچه‌سازی آسان هنگام ساخت ایجنت‌ها دارد.</div>
+  </details>
+  <details class="choice no">
+    <summary>به‌طور پیش‌فرض فقط از تسک‌های مبتنی بر بینایی مانند طبقه‌بندی تصویر یا OCR پشتیبانی می‌کند.</summary>
+    <div class="explain"><b>نادرست:</b> هرچند smolagents می‌تواند قابلیت‌های مبتنی بر بینایی را یکپارچه کند، جعبه‌ابزار پیش‌فرض صرفاً بینایی‌محور نیست.</div>
+  </details>
+  <details class="choice no">
+    <summary>فقط برای سیستم‌های چند ایجنتی در نظر گرفته شده و با یک CodeAgent تکی ناسازگار است.</summary>
+    <div class="explain"><b>نادرست:</b> جعبه‌ابزار پیش‌فرض را هر نوع ایجنتی، چه تکی و چه چندگانه، می‌تواند استفاده کند.</div>
+  </details>
+  <details class="choice no">
+    <summary>قابلیت‌های پیشرفته مبتنی بر بازیابی را برای پرسش و پاسخ در مقیاس بزرگ از یک vector store اضافه می‌کند.</summary>
+    <div class="explain"><b>نادرست:</b> هرچند می‌توانید ابزارهای بازیابی بسازید، جعبه‌ابزار پیش‌فرض به‌طور خودکار قابلیت‌های پیشرفته RAG ارائه نمی‌دهد.</div>
+  </details>
+</div>
+<hr>
+<p>تبریک بابت تکمیل این آزمون! 🎉 اگر سوالی برایتان چالش‌برانگیز بود، بخش‌های <em>ایجنت‌های کد</em>، <em>ایجنت‌های فراخوان ابزار</em> یا <em>ابزارها</em> را مرور کنید تا درکتان قوی‌تر شود. اگر همه را درست پاسخ دادید، در مسیر خوبی برای ساخت برنامه‌های مقاوم با smolagents هستید!</p>
+<nav class="pager"><a href="07 - ایجنت‌های بازیابی و RAG.html"><span>درس قبلی</span><strong>→ ایجنت‌های بازیابی و RAG</strong></a><a class="next" href="09 - سیستم‌های چند ایجنتی.html"><span>درس بعدی</span><strong>سیستم‌های چند ایجنتی ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

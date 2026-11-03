@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مقدمه‌ای بر فریم‌ورک‌های ایجنتی | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../assets/vendor/highlight.min.js"></script>
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۲</div>
+    <div class="chapter-name">فریم‌ورک‌های توسعه ایجنت</div>
+  </div>
+  <nav class="toc">
+    <!-- مقدمه کلی فصل -->
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۰</span><span class="toc-title">مقدمه فریم‌ورک‌ها</span><span class="toc-count">۱</span></summary>
+      <ol>
+        <li><a href="مقدمه_ای بر فریم_ورک_های ایجنتی.html" class="active">۰۰ - مقدمه‌ای بر فریم‌ورک‌های ایجنتی</a></li>
+      </ol>
+    </details>
+
+    <!-- زیرمجموعه smolagents -->
+    <details class="toc-ch">
+      <summary><span class="toc-num">۲.۱</span><span class="toc-title">فریم‌ورک smolagents</span><span class="toc-count">۱۲</span></summary>
+      <ol>
+        <li><a href="smolagents/01 - مقدمه‌ای بر smolagents.html">۰۱ - مقدمه‌ای بر smolagents</a></li>
+        <li><a href="smolagents/02 - چرا smolagents؟.html">۰۲ - چرا smolagents؟</a></li>
+        <li><a href="smolagents/03 - آزمون کوتاه ۱.html">۰۳ - آزمون کوتاه ۱</a></li>
+        <li><a href="smolagents/04 - ساخت ایجنت‌های کد.html">۰۴ - ساخت ایجنت‌های کد</a></li>
+        <li><a href="smolagents/05 - ایجنت‌های فراخوان ابزار.html">۰۵ - ایجنت‌های فراخوان ابزار</a></li>
+        <li><a href="smolagents/06 - ابزارها در smolagents.html">۰۶ - ابزارها در smolagents</a></li>
+        <li><a href="smolagents/07 - ایجنت‌های بازیابی و RAG.html">۰۷ - ایجنت‌های بازیابی و RAG</a></li>
+        <li><a href="smolagents/08 - آزمون کوتاه ۲.html">۰۸ - آزمون کوتاه ۲</a></li>
+        <li><a href="smolagents/09 - سیستم‌های چند ایجنتی.html">۰۹ - سیستم‌های چند ایجنتی</a></li>
+        <li><a href="smolagents/10 - ایجنت‌های بینایی و مرورگر.html">۱۰ - ایجنت‌های بینایی و مرورگر</a></li>
+        <li><a href="smolagents/11 - آزمون پایانی smolagents.html">۱۱ - آزمون پایانی smolagents</a></li>
+        <li><a href="smolagents/12 - جمع‌بندی smolagents.html">۱۲ - جمع‌بندی smolagents</a></li>
+      </ol>
+    </details>
+
+    <!-- زیرمجموعه LlamaIndex -->
+    <details class="toc-ch">
+      <summary><span class="toc-num">۲.۲</span><span class="toc-title">فریم‌ورک LlamaIndex</span><span class="toc-count">۹</span></summary>
+      <ol>
+        <li><a href="LlamaIndex/01 - مقدمه‌ای بر LlamaIndex.html">۰۱ - مقدمه‌ای بر LlamaIndex</a></li>
+        <li><a href="LlamaIndex/02 - آشنایی با LlamaHub.html">۰۲ - آشنایی با LlamaHub</a></li>
+        <li><a href="LlamaIndex/03 - کامپوننت‌ها در LlamaIndex.html">۰۳ - کامپوننت‌ها در LlamaIndex</a></li>
+        <li><a href="LlamaIndex/04 - ابزارها در LlamaIndex.html">۰۴ - ابزارها در LlamaIndex</a></li>
+        <li><a href="LlamaIndex/05 - آزمون کوتاه ۱.html">۰۵ - آزمون کوتاه ۱</a></li>
+        <li><a href="LlamaIndex/06 - ایجنت‌ها در LlamaIndex.html">۰۶ - ایجنت‌ها در LlamaIndex</a></li>
+        <li><a href="LlamaIndex/07 - ساخت گردش‌کارهای ایجنتی.html">۰۷ - ساخت گردش‌کارهای ایجنتی</a></li>
+        <li><a href="LlamaIndex/08 - آزمون کوتاه ۲.html">۰۸ - آزمون کوتاه ۲</a></li>
+        <li><a href="LlamaIndex/09 - جمع‌بندی LlamaIndex.html">۰۹ - جمع‌بندی LlamaIndex</a></li>
+      </ol>
+    </details>
+
+    <!-- زیرمجموعه LangGraph -->
+    <details class="toc-ch">
+      <summary><span class="toc-num">۲.۳</span><span class="toc-title">فریم‌ورک LangGraph</span><span class="toc-count">۶</span></summary>
+      <ol>
+        <li><a href="LangGraph/01 - معرفی LangGraph.html">۰۱ - معرفی LangGraph</a></li>
+        <li><a href="LangGraph/02 - اجزای بنیادین LangGraph.html">۰۲ - اجزای بنیادین LangGraph</a></li>
+        <li><a href="LangGraph/03 - ساخت اولین گراف با LangGraph.html">۰۳ - ساخت اولین گراف با LangGraph</a></li>
+        <li><a href="LangGraph/04 - گراف تحلیل اسناد و ReAct.html">۰۴ - گراف تحلیل اسناد و ReAct</a></li>
+        <li><a href="LangGraph/05 - آزمون LangGraph.html">۰۵ - آزمون LangGraph</a></li>
+        <li><a href="LangGraph/06 - جمع‌بندی LangGraph.html">۰۶ - جمع‌بندی LangGraph</a></li>
+      </ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../index.html">خانه</a><span>/</span><span>۰۲ — فریم‌ورک‌های ایجنتی</span><span>/</span><span>مقدمه</span></div>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/thumbnail.jpg" alt="تصویر شاخص فصل دوم" width="100%"/>
+</div>
+<h1>مقدمه‌ای بر فریم‌ورک‌های ایجنتی (Agentic Frameworks)</h1>
+
+<p>به این فصل دوم خوش آمدید! در این بخش <strong>فریم‌ورک‌های ایجنتی مختلف را بررسی می‌کنیم</strong> که می‌توان از آن‌ها برای ساخت اپلیکیشن‌های ایجنتی قدرتمند استفاده کرد.</p>
+
+<p>ما موارد زیر را مطالعه خواهیم کرد:</p>
+<ul>
+  <li><strong>بخش ۲.۱:</strong> کتابخانه <a href="smolagents/01 - مقدمه‌ای بر smolagents.html">smolagents</a> (<a href="https://huggingface.co/docs/smolagents/en/index" target="_blank" rel="noopener">مستندات رسمی</a>)</li>
+  <li><strong>بخش ۲.۲:</strong> فریم‌ورک <a href="LlamaIndex/01 - مقدمه‌ای بر LlamaIndex.html">LlamaIndex</a> (<a href="https://www.llamaindex.ai/" target="_blank" rel="noopener">وب‌سایت رسمی</a>)</li>
+  <li><strong>بخش ۲.۳:</strong> فریم‌ورک <a href="LangGraph/01 - معرفی LangGraph.html">LangGraph</a> (<a href="https://www.langchain.com/langgraph" target="_blank" rel="noopener">وب‌سایت رسمی</a>)</li>
+</ul>
+
+<p>بزن بریم! 🕵</p>
+
+<h2>چه زمانی باید از یک فریم‌ورک ایجنتی استفاده کرد؟</h2>
+
+<p>هنگام ساخت یک اپلیکیشن پیرامون LLMها، <strong>همیشه به یک فریم‌ورک ایجنتی نیاز نیست</strong>. این فریم‌ورک‌ها برای حل کارآمد یک تسک مشخص، انعطاف‌پذیری در جریان کاری فراهم می‌کنند، اما همیشه ضروری نیستند.</p>
+
+<p>گاهی اوقات <strong>جریان‌های کاری از پیش تعریف‌شده (Predefined Workflows) برای برآورده کردن درخواست‌های کاربر کافی هستند</strong> و نیاز واقعی به فریم‌ورک ایجنتی وجود ندارد. اگر رویکرد ساخت ایجنت ساده باشد، مثلاً زنجیره‌ای از پرامپت‌ها، استفاده از کد ساده ممکن است کافی باشد. مزیتش این است که برنامه‌نویس <strong>کنترل کامل و درک عمیق از سیستم خود را بدون لایه‌های انتزاعی</strong> خواهد داشت.</p>
+
+<p>با این حال، زمانی که جریان کاری پیچیده‌تر می‌شود، مثلاً وقتی می‌خواهیم LLM توابع را فراخوانی کند یا از چند ایجنت استفاده کنیم، این انتزاع‌ها شروع به مفید شدن می‌کنند.</p>
+
+<p>با در نظر گرفتن این ایده‌ها، همین حالا می‌توانیم نیاز به برخی قابلیت‌ها را شناسایی کنیم:</p>
+<ul>
+  <li>یک <em>موتور LLM</em> که سیستم را قدرت می‌بخشد.</li>
+  <li>یک <em>فهرست از ابزارها</em> که ایجنت می‌تواند به آن‌ها دسترسی داشته باشد.</li>
+  <li>یک <em>پارسر (Parser)</em> برای استخراج فراخوانی ابزارها از خروجی LLM.</li>
+  <li>یک <em>System Prompt</em> هماهنگ با پارسر.</li>
+  <li>یک <em>سیستم حافظه (Memory)</em>.</li>
+  <li><em>ثبت خطا (Error Logging) و سازوکارهای تلاش مجدد (Retry)</em> برای کنترل اشتباهات LLM.</li>
+</ul>
+
+<p>بررسی می‌کنیم که این موضوعات در فریم‌ورک‌های مختلف، از جمله <code>smolagents</code>، <code>LlamaIndex</code> و <code>LangGraph</code> چگونه حل شده‌اند.</p>
+
+<h2>بخش‌های فریم‌ورک‌های ایجنتی</h2>
+
+<table>
+  <thead>
+    <tr>
+      <th>فریم‌ورک</th>
+      <th>توضیحات</th>
+      <th>مدرس و نویسنده بخش</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><a href="smolagents/01 - مقدمه‌ای بر smolagents.html"><strong>smolagents</strong></a></td>
+      <td>فریم‌ورک ایجنت‌ها که توسط Hugging Face توسعه یافته است.</td>
+      <td>Sergio Paniego - <a href="https://huggingface.co/sergiopaniego" target="_blank" rel="noopener">HF</a> - <a href="https://x.com/sergiopaniego" target="_blank" rel="noopener">X</a> - <a href="https://www.linkedin.com/in/sergio-paniego-blanco" target="_blank" rel="noopener">Linkedin</a></td>
+    </tr>
+    <tr>
+      <td><a href="LlamaIndex/01 - مقدمه‌ای بر LlamaIndex.html"><strong>LlamaIndex</strong></a></td>
+      <td>جعبه‌ابزار انتها‌به‌انتها برای ارسال یک AI Agent تقویت‌شده با بافت داده (Context-Augmented) به محیط پروداکشن.</td>
+      <td>David Berenstein - <a href="https://huggingface.co/davidberenstein1957" target="_blank" rel="noopener">HF</a> - <a href="https://x.com/davidberenstei" target="_blank" rel="noopener">X</a> - <a href="https://www.linkedin.com/in/davidberenstein" target="_blank" rel="noopener">Linkedin</a></td>
+    </tr>
+    <tr>
+      <td><a href="LangGraph/01 - معرفی LangGraph.html"><strong>LangGraph</strong></a></td>
+      <td>ایجنت‌هایی که امکان ارکستراسیون وضعیت‌مند (Stateful) ایجنت‌ها را فراهم می‌کنند.</td>
+      <td>Joffrey THOMAS - <a href="https://huggingface.co/Jofthomas" target="_blank" rel="noopener">HF</a> - <a href="https://x.com/Jthmas404" target="_blank" rel="noopener">X</a> - <a href="https://www.linkedin.com/in/joffrey-thomas" target="_blank" rel="noopener">Linkedin</a></td>
+    </tr>
+  </tbody>
+</table>
+<nav class="pager">
+  <span></span>
+  <a class="next" href="smolagents/01 - مقدمه‌ای بر smolagents.html">
+    <span>درس بعدی</span>
+    <strong>smolagents: ۰۱ - مقدمه‌ای بر smolagents ←</strong>
+  </a>
+</nav>
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ساخت اولین گراف با LangGraph | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="stylesheet" href="../../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../../assets/vendor/highlight.min.js"></script>
+<script defer src="../../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۲.۳</div>
+    <div class="chapter-name">فریم‌ورک LangGraph</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۲.۳</span><span class="toc-title">اورکستریشن با LangGraph</span><span class="toc-count">۶</span></summary>
+      <ol><li><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html">۰۰ - مقدمه فریم‌ورک‌ها</a></li><li><a href="01 - معرفی LangGraph.html">۰۱ - معرفی LangGraph</a></li><li><a href="02 - اجزای بنیادین LangGraph.html">۰۲ - اجزای بنیادین LangGraph</a></li><li><a href="03 - ساخت اولین گراف با LangGraph.html" class="active">۰۳ - ساخت اولین گراف با LangGraph</a></li><li><a href="04 - گراف تحلیل اسناد و ReAct.html">۰۴ - گراف تحلیل اسناد و ReAct</a></li><li><a href="05 - آزمون LangGraph.html">۰۵ - آزمون LangGraph</a></li><li><a href="06 - جمع‌بندی LangGraph.html">۰۶ - جمع‌بندی LangGraph</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../../index.html">خانه</a><span>/</span><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html">۰۲ — فریم‌ورک‌های ایجنت</a><span>/</span><span>LangGraph</span><span>/</span><span>ساخت اولین گراف با LangGraph</span></div>
+<h1>ساخت اولین LangGraph شما: سیستم فیلتر ایمیل آلفرد</h1>
+<p>اکنون که بلوک‌های بنیادین را شناختیم، بیایید آن‌ها را با ساخت اولین گراف کاربردی‌مان عملی کنیم. سیستم پردازش ایمیل آلفرد را پیاده‌سازی می‌کنیم؛ سیستمی که در آن آلفرد باید:</p>
+<ol>
+  <li>ایمیل‌های دریافتی را بخواند</li>
+  <li>آن‌ها را به «اسپم» یا «معتبر» دسته‌بندی کند</li>
+  <li>برای ایمیل‌های معتبر یک پاسخ اولیه پیش‌نویس کند</li>
+  <li>در صورت معتبر بودن ایمیل، اطلاعات را برای آقای وین ارسال کند (فقط چاپ می‌شود)</li>
+</ol>
+<p>این مثال نشان می‌دهد چگونه جریان کاری‌ای را که شامل تصمیم‌گیری مبتنی بر LLM است با LangGraph ساختار دهیم. اگرچه این سیستم را نمی‌توان یک «ایجنت» دانست (چون هیچ ابزاری در آن دخیل نیست)، تمرکز این بخش بیشتر بر یادگیری خود فریم‌ورک LangGraph است تا ایجنت‌ها.</p>
+
+<div class="callout">
+  <div class="callout-title">💡 نکته</div>
+  <p>می‌توانید کد را در <a href="https://huggingface.co/agents-course/notebooks/blob/main/unit2/langgraph/mail_sorting.ipynb" target="_blank" rel="noopener">این نوت‌بوک</a> دنبال کنید که با Google Colab قابل اجراست.</p>
+</div>
+
+<h2>جریان کاری ما</h2>
+<p>جریان کاری‌ای که خواهیم ساخت این است:</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/LangGraph/first_graph.png" alt="اولین LangGraph" width="80%"/>
+</div>
+
+<h2>آماده‌سازی محیط</h2>
+<p>ابتدا پکیج‌های موردنیاز را نصب می‌کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">%pip install langgraph langchain_openai</code></pre></div>
+
+<p>سپس ماژول‌های لازم را ایمپورت می‌کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">import os
+from typing import TypedDict, List, Dict, Any, Optional
+from langgraph.graph import StateGraph, START, END
+from langchain_openai import ChatOpenAI
+from langchain_core.messages import HumanMessage</code></pre></div>
+
+<h2>مرحله ۱: تعریف State</h2>
+<p>مشخص می‌کنیم آلفرد در طول جریان پردازش ایمیل باید چه اطلاعاتی را ردیابی کند:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">class EmailState(TypedDict):
+    # ایمیلی که در حال پردازش است
+    email: Dict[str, Any]  # شامل subject، sender، body و غیره
+
+    # دسته‌ی ایمیل (درخواست اطلاعات، شکایت و غیره)
+    email_category: Optional[str]
+
+    # دلیل علامت‌گذاری ایمیل به‌عنوان اسپم
+    spam_reason: Optional[str]
+
+    # تحلیل‌ها و تصمیم‌ها
+    is_spam: Optional[bool]
+    
+    # تولید پاسخ
+    email_draft: Optional[str]
+    
+    # متادیتای پردازش
+    messages: List[Dict[str, Any]]  # ردیابی مکالمه با LLM برای تحلیل</code></pre></div>
+<div class="callout">
+  <div class="callout-title">💡 نکته</div>
+  <p>State را آن‌قدر جامع طراحی کنید که تمام اطلاعات مهم را ردیابی کند، اما از پرکردن آن با جزئیات غیرضروری بپرهیزید.</p>
+</div>
+
+<h2>مرحله ۲: تعریف نودها</h2>
+<p>اکنون توابع پردازشی‌ای را که نودهای ما را تشکیل می‌دهند ایجاد می‌کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-python"># مقداردهی اولیه‌ی LLM
+model = ChatOpenAI(temperature=0)
+
+def read_email(state: EmailState):
+    """Alfred reads and logs the incoming email"""
+    email = state["email"]
+    
+    # اینجا می‌توانیم کمی پیش‌پردازش اولیه انجام دهیم
+    print(f"Alfred is processing an email from {email['sender']} with subject: {email['subject']}")
+    
+    # در اینجا نیازی به تغییر state نیست
+    return {}
+
+def classify_email(state: EmailState):
+    """Alfred uses an LLM to determine if the email is spam or legitimate"""
+    email = state["email"]
+    
+    # آماده‌سازی پرامپت برای LLM
+    prompt = f"""
+    As Alfred the butler, analyze this email and determine if it is spam or legitimate.
+    
+    Email:
+    From: {email['sender']}
+    Subject: {email['subject']}
+    Body: {email['body']}
+    
+    First, determine if this email is spam. If it is spam, explain why.
+    If it is legitimate, categorize it (inquiry, complaint, thank you, etc.).
+    """
+    
+    # فراخوانی LLM
+    messages = [HumanMessage(content=prompt)]
+    response = model.invoke(messages)
+    
+    # منطق ساده برای پارس کردن پاسخ (در یک اپلیکیشن واقعی به پارسینگ مقاوم‌تری نیاز دارید)
+    response_text = response.content.lower()
+    is_spam = "spam" in response_text and "not spam" not in response_text
+    
+    # اگر اسپم است، دلیل را استخراج می‌کنیم
+    spam_reason = None
+    if is_spam and "reason:" in response_text:
+        spam_reason = response_text.split("reason:")[1].strip()
+    
+    # اگر معتبر است، دسته را تعیین می‌کنیم
+    email_category = None
+    if not is_spam:
+        categories = ["inquiry", "complaint", "thank you", "request", "information"]
+        for category in categories:
+            if category in response_text:
+                email_category = category
+                break
+    
+    # به‌روزرسانی messages برای ردیابی
+    new_messages = state.get("messages", []) + [
+        {"role": "user", "content": prompt},
+        {"role": "assistant", "content": response.content}
+    ]
+    
+    # بازگرداندن به‌روزرسانی‌های state
+    return {
+        "is_spam": is_spam,
+        "spam_reason": spam_reason,
+        "email_category": email_category,
+        "messages": new_messages
+    }
+
+def handle_spam(state: EmailState):
+    """Alfred discards spam email with a note"""
+    print(f"Alfred has marked the email as spam. Reason: {state['spam_reason']}")
+    print("The email has been moved to the spam folder.")
+    
+    # پردازش این ایمیل تمام شد
+    return {}
+
+def draft_response(state: EmailState):
+    """Alfred drafts a preliminary response for legitimate emails"""
+    email = state["email"]
+    category = state["email_category"] or "general"
+    
+    # آماده‌سازی پرامپت برای LLM
+    prompt = f"""
+    As Alfred the butler, draft a polite preliminary response to this email.
+    
+    Email:
+    From: {email['sender']}
+    Subject: {email['subject']}
+    Body: {email['body']}
+    
+    This email has been categorized as: {category}
+    
+    Draft a brief, professional response that Mr. Hugg can review and personalize before sending.
+    """
+    
+    # فراخوانی LLM
+    messages = [HumanMessage(content=prompt)]
+    response = model.invoke(messages)
+    
+    # به‌روزرسانی messages برای ردیابی
+    new_messages = state.get("messages", []) + [
+        {"role": "user", "content": prompt},
+        {"role": "assistant", "content": response.content}
+    ]
+    
+    # بازگرداندن به‌روزرسانی‌های state
+    return {
+        "email_draft": response.content,
+        "messages": new_messages
+    }
+
+def notify_mr_hugg(state: EmailState):
+    """Alfred notifies Mr. Hugg about the email and presents the draft response"""
+    email = state["email"]
+    
+    print("\n" + "="*50)
+    print(f"Sir, you've received an email from {email['sender']}.")
+    print(f"Subject: {email['subject']}")
+    print(f"Category: {state['email_category']}")
+    print("\nI've prepared a draft response for your review:")
+    print("-"*50)
+    print(state["email_draft"])
+    print("="*50 + "\n")
+    
+    # پردازش این ایمیل تمام شد
+    return {}</code></pre></div>
+
+<h2>مرحله ۳: تعریف منطق مسیریابی</h2>
+<p>به تابعی نیاز داریم که پس از دسته‌بندی، مسیر بعدی را مشخص کند:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">def route_email(state: EmailState) -&gt; str:
+    """Determine the next step based on spam classification"""
+    if state["is_spam"]:
+        return "spam"
+    else:
+        return "legitimate"</code></pre></div>
+<div class="callout">
+  <div class="callout-title">💡 یادداشت</div>
+  <p>این تابع مسیریابی توسط LangGraph فراخوانی می‌شود تا تعیین کند پس از نود دسته‌بندی، کدام یال دنبال شود. مقدار بازگشتی باید با یکی از کلیدها در نگاشت یال‌های شرطی ما مطابقت داشته باشد.</p>
+</div>
+
+<h2>مرحله ۴: ساخت StateGraph و تعریف یال‌ها</h2>
+<p>اکنون همه‌چیز را به هم وصل می‌کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-python"># ساخت گراف
+email_graph = StateGraph(EmailState)
+
+# افزودن نودها
+email_graph.add_node("read_email", read_email)
+email_graph.add_node("classify_email", classify_email)
+email_graph.add_node("handle_spam", handle_spam)
+email_graph.add_node("draft_response", draft_response)
+email_graph.add_node("notify_mr_hugg", notify_mr_hugg)
+
+# شروع یال‌ها
+email_graph.add_edge(START, "read_email")
+# افزودن یال‌ها - تعریف جریان
+email_graph.add_edge("read_email", "classify_email")
+
+# افزودن انشعاب شرطی از classify_email
+email_graph.add_conditional_edges(
+    "classify_email",
+    route_email,
+    {
+        "spam": "handle_spam",
+        "legitimate": "draft_response"
+    }
+)
+
+# افزودن یال‌های پایانی
+email_graph.add_edge("handle_spam", END)
+email_graph.add_edge("draft_response", "notify_mr_hugg")
+email_graph.add_edge("notify_mr_hugg", END)
+
+# کامپایل گراف
+compiled_graph = email_graph.compile()</code></pre></div>
+
+<p>توجه کنید که چگونه از نود ویژه‌ی <code>END</code> که توسط LangGraph ارائه می‌شود استفاده کردیم. این نود وضعیت‌های پایانی را مشخص می‌کند، یعنی جایی که جریان کاری تمام می‌شود.</p>
+
+<h2>مرحله ۵: اجرای اپلیکیشن</h2>
+<p>گراف خود را با یک ایمیل معتبر و یک ایمیل اسپم آزمایش می‌کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-python"># نمونه ایمیل معتبر
+legitimate_email = {
+    "sender": "john.smith@example.com",
+    "subject": "Question about your services",
+    "body": "Dear Mr. Hugg, I was referred to you by a colleague and I'm interested in learning more about your consulting services. Could we schedule a call next week? Best regards, John Smith"
+}
+
+# نمونه ایمیل اسپم
+spam_email = {
+    "sender": "winner@lottery-intl.com",
+    "subject": "YOU HAVE WON $5,000,000!!!",
+    "body": "CONGRATULATIONS! You have been selected as the winner of our international lottery! To claim your $5,000,000 prize, please send us your bank details and a processing fee of $100."
+}
+
+# پردازش ایمیل معتبر
+print("\nProcessing legitimate email...")
+legitimate_result = compiled_graph.invoke({
+    "email": legitimate_email,
+    "is_spam": None,
+    "spam_reason": None,
+    "email_category": None,
+    "email_draft": None,
+    "messages": []
+})
+
+# پردازش ایمیل اسپم
+print("\nProcessing spam email...")
+spam_result = compiled_graph.invoke({
+    "email": spam_email,
+    "is_spam": None,
+    "spam_reason": None,
+    "email_category": None,
+    "email_draft": None,
+    "messages": []
+})</code></pre></div>
+
+<h2>مرحله ۶: بازرسی ایجنت دسته‌بندی ایمیل با Langfuse 📡</h2>
+<p>همان‌طور که آلفرد ایجنت دسته‌بندی ایمیل را بهبود می‌دهد، از دیباگ کردن اجراهای آن خسته می‌شود. ایجنت‌ها ذاتاً غیرقابل‌پیش‌بینی هستند و بازرسی‌شان دشوار است. اما چون او قصد دارد نهایتاً بهترین ایجنت تشخیص اسپم را بسازد و آن را در محیط پروداکشن مستقر کند، برای پایش و تحلیل‌های آینده به قابلیت ردیابی (Traceability) مطمئنی نیاز دارد.</p>
+<p>برای این کار، آلفرد می‌تواند از یک ابزار مشاهده‌پذیری (Observability) مانند <a href="https://langfuse.com/" target="_blank" rel="noopener">Langfuse</a> برای ردیابی و پایش ایجنت استفاده کند.</p>
+
+<p>ابتدا Langfuse را با pip نصب می‌کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">%pip install -q langfuse</code></pre></div>
+
+<p>سپس LangChain را نصب می‌کنیم (چون از Langfuse استفاده می‌کنیم، LangChain لازم است):</p>
+<div class="code"><pre dir="ltr"><code class="language-python">%pip install langchain</code></pre></div>
+
+<p>در ادامه، کلیدهای API و آدرس هاست Langfuse را به‌عنوان متغیر محیطی اضافه می‌کنیم. می‌توانید با ثبت‌نام در <a href="https://cloud.langfuse.com" target="_blank" rel="noopener">Langfuse Cloud</a> یا <a href="https://langfuse.com/self-hosting" target="_blank" rel="noopener">میزبانی شخصی (Self-host) Langfuse</a> اطلاعات حساب خود را دریافت کنید.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">import os
+ 
+# کلیدهای پروژه‌ی خود را از صفحه‌ی تنظیمات پروژه بگیرید: https://cloud.langfuse.com
+os.environ["LANGFUSE_PUBLIC_KEY"] = "pk-lf-..." 
+os.environ["LANGFUSE_SECRET_KEY"] = "sk-lf-..."
+os.environ["LANGFUSE_HOST"] = "https://cloud.langfuse.com" # 🇪🇺 منطقه‌ی اروپا
+# os.environ["LANGFUSE_HOST"] = "https://us.cloud.langfuse.com" # 🇺🇸 منطقه‌ی آمریکا</code></pre></div>
+
+<p>سپس <a href="https://langfuse.com/docs/integrations/langchain/tracing#add-langfuse-to-your-langchain-application" target="_blank" rel="noopener"><code>callback_handler</code> مربوط به Langfuse</a> را پیکربندی می‌کنیم و با افزودن <code>langfuse_callback</code> به فراخوانی گراف، یعنی <code>config={"callbacks": [langfuse_handler]}</code>، ایجنت را ابزارنگاری (Instrument) می‌کنیم.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from langfuse.langchain import CallbackHandler
+
+# مقداردهی اولیه‌ی CallbackHandler مربوط به Langfuse برای LangGraph/Langchain (ردیابی)
+langfuse_handler = CallbackHandler()
+
+# پردازش ایمیل معتبر
+legitimate_result = compiled_graph.invoke(
+    input={"email": legitimate_email, "is_spam": None, "spam_reason": None, "email_category": None, "draft_response": None, "messages": []},
+    config={"callbacks": [langfuse_handler]}
+)</code></pre></div>
+
+<p>آلفرد اکنون متصل شده است 🔌! اجراهای LangGraph در Langfuse ثبت می‌شوند و دید کاملی از رفتار ایجنت در اختیار او می‌گذارند. با این پیکربندی، او آماده است اجراهای قبلی را مرور کند و ایجنت دسته‌بندی ایمیل را باز هم بهبود دهد.</p>
+
+<div class="flex justify-center">
+<img src="https://langfuse.com/images/cookbook/huggingface-agent-course/langgraph-trace-legit.png" alt="نمونه ردیابی (Trace) در Langfuse" width="100%"/>
+</div>
+
+<p><em><a href="https://cloud.langfuse.com/project/cloramnkj0002jz088vzn1ja4/traces/f5d6d72e-20af-4357-b232-af44c3728a7b?timestamp=2025-03-17T10%3A13%3A28.413Z&amp;observation=6997ba69-043f-4f77-9445-700a033afba1" target="_blank" rel="noopener">لینک عمومی به ردیابی ایمیل معتبر</a></em></p>
+
+<h2>بصری‌سازی گراف</h2>
+<p>LangGraph به ما اجازه می‌دهد جریان کاری خود را بصری‌سازی کنیم تا ساختار آن را بهتر بفهمیم و دیباگ کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">compiled_graph.get_graph().draw_mermaid_png()</code></pre></div>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/LangGraph/mail_flow.png" alt="گراف ایمیل در LangGraph" width="70%"/>
+</div>
+
+<p>این کار یک نمایش بصری تولید می‌کند که نشان می‌دهد نودها چگونه به هم متصل‌اند و چه مسیرهای شرطی‌ای می‌توانند طی شوند.</p>
+
+<h2>آنچه ساختیم</h2>
+<p>ما یک جریان کاری کامل پردازش ایمیل ساختیم که:</p>
+<ol>
+  <li>یک ایمیل ورودی را دریافت می‌کند</li>
+  <li>با استفاده از یک LLM آن را به «اسپم» یا «معتبر» دسته‌بندی می‌کند</li>
+  <li>ایمیل‌های اسپم را با دور انداختن مدیریت می‌کند</li>
+  <li>برای ایمیل‌های معتبر، یک پاسخ پیش‌نویس می‌کند و آقای هاگ (Mr. Hugg) را مطلع می‌سازد</li>
+</ol>
+<p>این مثال قدرت LangGraph را در ارکستراسیون جریان‌های کاری پیچیده با LLMها و در عین حال حفظ یک جریان واضح و ساختارمند نشان می‌دهد.</p>
+
+<h2>نکات کلیدی</h2>
+<ul>
+  <li><strong>مدیریت وضعیت (State Management):</strong> یک State جامع تعریف کردیم تا تمام جنبه‌های پردازش ایمیل را ردیابی کند.</li>
+  <li><strong>پیاده‌سازی نودها:</strong> نودهای کاربردی‌ای ساختیم که با یک LLM تعامل می‌کنند.</li>
+  <li><strong>مسیریابی شرطی:</strong> منطق انشعاب بر اساس دسته‌بندی ایمیل را پیاده‌سازی کردیم.</li>
+  <li><strong>وضعیت‌های پایانی:</strong> از نود <code>END</code> برای مشخص کردن نقاط تکمیل جریان کاری استفاده کردیم.</li>
+</ul>
+
+<h2>گام بعدی چیست؟</h2>
+<p>در بخش بعد، قابلیت‌های پیشرفته‌تر LangGraph را بررسی می‌کنیم، از جمله مدیریت تعامل انسان در جریان کاری و پیاده‌سازی منطق انشعاب پیچیده‌تر بر اساس چند شرط.</p>
+<nav class="pager"><a href="02 - اجزای بنیادین LangGraph.html"><span>درس قبلی</span><strong>→ اجزای بنیادین LangGraph</strong></a><a class="next" href="04 - گراف تحلیل اسناد و ReAct.html"><span>درس بعدی</span><strong>گراف تحلیل اسناد و ReAct ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>معرفی LangGraph | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="stylesheet" href="../../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../../assets/vendor/highlight.min.js"></script>
+<script defer src="../../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۲.۳</div>
+    <div class="chapter-name">فریم‌ورک LangGraph</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۲.۳</span><span class="toc-title">اورکستریشن با LangGraph</span><span class="toc-count">۶</span></summary>
+      <ol><li><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html">۰۰ - مقدمه فریم‌ورک‌ها</a></li><li><a href="01 - معرفی LangGraph.html" class="active">۰۱ - معرفی LangGraph</a></li><li><a href="02 - اجزای بنیادین LangGraph.html">۰۲ - اجزای بنیادین LangGraph</a></li><li><a href="03 - ساخت اولین گراف با LangGraph.html">۰۳ - ساخت اولین گراف با LangGraph</a></li><li><a href="04 - گراف تحلیل اسناد و ReAct.html">۰۴ - گراف تحلیل اسناد و ReAct</a></li><li><a href="05 - آزمون LangGraph.html">۰۵ - آزمون LangGraph</a></li><li><a href="06 - جمع‌بندی LangGraph.html">۰۶ - جمع‌بندی LangGraph</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../../index.html">خانه</a><span>/</span><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html">۰۲ — فریم‌ورک‌های ایجنت</a><span>/</span><span>LangGraph</span><span>/</span><span>معرفی LangGraph</span></div>
+<h1>فریم‌ورک LangGraph چیست و چه تفاوتی با LangChain دارد؟</h1>
+<p>فریم‌ورک <code>LangGraph</code> توسط تیم <a href="https://www.langchain.com/" target="_blank" rel="noopener">LangChain</a> توسعه یافته است تا <strong>جریان کنترل (Control Flow) اپلیکیشن‌هایی را که یک LLM در آن‌ها به‌کار رفته مدیریت کند</strong>.</p>
+
+<h2>آیا LangGraph با LangChain تفاوت دارد؟</h2>
+<p>LangChain یک رابط استاندارد برای تعامل با مدل‌ها و سایر مؤلفه‌ها ارائه می‌دهد که برای بازیابی داده (Retrieval)، فراخوانی LLM و فراخوانی ابزارها مفید است. کلاس‌های LangChain را می‌توان در LangGraph استفاده کرد، اما <strong>اجباری</strong> به استفاده از آن‌ها نیست.</p>
+<p>این دو پکیج متفاوت‌اند و می‌توان آن‌ها را به‌صورت مستقل به‌کار برد، اما در نهایت تمام منابعی که آنلاین پیدا می‌کنید، هر دو پکیج را دست‌به‌دست هم استفاده می‌کنند.</p>
+
+<h2>چه زمانی باید از LangGraph استفاده کنم؟</h2>
+<h3>کنترل در برابر آزادی عمل</h3>
+<p>در طراحی اپلیکیشن‌های هوش مصنوعی، با یک بده‌بستان (Trade-off) اساسی میان <strong>کنترل (Control)</strong> و <strong>آزادی عمل (Freedom)</strong> مواجه هستیم:</p>
+<ul>
+  <li><strong>آزادی عمل</strong> به LLM شما فضای بیشتری برای خلاقیت و مقابله با مسائل غیرمنتظره می‌دهد.</li>
+  <li><strong>کنترل</strong> به شما امکان می‌دهد رفتار قابل‌پیش‌بینی را تضمین کنید و گاردریل‌ها (Guardrails) را حفظ نمایید.</li>
+</ul>
+
+<p>ایجنت‌های کدنویس (Code Agents)، مانند آن‌هایی که در <em>smolagents</em> با آن‌ها روبه‌رو می‌شوید، بسیار آزاد هستند. آن‌ها می‌توانند چند ابزار را در یک مرحله اجرایی فراخوانی کنند، ابزارهای خودشان را بسازند و غیره. با این حال، این رفتار می‌تواند آن‌ها را نسبت به یک ایجنت معمولی که با JSON کار می‌کند، کمتر قابل‌پیش‌بینی و کمتر قابل‌کنترل کند!</p>
+
+<p><code>LangGraph</code> در سمت دیگر این طیف قرار دارد و زمانی می‌درخشد که به <strong>«کنترل»</strong> روی اجرای ایجنت خود نیاز دارید.</p>
+
+<p>LangGraph به‌ویژه زمانی ارزشمند است که <strong>روی اپلیکیشن خود کنترل</strong> می‌خواهید. این فریم‌ورک ابزارهایی در اختیار شما می‌گذارد تا اپلیکیشنی بسازید که فرایندی قابل‌پیش‌بینی را دنبال کند و در عین حال از قدرت LLMها بهره ببرد.</p>
+
+<p>به بیان ساده، اگر اپلیکیشن شما شامل یک سری مراحل است که باید به شیوه‌ای مشخص ارکستره شوند و در هر نقطه انشعاب تصمیمی گرفته می‌شود، <strong>LangGraph ساختاری را که نیاز دارید فراهم می‌کند</strong>.</p>
+
+<p>برای مثال، فرض کنید می‌خواهیم یک دستیار LLM بسازیم که بتواند به سوالاتی درباره‌ی چند سند پاسخ دهد.</p>
+
+<p>از آنجا که LLMها متن را از همه بهتر می‌فهمند، پیش از آنکه بتوانید به سوال پاسخ دهید، باید سایر مدالیته‌های پیچیده (نمودارها، جداول) را به متن تبدیل کنید. اما این انتخاب به نوع سندی که دارید بستگی دارد!</p>
+
+<p>این یک انشعاب است که من آن را به‌صورت زیر نمایش داده‌ام:</p>
+
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/LangGraph/flow.png" alt="کنترل جریان در LangGraph" width="100%"/>
+</div>
+
+<div class="callout">
+  <div class="callout-title">💡 نکته</div>
+  <p>بخش سمت چپ یک ایجنت نیست، چون در آن هیچ فراخوانی ابزاری وجود ندارد. اما بخش سمت راست باید کدی بنویسد تا روی فایل xls کوئری بزند (تبدیل آن به pandas و دستکاری‌اش).</p>
+</div>
+
+<p>اگرچه این انشعاب قطعی (Deterministic) است، می‌توانید انشعاب‌هایی هم طراحی کنید که به خروجی یک LLM وابسته باشند و در نتیجه غیرقطعی (Non-deterministic) شوند.</p>
+
+<p>مهم‌ترین سناریوهایی که LangGraph در آن‌ها می‌درخشد عبارت‌اند از:</p>
+<ul>
+  <li><strong>فرایندهای استدلال چندمرحله‌ای</strong> که نیاز به کنترل صریح روی جریان دارند.</li>
+  <li><strong>اپلیکیشن‌هایی که به پایداری وضعیت (Persistence of State)</strong> بین مراحل نیاز دارند.</li>
+  <li><strong>سیستم‌هایی که منطق قطعی را با قابلیت‌های هوش مصنوعی ترکیب می‌کنند.</strong></li>
+  <li><strong>جریان‌های کاری که به مداخله‌ی انسان در حلقه (Human-in-the-loop)</strong> نیاز دارند.</li>
+  <li><strong>معماری‌های پیچیده‌ی ایجنتی</strong> که چند مؤلفه در آن‌ها با هم کار می‌کنند.</li>
+</ul>
+
+<p>در واقع، هرجا که شما به‌عنوان یک <strong>انسان</strong> بتوانید جریانی از اقدامات را طراحی کنید و بر اساس خروجی هر اقدام تصمیم بگیرید که مرحله‌ی بعد چه باشد، LangGraph فریم‌ورک مناسب شماست!</p>
+
+<p><code>LangGraph</code> به نظر نویسنده‌ی این بخش، <strong>آماده‌ترین فریم‌ورک ایجنتی برای محیط پروداکشن</strong> در بازار است.</p>
+
+<h2>LangGraph چگونه کار می‌کند؟</h2>
+<p>در هسته‌ی خود، <code>LangGraph</code> از یک ساختار گراف جهت‌دار (Directed Graph) برای تعریف جریان اپلیکیشن شما استفاده می‌کند:</p>
+<ul>
+  <li><strong>نودها (Nodes)</strong> مراحل پردازشی منفرد را نشان می‌دهند (مانند فراخوانی یک LLM، استفاده از یک ابزار یا گرفتن یک تصمیم).</li>
+  <li><strong>یال‌ها (Edges)</strong> انتقال‌های ممکن بین مراحل را تعریف می‌کنند.</li>
+  <li><strong>وضعیت (State)</strong> توسط کاربر تعریف و نگهداری می‌شود و در طول اجرا بین نودها منتقل می‌گردد. هنگام تصمیم‌گیری درباره‌ی نود بعدی، این همان وضعیت فعلی است که به آن نگاه می‌کنیم.</li>
+</ul>
+<p>این بلوک‌های بنیادین را در درس بعدی بیشتر بررسی خواهیم کرد!</p>
+
+<h2>تفاوت آن با پایتون معمولی چیست؟ چرا به LangGraph نیاز دارم؟</h2>
+<p>شاید از خودتان بپرسید: «من می‌توانم همین جریان‌ها را با کد پایتون معمولی و دستورهای if-else مدیریت کنم، درست است؟»</p>
+<p>از نظر فنی درست است، اما LangGraph <strong>مزیت‌هایی</strong> نسبت به پایتون ساده برای ساخت سیستم‌های پیچیده دارد. شما می‌توانید همان اپلیکیشن را بدون LangGraph هم بسازید، اما LangGraph ابزارها و انتزاع‌های ساده‌تری برای شما فراهم می‌کند.</p>
+<p>این فریم‌ورک شامل مدیریت وضعیت (State)، بصری‌سازی (Visualization)، لاگ‌گیری (Traces)، قابلیت داخلی Human-in-the-loop و موارد دیگر است.</p>
+<nav class="pager"><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html"><span>درس قبلی</span><strong>→ مقدمه فریم‌ورک‌های ایجنت</strong></a><a class="next" href="02 - اجزای بنیادین LangGraph.html"><span>درس بعدی</span><strong>اجزای بنیادین LangGraph ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

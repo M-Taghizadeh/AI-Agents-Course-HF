@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ابزارها در smolagents | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="stylesheet" href="../../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../../assets/vendor/highlight.min.js"></script>
+<script defer src="../../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۲.۱</div>
+    <div class="chapter-name">فریم‌ورک smolagents</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۲.۱</span><span class="toc-title">توسعه ایجنت با smolagents</span><span class="toc-count">۱۲</span></summary>
+      <ol><li><a href="01 - مقدمه‌ای بر smolagents.html">مقدمه‌ای بر smolagents</a></li><li><a href="02 - چرا smolagents؟.html">چرا smolagents؟</a></li><li><a href="03 - آزمون کوتاه ۱.html">آزمون کوتاه ۱</a></li><li><a href="04 - ساخت ایجنت‌های کد.html">ساخت ایجنت‌های کد</a></li><li><a href="05 - ایجنت‌های فراخوان ابزار.html">ایجنت‌های فراخوان ابزار</a></li><li><a href="06 - ابزارها در smolagents.html" class="active">ابزارها در smolagents</a></li><li><a href="07 - ایجنت‌های بازیابی و RAG.html">ایجنت‌های بازیابی و RAG</a></li><li><a href="08 - آزمون کوتاه ۲.html">آزمون کوتاه ۲</a></li><li><a href="09 - سیستم‌های چند ایجنتی.html">سیستم‌های چند ایجنتی</a></li><li><a href="10 - ایجنت‌های بینایی و مرورگر.html">ایجنت‌های بینایی و مرورگر</a></li><li><a href="11 - آزمون پایانی smolagents.html">آزمون پایانی smolagents</a></li><li><a href="12 - جمع‌بندی smolagents.html">جمع‌بندی smolagents</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../../index.html">خانه</a><span>/</span><span>۰۲.۱ — فریم‌ورک smolagents</span><span>/</span><span>ابزارها در smolagents</span></div>
+<p>📓 <a href="https://colab.research.google.com/#fileId=https://huggingface.co/agents-course/notebooks/blob/main/unit2/smolagents/tools.ipynb" target="_blank">اجرا در Google Colab</a> · 💬 <a href="http://hf.co/join/discord" target="_blank">کمک گرفتن در دیسکورد</a></p>
+<h1>ابزارها (Tools)</h1>
+<p>همان‌طور که در <a href="https://huggingface.co/learn/agents-course/unit1/tools">واحد ۱</a> دیدیم، ایجنت‌ها برای انجام اکشن‌های گوناگون از ابزارها استفاده می‌کنند. در <code>smolagents</code> ابزارها به عنوان <strong>توابعی که یک LLM می‌تواند درون یک سیستم ایجنتی فراخوانی کند</strong> در نظر گرفته می‌شوند.</p>
+<p>برای تعامل با یک ابزار، LLM به یک <strong>توضیح رابط (interface description)</strong> با اجزای کلیدی زیر نیاز دارد:</p>
+<ul>
+  <li><strong>نام (Name):</strong> ابزار چه نامی دارد</li>
+  <li><strong>توضیح ابزار (Tool description):</strong> ابزار چه کاری می‌کند</li>
+  <li><strong>انواع و توضیحات ورودی:</strong> ابزار چه آرگومان‌هایی می‌پذیرد</li>
+  <li><strong>نوع خروجی (Output type):</strong> ابزار چه چیزی برمی‌گرداند</li>
+</ul>
+<p>برای مثال، در آماده‌سازی مهمانی عمارت وین، آلفرد به ابزارهای مختلفی برای جمع‌آوری اطلاعات نیاز دارد ــ از جستجوی خدمات کترینگ تا یافتن ایده‌های تم مهمانی. رابط یک ابزار جستجوی ساده می‌تواند این شکل باشد:</p>
+<ul>
+  <li><strong>نام:</strong> <code>web_search</code></li>
+  <li><strong>توضیح ابزار:</strong> جستجوی وب برای پرسش‌های مشخص</li>
+  <li><strong>ورودی:</strong> <code>query</code> (رشته) — عبارت جستجو</li>
+  <li><strong>خروجی:</strong> رشته‌ای شامل نتایج جستجو</li>
+</ul>
+<p>آلفرد با استفاده از این ابزارها می‌تواند تصمیم‌های آگاهانه بگیرد و همه اطلاعات لازم برای برنامه‌ریزی مهمانی بی‌نقص را جمع کند.</p>
+<p>در پایین، انیمیشنی می‌بینید که نشان می‌دهد یک فراخوانی ابزار چگونه مدیریت می‌شود:</p>
+<img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/transformers/Agent_ManimCE.gif" alt="خط لوله ایجنتی" width="100%"/>
+<p>منبع تصویر: <a href="https://huggingface.co/docs/smolagents/conceptual_guides/react">مستندات smolagents</a></p>
+
+<h2>روش‌های ساخت ابزار</h2>
+<p>در <code>smolagents</code> ابزارها را می‌توان به دو روش تعریف کرد:</p>
+<ol>
+  <li><strong>استفاده از دکوراتور <code>@tool</code></strong> برای ابزارهای ساده مبتنی بر تابع</li>
+  <li><strong>ساخت زیرکلاس از <code>Tool</code></strong> برای قابلیت‌های پیچیده‌تر</li>
+</ol>
+
+<h3>دکوراتور <code>@tool</code></h3>
+<p>دکوراتور <code>@tool</code> <strong>روش توصیه‌شده برای تعریف ابزارهای ساده</strong> است. در پشت صحنه، smolagents اطلاعات پایه تابع را از پایتون پارس می‌کند. بنابراین اگر نام تابع را واضح انتخاب کنید و docstring خوبی بنویسید، استفاده از آن برای LLM آسان‌تر می‌شود.</p>
+<p>در این روش، تابعی تعریف می‌کنیم که دارای این ویژگی‌هاست:</p>
+<ul>
+  <li><strong>نام تابع واضح و توصیفی</strong> که به LLM کمک می‌کند هدف آن را بفهمد.</li>
+  <li><strong>نوع‌نما (type hint) برای ورودی‌ها و خروجی‌ها</strong> تا استفاده درست تضمین شود.</li>
+  <li><strong>توضیح دقیق</strong> شامل بخش <code>Args:</code> که در آن هر آرگومان صراحتاً توصیف می‌شود. این توضیحات زمینه ارزشمندی برای LLM فراهم می‌کنند، پس مهم است که با دقت نوشته شوند.</li>
+</ul>
+
+<h4>ساخت ابزاری که کترینگ با بالاترین امتیاز را پیدا می‌کند</h4>
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/smolagents/alfred-catering.jpg" alt="کترینگ آلفرد" width="100%"/>
+<blockquote><p><strong>نکته:</strong> می‌توانید کد را در <a href="https://huggingface.co/agents-course/notebooks/blob/main/unit2/smolagents/tools.ipynb" target="_blank">این نوت‌بوک</a> که با Google Colab قابل اجراست دنبال کنید.</p></blockquote>
+<p>فرض کنید آلفرد منوی مهمانی را تعیین کرده، اما حالا برای تهیه غذا برای این تعداد زیاد مهمان به کمک نیاز دارد. او می‌خواهد یک سرویس کترینگ استخدام کند و باید گزینه‌های با بالاترین امتیاز را شناسایی کند. آلفرد می‌تواند با ابزاری، بهترین سرویس‌های کترینگ منطقه‌اش را جستجو کند.</p>
+<p>در ادامه نمونه‌ای از نحوه استفاده آلفرد از دکوراتور <code>@tool</code> برای این کار را می‌بینید:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents import CodeAgent, InferenceClientModel, tool
+
+# Let's pretend we have a function that fetches the highest-rated catering services.
+@tool
+def catering_service_tool(query: str) -&gt; str:
+    """
+    This tool returns the highest-rated catering service in Gotham City.
+
+    Args:
+        query: A search term for finding catering services.
+    """
+    # Example list of catering services and their ratings
+    services = {
+        "Gotham Catering Co.": 4.9,
+        "Wayne Manor Catering": 4.8,
+        "Gotham City Events": 4.7,
+    }
+
+    # Find the highest rated catering service (simulating search query filtering)
+    best_service = max(services, key=services.get)
+
+    return best_service
+
+
+agent = CodeAgent(tools=[catering_service_tool], model=InferenceClientModel())
+
+# Run the agent to find the best catering service
+result = agent.run(
+    "Can you give me the name of the highest-rated catering service in Gotham City?"
+)
+
+print(result)   # Output: Gotham Catering Co.</code></pre></div>
+
+<h3>تعریف ابزار به صورت یک کلاس پایتون</h3>
+<p>این رویکرد شامل ساخت زیرکلاسی از <a href="https://huggingface.co/docs/smolagents/v1.8.1/en/reference/tools#smolagents.Tool"><code>Tool</code></a> است. برای ابزارهای پیچیده می‌توانیم به جای تابع، یک کلاس پیاده کنیم. کلاس، تابع را با فراداده‌هایی (metadata) می‌پوشاند که به LLM کمک می‌کند ابزار را مؤثرتر به کار ببرد. در این کلاس تعریف می‌کنیم:</p>
+<ul>
+  <li><code>name</code>: نام ابزار.</li>
+  <li><code>description</code>: توضیحی که برای پر کردن پرامپت سیستم ایجنت استفاده می‌شود.</li>
+  <li><code>inputs</code>: دیکشنری‌ای با کلیدهای <code>type</code> و <code>description</code> که اطلاعاتی برای کمک به مفسر پایتون در پردازش ورودی‌ها فراهم می‌کند.</li>
+  <li><code>output_type</code>: نوع خروجی مورد انتظار را مشخص می‌کند.</li>
+  <li><code>forward</code>: متدی که منطق استنتاج (اجرای ابزار) را در بر دارد.</li>
+</ul>
+<p>در ادامه مثالی از ابزاری که با <code>Tool</code> ساخته شده و نحوه ادغام آن در یک <code>CodeAgent</code> را می‌بینید.</p>
+
+<h4>ساخت ابزاری برای تولید ایده‌های مهمانی با تم ابرقهرمانی</h4>
+<p>مهمانی آلفرد در عمارت یک <strong>رویداد با تم ابرقهرمانی</strong> است، اما او برای اینکه آن را واقعاً خاص کند به ایده‌های خلاقانه نیاز دارد. به عنوان یک میزبان فوق‌العاده، می‌خواهد مهمانان را با یک تم منحصربه‌فرد شگفت‌زده کند.</p>
+<p>برای این کار می‌تواند از ایجنتی استفاده کند که بر اساس یک دسته‌بندی مشخص، ایده‌های مهمانی با تم ابرقهرمانی تولید می‌کند. به این ترتیب آلفرد می‌تواند تم مناسب را پیدا کند و مهمانانش را شگفت‌زده کند.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents import Tool, CodeAgent, InferenceClientModel
+
+class SuperheroPartyThemeTool(Tool):
+    name = "superhero_party_theme_generator"
+    description = """
+    This tool suggests creative superhero-themed party ideas based on a category.
+    It returns a unique party theme idea."""
+
+    inputs = {
+        "category": {
+            "type": "string",
+            "description": "The type of superhero party (e.g., 'classic heroes', 'villain masquerade', 'futuristic Gotham').",
+        }
+    }
+
+    output_type = "string"
+
+    def forward(self, category: str):
+        themes = {
+            "classic heroes": "Justice League Gala: Guests come dressed as their favorite DC heroes with themed cocktails like 'The Kryptonite Punch'.",
+            "villain masquerade": "Gotham Rogues' Ball: A mysterious masquerade where guests dress as classic Batman villains.",
+            "futuristic Gotham": "Neo-Gotham Night: A cyberpunk-style party inspired by Batman Beyond, with neon decorations and futuristic gadgets."
+        }
+
+        return themes.get(category.lower(), "Themed party idea not found. Try 'classic heroes', 'villain masquerade', or 'futuristic Gotham'.")
+
+# Instantiate the tool
+party_theme_tool = SuperheroPartyThemeTool()
+agent = CodeAgent(tools=[party_theme_tool], model=InferenceClientModel())
+
+# Run the agent to generate a party theme idea
+result = agent.run(
+    "What would be a good superhero party idea for a 'villain masquerade' theme?"
+)
+
+print(result)  # Output: "Gotham Rogues' Ball: A mysterious masquerade where guests dress as classic Batman villains."</code></pre></div>
+<p>با این ابزار، آلفرد به ابَرمیزبانی تبدیل می‌شود که با مهمانی ابرقهرمانی فراموش‌نشدنی‌اش مهمانان را تحت تأثیر قرار می‌دهد! 🦸‍♂️🦸‍♀️</p>
+
+<h2>جعبه‌ابزار پیش‌فرض</h2>
+<p><code>smolagents</code> مجموعه‌ای از ابزارهای از پیش ساخته‌شده دارد که می‌توان مستقیماً به ایجنت تزریق کرد. <a href="https://huggingface.co/docs/smolagents/guided_tour?build-a-tool=Decorate+a+function+with+%40tool#default-toolbox">جعبه‌ابزار پیش‌فرض</a> شامل این موارد است:</p>
+<ul>
+  <li><strong>PythonInterpreterTool</strong></li>
+  <li><strong>FinalAnswerTool</strong></li>
+  <li><strong>UserInputTool</strong></li>
+  <li><strong>DuckDuckGoSearchTool</strong></li>
+  <li><strong>GoogleSearchTool</strong></li>
+  <li><strong>VisitWebpageTool</strong></li>
+</ul>
+<p>آلفرد می‌تواند برای تضمین یک مهمانی بی‌نقص در عمارت وین از ابزارهای مختلفی استفاده کند:</p>
+<ul>
+  <li>اول، می‌تواند از <code>DuckDuckGoSearchTool</code> برای یافتن ایده‌های خلاقانه مهمانی با تم ابرقهرمانی استفاده کند.</li>
+  <li>برای کترینگ، به <code>GoogleSearchTool</code> تکیه می‌کند تا سرویس‌های با بالاترین امتیاز را در گاتهام پیدا کند.</li>
+  <li>برای مدیریت چیدمان صندلی‌ها، آلفرد می‌تواند محاسبات را با <code>PythonInterpreterTool</code> اجرا کند.</li>
+  <li>پس از جمع‌آوری همه‌چیز، برنامه را با <code>FinalAnswerTool</code> تدوین می‌کند.</li>
+</ul>
+<p>با این ابزارها، آلفرد تضمین می‌کند که مهمانی هم استثنایی و هم روان باشد. 🦇💡</p>
+
+<h2>اشتراک‌گذاری و وارد کردن ابزارها</h2>
+<p>یکی از قدرتمندترین ویژگی‌های <strong>smolagents</strong> توانایی اشتراک‌گذاری ابزارهای سفارشی در Hub و یکپارچه‌سازی روان ابزارهای ساخته‌شده توسط جامعه است. این شامل اتصال به <strong>HF Spaces</strong> و <strong>ابزارهای LangChain</strong> می‌شود و توانایی آلفرد را برای سازماندهی یک مهمانی فراموش‌نشدنی در عمارت وین به‌طور چشمگیری افزایش می‌دهد. 🎭</p>
+<p>با این یکپارچه‌سازی‌ها، آلفرد می‌تواند به ابزارهای پیشرفته برنامه‌ریزی رویداد دسترسی پیدا کند ــ چه تنظیم نورپردازی برای حال‌وهوای عالی، چه انتخاب پلی‌لیست ایده‌آل مهمانی، و چه هماهنگی با بهترین کترینگ‌های گاتهام.</p>
+<p>در ادامه نمونه‌هایی از این قابلیت‌ها و نحوه ارتقای تجربه مهمانی با آن‌ها را می‌بینید:</p>
+
+<h3>اشتراک‌گذاری یک ابزار در Hub</h3>
+<p>اشتراک‌گذاری ابزار سفارشی با جامعه آسان است! کافی است با متد <code>push_to_hub()</code> آن را در حساب Hugging Face خود آپلود کنید.</p>
+<p>برای مثال، آلفرد می‌تواند <code>party_theme_tool</code> خود را به اشتراک بگذارد تا به دیگران در یافتن بهترین خدمات کترینگ گاتهام کمک کند. روش انجام آن:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">party_theme_tool.push_to_hub("{your_username}/party_theme_tool", token="&lt;YOUR_HUGGINGFACEHUB_API_TOKEN&gt;")</code></pre></div>
+
+<h3>وارد کردن یک ابزار از Hub</h3>
+<p>می‌توانید با تابع <code>load_tool()</code> به‌آسانی ابزارهای ساخته‌شده توسط کاربران دیگر را وارد کنید. برای مثال، آلفرد ممکن است بخواهد با هوش مصنوعی یک تصویر تبلیغاتی برای مهمانی تولید کند. به جای ساختن ابزار از صفر، می‌تواند از ابزار از پیش تعریف‌شده جامعه استفاده کند:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents import load_tool, CodeAgent, InferenceClientModel
+
+image_generation_tool = load_tool(
+    "m-ric/text-to-image",
+    trust_remote_code=True
+)
+
+agent = CodeAgent(
+    tools=[image_generation_tool],
+    model=InferenceClientModel()
+)
+
+agent.run("Generate an image of a luxurious superhero-themed party at Wayne Manor with made-up superheros.")</code></pre></div>
+
+<h3>وارد کردن یک Hugging Face Space به عنوان ابزار</h3>
+<p>همچنین می‌توانید با <code>Tool.from_space()</code> یک HF Space را به عنوان ابزار وارد کنید. این کار امکان یکپارچه‌سازی با هزاران Space جامعه را برای کارهایی از تولید تصویر تا تحلیل داده فراهم می‌کند.</p>
+<p>این ابزار با استفاده از <code>gradio_client</code> به بک‌اند Gradio آن Space متصل می‌شود، پس اگر هنوز نصب نکرده‌اید حتماً آن را با <code>pip</code> نصب کنید.</p>
+<p>برای مهمانی، آلفرد می‌تواند از یک HF Space موجود برای تولید تصویر هوش مصنوعی مورد استفاده در اطلاعیه استفاده کند (به جای ابزار از پیش ساخته‌ای که قبلاً ذکر شد). بیایید آن را بسازیم!</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents import CodeAgent, InferenceClientModel, Tool
+
+image_generation_tool = Tool.from_space(
+    "black-forest-labs/FLUX.1-schnell",
+    name="image_generator",
+    description="Generate an image from a prompt"
+)
+
+model = InferenceClientModel("Qwen/Qwen2.5-Coder-32B-Instruct")
+
+agent = CodeAgent(tools=[image_generation_tool], model=model)
+
+agent.run(
+    "Improve this prompt, then generate an image of it.",
+    additional_args={'user_prompt': 'A grand superhero-themed party at Wayne Manor, with Alfred overseeing a luxurious gala'}
+)</code></pre></div>
+
+<h3>وارد کردن یک ابزار LangChain</h3>
+<p>درباره فریم‌ورک <code>LangChain</code> در بخش‌های بعدی صحبت خواهیم کرد. فعلاً فقط اشاره می‌کنیم که می‌توانید ابزارهای LangChain را در گردش کار smolagents خود استفاده کنید!</p>
+<p>با متد <code>Tool.from_langchain()</code> به‌راحتی می‌توانید ابزارهای LangChain را بارگذاری کنید. آلفرد، که همیشه کمال‌گراست، در حال آماده‌سازی یک شب ابرقهرمانی خیره‌کننده در عمارت وین است، در حالی که خانواده وین در سفرند. برای اینکه مطمئن شود هر جزئیات از انتظارات فراتر می‌رود، از ابزارهای LangChain برای یافتن ایده‌های سرگرمی در سطح عالی استفاده می‌کند.</p>
+<p>آلفرد با <code>Tool.from_langchain()</code> به‌راحتی قابلیت‌های جستجوی پیشرفته را به smolagent خود اضافه می‌کند و با چند فرمان ساده می‌تواند ایده‌ها و خدمات مهمانی انحصاری را کشف کند.</p>
+<p>روش کار او به این صورت است:</p>
+<p>ابتدا باید یکپارچه‌سازی <code>langchain</code> برای <code>smolagents</code> را نصب کنیم.</p>
+<div class="code"><pre dir="ltr"><code class="language-bash">pip install -U langchain-community</code></pre></div>
+<p>پس از نصب یکپارچه‌سازی langchain، حتماً کلید SerpAPI خود را تنظیم کنید. این کار برای ابزارهای مبتنی بر جستجو مانند <code>SerpAPITool</code> لازم است:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">os.environ['SERPAPI_API_KEY'] = '...'</code></pre></div>
+<p>می‌توانید کلید SerpAPI را <a href="https://serpapi.com/">اینجا</a> بسازید.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from langchain.agents import load_tools
+from smolagents import CodeAgent, InferenceClientModel, Tool
+
+search_tool = Tool.from_langchain(load_tools(["serpapi"])[0])
+
+agent = CodeAgent(tools=[search_tool], model=model)
+
+agent.run("Search for luxury entertainment ideas for a superhero-themed event, such as live performances and interactive experiences.")</code></pre></div>
+
+<h3>وارد کردن یک مجموعه ابزار از هر سرور MCP</h3>
+<p><code>smolagents</code> همچنین اجازه می‌دهد ابزارها را از صدها سرور MCP موجود در <a href="https://glama.ai/mcp/servers">glama.ai</a> یا <a href="https://smithery.ai">smithery.ai</a> وارد کنید. اگر می‌خواهید بیشتر درباره MCP بدانید، می‌توانید <a href="https://huggingface.co/learn/mcp-course/">دوره رایگان MCP</a> ما را ببینید.</p>
+<details>
+<summary>نصب کلاینت mcp</summary>
+<p>ابتدا باید یکپارچه‌سازی <code>mcp</code> برای <code>smolagents</code> را نصب کنیم.</p>
+<div class="code"><pre dir="ltr"><code class="language-bash">pip install "smolagents[mcp]"</code></pre></div>
+</details>
+<p>ابزارهای سرورهای MCP را می‌توان به صورت زیر در یک شیء ToolCollection بارگذاری کرد:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">import os
+from smolagents import ToolCollection, CodeAgent
+from mcp import StdioServerParameters
+from smolagents import InferenceClientModel
+
+
+model = InferenceClientModel("Qwen/Qwen2.5-Coder-32B-Instruct")
+
+
+server_parameters = StdioServerParameters(
+    command="uvx",
+    args=["--quiet", "pubmedmcp@0.1.3"],
+    env={"UV_PYTHON": "3.12", **os.environ},
+)
+
+with ToolCollection.from_mcp(server_parameters, trust_remote_code=True) as tool_collection:
+    agent = CodeAgent(tools=[*tool_collection.tools], model=model, add_base_tools=True)
+    agent.run("Please find a remedy for hangover.")</code></pre></div>
+<p>با این پیکربندی، آلفرد می‌تواند به‌سرعت گزینه‌های سرگرمی لوکس را کشف کند و تجربه‌ای فراموش‌نشدنی برای نخبگان گاتهام رقم بزند. این ابزار به او کمک می‌کند رویداد ابرقهرمانی بی‌نقصی را در عمارت وین سازماندهی کند! 🎉</p>
+
+<h2>منابع</h2>
+<ul>
+  <li><a href="https://huggingface.co/docs/smolagents/tutorials/tools">آموزش ابزارها</a> — با مطالعه این آموزش یاد بگیرید چگونه مؤثر با ابزارها کار کنید.</li>
+  <li><a href="https://huggingface.co/docs/smolagents/v1.8.1/en/reference/tools">مستندات ابزارها</a> — مستندات مرجع جامع درباره ابزارها.</li>
+  <li><a href="https://huggingface.co/docs/smolagents/v1.8.1/en/guided_tour#tools">تور راهنما: ابزارها</a> — یک تور گام‌به‌گام برای ساخت و استفاده کارآمد از ابزارها.</li>
+  <li><a href="https://huggingface.co/docs/smolagents/tutorials/building_good_agents">Building Effective Agents</a> — راهنمای دقیق بهترین شیوه‌ها برای توسعه ایجنت‌های تابع‌محور قابل اتکا و با کارایی بالا.</li>
+</ul>
+<nav class="pager"><a href="05 - ایجنت‌های فراخوان ابزار.html"><span>درس قبلی</span><strong>→ ایجنت‌های فراخوان ابزار</strong></a><a class="next" href="07 - ایجنت‌های بازیابی و RAG.html"><span>درس بعدی</span><strong>ایجنت‌های بازیابی و RAG ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

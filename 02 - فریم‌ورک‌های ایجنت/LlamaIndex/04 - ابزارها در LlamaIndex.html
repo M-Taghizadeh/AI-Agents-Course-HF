@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ابزارها در LlamaIndex | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="stylesheet" href="../../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../../assets/vendor/highlight.min.js"></script>
+<script defer src="../../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۲.۲</div>
+    <div class="chapter-name">فریم‌ورک LlamaIndex</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۲.۲</span><span class="toc-title">ایجنت‌ها در LlamaIndex</span><span class="toc-count">۹</span></summary>
+      <ol><li><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html">۰۰ - مقدمه فریم‌ورک‌ها</a></li><li><a href="01 - مقدمه‌ای بر LlamaIndex.html">۰۱ - مقدمه‌ای بر LlamaIndex</a></li><li><a href="02 - آشنایی با LlamaHub.html">۰۲ - آشنایی با LlamaHub</a></li><li><a href="03 - کامپوننت‌ها در LlamaIndex.html">۰۳ - کامپوننت‌ها در LlamaIndex</a></li><li><a href="04 - ابزارها در LlamaIndex.html" class="active">۰۴ - ابزارها در LlamaIndex</a></li><li><a href="05 - آزمون کوتاه ۱.html">۰۵ - آزمون کوتاه ۱</a></li><li><a href="06 - ایجنت‌ها در LlamaIndex.html">۰۶ - ایجنت‌ها در LlamaIndex</a></li><li><a href="07 - ساخت گردش‌کارهای ایجنتی.html">۰۷ - ساخت گردش‌کارهای ایجنتی</a></li><li><a href="08 - آزمون کوتاه ۲.html">۰۸ - آزمون کوتاه ۲</a></li><li><a href="09 - جمع‌بندی LlamaIndex.html">۰۹ - جمع‌بندی LlamaIndex</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../../index.html">خانه</a><span>/</span><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html">۰۲ — فریم‌ورک‌های ایجنت</a><span>/</span><span>LlamaIndex</span><span>/</span><span>ابزارها در LlamaIndex</span></div>
+<h1>استفاده از ابزارها در LlamaIndex</h1>
+<p><strong>تعریف یک مجموعه‌ی روشن از ابزارها (Tools) برای عملکرد حیاتی است.</strong> همان‌طور که در فصل ۱ بحث کردیم، رابط‌های روشن ابزار برای LLMها راحت‌تر قابل‌استفاده هستند. درست مانند رابط‌های API نرم‌افزاری برای مهندسان انسانی، اگر فهمیدن نحوه‌ی کار ابزار آسان باشد، می‌توانند بهره‌ی بیشتری از آن ببرند.</p>
+<p><strong>چهار نوع اصلی ابزار در LlamaIndex وجود دارد</strong>:</p>
+
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/llama-index/tools.png" alt="ابزارها" width="100%"/>
+</div>
+
+<ol>
+  <li><code>FunctionTool</code>: هر تابع پایتونی را به ابزاری تبدیل می‌کند که ایجنت بتواند از آن استفاده کند. این ابزار به‌طور خودکار می‌فهمد تابع چگونه کار می‌کند.</li>
+  <li><code>QueryEngineTool</code>: ابزاری که به ایجنت‌ها اجازه می‌دهد از query engineها استفاده کنند. از آنجا که ایجنت‌ها بر پایه‌ی query engineها ساخته شده‌اند، می‌توانند از ایجنت‌های دیگر هم به‌عنوان ابزار استفاده کنند.</li>
+  <li><code>Toolspecs</code>: مجموعه‌هایی از ابزارها که توسط جامعه ساخته شده‌اند و اغلب شامل ابزارهایی برای سرویس‌های خاص مانند Gmail هستند.</li>
+  <li><code>Utility Tools</code>: ابزارهای ویژه‌ای که به مدیریت حجم زیاد داده از ابزارهای دیگر کمک می‌کنند.</li>
+</ol>
+<p>در ادامه هر یک را با جزئیات بیشتر بررسی می‌کنیم.</p>
+
+<h2>ساخت یک FunctionTool</h2>
+<div class="callout">
+  <div class="callout-title">💡 نکته</div>
+  <p>می‌توانید کد را در <a href="https://huggingface.co/agents-course/notebooks/blob/main/unit2/llama-index/tools.ipynb" target="_blank" rel="noopener">این نوت‌بوک</a> دنبال کنید که با Google Colab قابل اجراست.</p>
+</div>
+
+<p>FunctionTool راهی ساده برای پوشاندن (Wrap) هر تابع پایتون و در دسترس قرار دادن آن برای ایجنت است. می‌توانید یک تابع همگام (Synchronous) یا ناهمگام (Asynchronous) را به همراه پارامترهای اختیاری <code>name</code> و <code>description</code> به ابزار بدهید. نام و توضیحات به‌ویژه مهم هستند، چون به ایجنت کمک می‌کنند بفهمد چه زمانی و چگونه از ابزار به‌طور مؤثر استفاده کند. در ادامه می‌بینیم چگونه یک FunctionTool بسازیم و سپس آن را فراخوانی کنیم.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from llama_index.core.tools import FunctionTool
+
+def get_weather(location: str) -&gt; str:
+    """Useful for getting the weather for a given location."""
+    print(f"Getting weather for {location}")
+    return f"The weather in {location} is sunny"
+
+tool = FunctionTool.from_defaults(
+    get_weather,
+    name="my_weather_tool",
+    description="Useful for getting the weather for a given location.",
+)
+tool.call("New York")</code></pre></div>
+<div class="callout">
+  <div class="callout-title">💡 نکته</div>
+  <p>هنگام استفاده از یک ایجنت یا LLM دارای function calling، ابزار انتخاب‌شده (و آرگومان‌هایی که برای آن نوشته می‌شود) به‌شدت به نام ابزار و توضیحِ هدف و آرگومان‌های آن وابسته است. درباره‌ی function calling در <a href="https://docs.llamaindex.ai/en/stable/examples/workflow/function_calling_agent/" target="_blank" rel="noopener">راهنمای Function Calling</a> بیشتر بخوانید.</p>
+</div>
+
+<h2>ساخت یک QueryEngineTool</h2>
+<p>همان <code>QueryEngine</code>ای که در بخش قبل تعریف کردیم را می‌توان به‌سادگی با کلاس <code>QueryEngineTool</code> به یک ابزار تبدیل کرد. در مثال زیر می‌بینیم چگونه از یک <code>QueryEngine</code> یک <code>QueryEngineTool</code> بسازیم.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">import chromadb
+from llama_index.core import VectorStoreIndex
+from llama_index.core.tools import QueryEngineTool
+from llama_index.llms.huggingface_api import HuggingFaceInferenceAPI
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from llama_index.vector_stores.chroma import ChromaVectorStore
+
+embed_model = HuggingFaceEmbedding("BAAI/bge-small-en-v1.5")
+
+db = chromadb.PersistentClient(path="./alfred_chroma_db")
+chroma_collection = db.get_or_create_collection("alfred")
+vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
+
+index = VectorStoreIndex.from_vector_store(vector_store, embed_model=embed_model)
+
+llm = HuggingFaceInferenceAPI(model_name="Qwen/Qwen2.5-Coder-32B-Instruct")
+query_engine = index.as_query_engine(llm=llm)
+tool = QueryEngineTool.from_defaults(query_engine, name="some useful name", description="some useful description")</code></pre></div>
+
+<h2>ساخت Toolspecها</h2>
+<p><code>ToolSpec</code>ها را مجموعه‌هایی از ابزارها در نظر بگیرید که هماهنگ با هم کار می‌کنند، مانند یک جعبه‌ابزار حرفه‌ای و سازمان‌یافته. همان‌طور که جعبه‌ابزار یک مکانیک شامل ابزارهای مکمل برای تعمیر خودرو است، یک <code>ToolSpec</code> ابزارهای مرتبط را برای اهداف مشخص ترکیب می‌کند. برای مثال، <code>ToolSpec</code> یک ایجنت حسابداری ممکن است قابلیت‌های صفحه‌گسترده، ایمیل و ابزارهای محاسباتی را به‌زیبایی یکپارچه کند تا وظایف مالی را با دقت و کارایی انجام دهد.</p>
+<details>
+<summary>نصب Google Toolspec</summary>
+<p>همان‌طور که در <a href="02 - آشنایی با LlamaHub.html">بخش LlamaHub</a> معرفی شد، می‌توانیم Google toolspec را با دستور زیر نصب کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-bash">pip install llama-index-tools-google</code></pre></div>
+</details>
+
+<p>و اکنون می‌توانیم toolspec را بارگذاری کنیم و آن را به فهرستی از ابزارها تبدیل کنیم.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from llama_index.tools.google import GmailToolSpec
+
+tool_spec = GmailToolSpec()
+tool_spec_list = tool_spec.to_tool_list()</code></pre></div>
+
+<p>برای نمایی دقیق‌تر از ابزارها، می‌توانیم به <code>metadata</code> هر ابزار نگاه کنیم.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">[(tool.metadata.name, tool.metadata.description) for tool in tool_spec_list]</code></pre></div>
+
+<h3>پروتکل Model Context Protocol (MCP) در LlamaIndex</h3>
+<p>LlamaIndex همچنین اجازه می‌دهد از ابزارهای MCP از طریق <a href="https://llamahub.ai/l/tools/llama-index-tools-mcp?from=" target="_blank" rel="noopener">یک ToolSpec در LlamaHub</a> استفاده کنید. کافی است یک سرور MCP را اجرا کنید و با پیاده‌سازی زیر شروع به استفاده از آن کنید.</p>
+<p>اگر می‌خواهید بیشتر درباره‌ی MCP بدانید، می‌توانید <a href="https://huggingface.co/learn/mcp-course/" target="_blank" rel="noopener">دوره‌ی رایگان MCP</a> ما را ببینید.</p>
+<details>
+<summary>نصب MCP Toolspec</summary>
+<p>همان‌طور که در <a href="02 - آشنایی با LlamaHub.html">بخش LlamaHub</a> معرفی شد، می‌توانیم MCP toolspec را با دستور زیر نصب کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-bash">pip install llama-index-tools-mcp</code></pre></div>
+</details>
+<div class="code"><pre dir="ltr"><code class="language-python">from llama_index.tools.mcp import BasicMCPClient, McpToolSpec
+
+# فرض می‌کنیم یک سرور MCP روی 127.0.0.1:8000 در حال اجراست، یا می‌توانید از کلاینت MCP برای اتصال به سرور MCP خودتان استفاده کنید.
+mcp_client = BasicMCPClient("http://127.0.0.1:8000/sse")
+mcp_tool = McpToolSpec(client=mcp_client)
+
+# دریافت ایجنت
+agent = await get_agent(mcp_tool)
+
+# ساخت کانتکست ایجنت
+agent_context = Context(agent)</code></pre></div>
+
+<h2>ابزارهای کمکی (Utility Tools)</h2>
+<p>اغلب، پرس‌وجوی مستقیم از یک API <strong>می‌تواند حجم بیش‌ازحدی از داده برگرداند</strong>، که بخشی از آن ممکن است نامرتبط باشد، از پنجره‌ی کانتکست LLM سرریز شود یا تعداد توکن‌های مصرفی را بی‌دلیل افزایش دهد. بیایید دو ابزار کمکی اصلی را مرور کنیم.</p>
+<ol>
+  <li><code>OnDemandToolLoader</code>: این ابزار هر data loader موجود در LlamaIndex (کلاس BaseReader) را به ابزاری تبدیل می‌کند که ایجنت بتواند از آن استفاده کند. این ابزار را می‌توان با تمام پارامترهای لازم برای راه‌اندازی <code>load_data</code> از data loader، به‌همراه یک رشته‌ی کوئری به زبان طبیعی فراخوانی کرد. در حین اجرا، ابتدا داده را از data loader بارگذاری می‌کنیم، آن را ایندکس می‌کنیم (مثلاً با یک vector store) و سپس «در لحظه‌ی نیاز» (On-demand) از آن پرس‌وجو می‌کنیم. هر سه گام در یک فراخوانی ابزار انجام می‌شوند.</li>
+  <li><code>LoadAndSearchToolSpec</code>: این ابزار هر Tool موجود را به‌عنوان ورودی می‌گیرد. چون یک tool spec است، <code>to_tool_list</code> را پیاده‌سازی می‌کند و هنگام فراخوانی آن، دو ابزار برگردانده می‌شود: یک ابزار بارگذاری (Load) و یک ابزار جستجو (Search). اجرای ابزار بارگذاری، ابزار زیربنایی را فراخوانی می‌کند و سپس خروجی را ایندکس می‌کند (به‌صورت پیش‌فرض با یک ایندکس برداری). اجرای ابزار جستجو یک رشته‌ی کوئری را به‌عنوان ورودی می‌گیرد و ایندکس زیربنایی را فراخوانی می‌کند.</li>
+</ol>
+<div class="callout">
+  <div class="callout-title">💡 نکته</div>
+  <p>toolspecها و utility toolها را در <a href="https://llamahub.ai/" target="_blank" rel="noopener">LlamaHub</a> پیدا می‌کنید.</p>
+</div>
+
+<p>اکنون که مبانی ایجنت‌ها و ابزارها در LlamaIndex را فهمیدیم، ببینیم چگونه می‌توانیم از <strong>LlamaIndex برای ساخت گردش‌کارهای قابل‌پیکربندی و قابل‌مدیریت</strong> استفاده کنیم!</p>
+<nav class="pager"><a href="03 - کامپوننت‌ها در LlamaIndex.html"><span>درس قبلی</span><strong>→ کامپوننت‌ها در LlamaIndex</strong></a><a class="next" href="05 - آزمون کوتاه ۱.html"><span>درس بعدی</span><strong>آزمون کوتاه ۱ ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

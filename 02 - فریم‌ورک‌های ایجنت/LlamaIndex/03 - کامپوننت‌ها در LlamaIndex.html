@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>کامپوننت‌ها در LlamaIndex | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="stylesheet" href="../../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../../assets/vendor/highlight.min.js"></script>
+<script defer src="../../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۲.۲</div>
+    <div class="chapter-name">فریم‌ورک LlamaIndex</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۲.۲</span><span class="toc-title">ایجنت‌ها در LlamaIndex</span><span class="toc-count">۹</span></summary>
+      <ol><li><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html">۰۰ - مقدمه فریم‌ورک‌ها</a></li><li><a href="01 - مقدمه‌ای بر LlamaIndex.html">۰۱ - مقدمه‌ای بر LlamaIndex</a></li><li><a href="02 - آشنایی با LlamaHub.html">۰۲ - آشنایی با LlamaHub</a></li><li><a href="03 - کامپوننت‌ها در LlamaIndex.html" class="active">۰۳ - کامپوننت‌ها در LlamaIndex</a></li><li><a href="04 - ابزارها در LlamaIndex.html">۰۴ - ابزارها در LlamaIndex</a></li><li><a href="05 - آزمون کوتاه ۱.html">۰۵ - آزمون کوتاه ۱</a></li><li><a href="06 - ایجنت‌ها در LlamaIndex.html">۰۶ - ایجنت‌ها در LlamaIndex</a></li><li><a href="07 - ساخت گردش‌کارهای ایجنتی.html">۰۷ - ساخت گردش‌کارهای ایجنتی</a></li><li><a href="08 - آزمون کوتاه ۲.html">۰۸ - آزمون کوتاه ۲</a></li><li><a href="09 - جمع‌بندی LlamaIndex.html">۰۹ - جمع‌بندی LlamaIndex</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../../index.html">خانه</a><span>/</span><a href="../مقدمه_ای بر فریم_ورک_های ایجنتی.html">۰۲ — فریم‌ورک‌های ایجنت</a><span>/</span><span>LlamaIndex</span><span>/</span><span>کامپوننت‌ها در LlamaIndex</span></div>
+<h1>کامپوننت‌ها در LlamaIndex چیستند؟</h1>
+<p>آلفرد، پیشخدمت ایجنت مفید ما از فصل اول را به یاد دارید؟ برای اینکه آلفرد بتواند به‌طور مؤثر به ما کمک کند، باید درخواست‌های ما را بفهمد و <strong>اطلاعات مرتبط را برای تکمیل وظایف آماده، پیدا و استفاده کند.</strong> اینجاست که کامپوننت‌های LlamaIndex وارد می‌شوند.</p>
+<p>اگرچه LlamaIndex کامپوننت‌های فراوانی دارد، <strong>ما به‌طور مشخص روی کامپوننت <code>QueryEngine</code> تمرکز می‌کنیم.</strong> چرا؟ چون می‌توان از آن به‌عنوان یک ابزار RAG (تولید تقویت‌شده با بازیابی | Retrieval-Augmented Generation) برای ایجنت استفاده کرد.</p>
+<p>پس RAG چیست؟ LLMها روی حجم عظیمی از داده آموزش می‌بینند تا دانش عمومی یاد بگیرند. با این حال، ممکن است روی داده‌های مرتبط و به‌روز آموزش ندیده باشند. RAG این مشکل را با پیدا کردن و بازیابی اطلاعات مرتبط از داده‌های شما و دادن آن به LLM حل می‌کند.</p>
+
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit2/llama-index/rag.png" alt="RAG" width="100%"/>
+</div>
+
+<p>حالا به نحوه‌ی کار آلفرد فکر کنید:</p>
+<ol>
+  <li>شما از آلفرد می‌خواهید در برنامه‌ریزی یک مهمانی شام کمک کند</li>
+  <li>آلفرد باید تقویم شما، ترجیحات غذایی‌تان و منوهای موفق قبلی را بررسی کند</li>
+  <li><code>QueryEngine</code> به آلفرد کمک می‌کند این اطلاعات را پیدا کند و برای برنامه‌ریزی مهمانی شام از آن‌ها استفاده نماید</li>
+</ol>
+<p>این موضوع <code>QueryEngine</code> را به <strong>یک کامپوننت کلیدی برای ساخت گردش‌کارهای Agentic RAG</strong> در LlamaIndex تبدیل می‌کند. همان‌طور که آلفرد برای مفید بودن باید در اطلاعات خانه‌ی شما جستجو کند، هر ایجنتی به راهی برای پیدا کردن و فهمیدن داده‌های مرتبط نیاز دارد. <code>QueryEngine</code> دقیقاً همین قابلیت را فراهم می‌کند.</p>
+<p>اکنون کمی عمیق‌تر به کامپوننت‌ها بپردازیم و ببینیم چگونه می‌توانید <strong>کامپوننت‌ها را ترکیب کنید تا یک پایپ‌لاین RAG بسازید.</strong></p>
+
+<h2>ساخت یک پایپ‌لاین RAG با استفاده از کامپوننت‌ها</h2>
+<div class="callout">
+  <div class="callout-title">💡 نکته</div>
+  <p>می‌توانید کد را در <a href="https://huggingface.co/agents-course/notebooks/blob/main/unit2/llama-index/components.ipynb" target="_blank" rel="noopener">این نوت‌بوک</a> دنبال کنید که با Google Colab قابل اجراست.</p>
+</div>
+
+<p>RAG پنج مرحله‌ی کلیدی دارد که خود بخشی از اغلب اپلیکیشن‌های بزرگ‌تری هستند که خواهید ساخت. این مراحل عبارت‌اند از:</p>
+<ol>
+  <li><strong>بارگذاری (Loading):</strong> یعنی آوردن داده‌هایتان از جایی که قرار دارند، چه فایل‌های متنی، PDF، وب‌سایتی دیگر، پایگاه داده یا API، به درون گردش‌کار شما. LlamaHub صدها ادغام برای انتخاب ارائه می‌دهد.</li>
+  <li><strong>ایندکس‌سازی (Indexing):</strong> یعنی ساختن یک ساختار داده که امکان پرس‌وجو روی داده‌ها را فراهم کند. برای LLMها این تقریباً همیشه به معنای ساخت امبدینگ‌های برداری (Vector Embeddings) است؛ نمایش‌های عددی از معنای داده. ایندکس‌سازی همچنین می‌تواند به راهبردهای متادیتایی متعدد دیگری اشاره داشته باشد تا پیدا کردن دقیق داده‌های مرتبط با زمینه، بر اساس ویژگی‌ها، آسان شود.</li>
+  <li><strong>ذخیره‌سازی (Storing):</strong> پس از ایندکس شدن داده‌ها، می‌خواهید ایندکس و سایر متادیتاها را ذخیره کنید تا نیازی به ایندکس مجدد نباشد.</li>
+  <li><strong>پرس‌وجو (Querying):</strong> برای هر راهبرد ایندکس‌سازی، راه‌های زیادی برای استفاده از LLMها و ساختارهای داده‌ی LlamaIndex جهت پرس‌وجو وجود دارد، از جمله زیرکوئری‌ها (Sub-queries)، کوئری‌های چندمرحله‌ای و راهبردهای ترکیبی (Hybrid).</li>
+  <li><strong>ارزیابی (Evaluation):</strong> گام حیاتی در هر جریان، بررسی میزان اثربخشی آن نسبت به راهبردهای دیگر یا هنگام اعمال تغییرات است. ارزیابی معیارهای عینی‌ای از دقت، وفاداری و سرعت پاسخ‌های شما به کوئری‌ها ارائه می‌دهد.</li>
+</ol>
+<p>در ادامه می‌بینیم چگونه می‌توانیم این مراحل را با استفاده از کامپوننت‌ها بازتولید کنیم.</p>
+
+<h3>بارگذاری و امبد کردن اسناد</h3>
+<p>همان‌طور که گفته شد، LlamaIndex می‌تواند روی داده‌های خودتان کار کند، اما <strong>پیش از دسترسی به داده‌ها باید آن‌ها را بارگذاری کنیم.</strong> سه روش اصلی برای بارگذاری داده در LlamaIndex وجود دارد:</p>
+<ol>
+  <li><code>SimpleDirectoryReader</code>: یک لودر داخلی برای انواع فایل‌ها از یک پوشه‌ی محلی.</li>
+  <li><code>LlamaParse</code>: ابزار رسمی LlamaIndex برای پارس PDF که به‌صورت یک API مدیریت‌شده در دسترس است.</li>
+  <li><code>LlamaHub</code>: رجیستری صدها کتابخانه‌ی بارگذاری داده برای دریافت داده از هر منبعی.</li>
+</ol>
+<div class="callout">
+  <div class="callout-title">💡 نکته</div>
+  <p>با لودرهای <a href="https://docs.llamaindex.ai/en/stable/module_guides/loading/connector/" target="_blank" rel="noopener">LlamaHub</a> و پارسر <a href="https://github.com/run-llama/llama_cloud_services/blob/main/parse.md" target="_blank" rel="noopener">LlamaParse</a> برای منابع داده‌ی پیچیده‌تر آشنا شوید.</p>
+</div>
+
+<p><strong>ساده‌ترین راه بارگذاری داده، <code>SimpleDirectoryReader</code> است.</strong> این کامپوننت همه‌کاره می‌تواند انواع فایل‌ها را از یک پوشه بارگذاری کند و آن‌ها را به آبجکت‌های <code>Document</code> تبدیل کند که LlamaIndex بتواند با آن‌ها کار کند. بیایید ببینیم چگونه می‌توانیم از <code>SimpleDirectoryReader</code> برای بارگذاری داده از یک پوشه استفاده کنیم.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from llama_index.core import SimpleDirectoryReader
+
+reader = SimpleDirectoryReader(input_dir="path/to/directory")
+documents = reader.load_data()</code></pre></div>
+
+<p>پس از بارگذاری اسناد، باید آن‌ها را به قطعات کوچک‌تری به نام آبجکت‌های <code>Node</code> بشکنیم. یک <code>Node</code> فقط یک قطعه (Chunk) از متن سند اصلی است که کار کردن با آن برای هوش مصنوعی آسان‌تر است، و در عین حال ارجاع‌هایی به آبجکت <code>Document</code> اصلی دارد.</p>
+<p><code>IngestionPipeline</code> با دو تبدیل (Transformation) کلیدی به ما در ساخت این Nodeها کمک می‌کند:</p>
+<ol>
+  <li><code>SentenceSplitter</code> اسناد را با تقسیم‌کردن در مرزهای طبیعی جمله‌ها به قطعات قابل‌مدیریت می‌شکند.</li>
+  <li><code>HuggingFaceEmbedding</code> هر قطعه را به امبدینگ‌های عددی تبدیل می‌کند؛ نمایش‌های برداری‌ای که معنای مفهومی را به شکلی که هوش مصنوعی بتواند کارآمد پردازش کند در خود دارند.</li>
+</ol>
+<p>این فرایند به ما کمک می‌کند اسنادمان را به شکلی سازمان‌دهی کنیم که برای جستجو و تحلیل مفیدتر باشد.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from llama_index.core import Document
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+from llama_index.core.node_parser import SentenceSplitter
+from llama_index.core.ingestion import IngestionPipeline
+
+# ساخت پایپ‌لاین به‌همراه تبدیل‌ها
+pipeline = IngestionPipeline(
+    transformations=[
+        SentenceSplitter(chunk_overlap=0),
+        HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5"),
+    ]
+)
+
+nodes = await pipeline.arun(documents=[Document.example()])</code></pre></div>
+
+<h3>ذخیره‌سازی و ایندکس‌سازی اسناد</h3>
+<p>پس از ساخت آبجکت‌های <code>Node</code>، باید آن‌ها را ایندکس کنیم تا قابل جستجو شوند، اما پیش از آن به جایی برای ذخیره‌ی داده‌هایمان نیاز داریم.</p>
+<p>از آنجا که از یک ingestion pipeline استفاده می‌کنیم، می‌توانیم مستقیماً یک vector store را به پایپ‌لاین وصل کنیم تا آن را پر کند. در این مثال از <code>Chroma</code> برای ذخیره‌ی اسنادمان استفاده می‌کنیم.</p>
+<details>
+<summary>نصب ChromaDB</summary>
+<p>همان‌طور که در <a href="02 - آشنایی با LlamaHub.html">بخش LlamaHub</a> معرفی شد، می‌توانیم vector store مربوط به ChromaDB را با دستور زیر نصب کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-bash">pip install llama-index-vector-stores-chroma</code></pre></div>
+</details>
+<div class="code"><pre dir="ltr"><code class="language-python">import chromadb
+from llama_index.vector_stores.chroma import ChromaVectorStore
+
+db = chromadb.PersistentClient(path="./alfred_chroma_db")
+chroma_collection = db.get_or_create_collection("alfred")
+vector_store = ChromaVectorStore(chroma_collection=chroma_collection)
+
+pipeline = IngestionPipeline(
+    transformations=[
+        SentenceSplitter(chunk_size=25, chunk_overlap=0),
+        HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5"),
+    ],
+    vector_store=vector_store,
+)</code></pre></div>
+<div class="callout">
+  <div class="callout-title">💡 نکته</div>
+  <p>نمای کلی انواع مختلف vector storeها را می‌توانید در <a href="https://docs.llamaindex.ai/en/stable/module_guides/storing/vector_stores/" target="_blank" rel="noopener">مستندات LlamaIndex</a> ببینید.</p>
+</div>
+
+<p>اینجاست که امبدینگ‌های برداری وارد می‌شوند: با امبد کردن هم کوئری و هم Nodeها در یک فضای برداری مشترک، می‌توانیم تطبیق‌های مرتبط را پیدا کنیم. <code>VectorStoreIndex</code> این کار را برای ما انجام می‌دهد و از همان مدل امبدینگی که هنگام ingestion استفاده کردیم بهره می‌برد تا سازگاری تضمین شود.</p>
+<p>بیایید ببینیم چگونه این ایندکس را از vector store و امبدینگ‌هایمان بسازیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from llama_index.core import VectorStoreIndex
+from llama_index.embeddings.huggingface import HuggingFaceEmbedding
+
+embed_model = HuggingFaceEmbedding(model_name="BAAI/bge-small-en-v1.5")
+index = VectorStoreIndex.from_vector_store(vector_store, embed_model=embed_model)</code></pre></div>
+
+<p>همه‌ی اطلاعات به‌طور خودکار درون آبجکت <code>ChromaVectorStore</code> و مسیر پوشه‌ی داده‌شده پایدار (Persist) می‌شوند.</p>
+<p>عالی! اکنون که می‌توانیم ایندکس خود را به‌سادگی ذخیره و بارگذاری کنیم، بیایید ببینیم چگونه می‌توان به روش‌های مختلف از آن پرس‌وجو کرد.</p>
+
+<h3>پرس‌وجو از یک VectorStoreIndex با پرامپت‌ها و LLMها</h3>
+<p>پیش از اینکه بتوانیم از ایندکس خود پرس‌وجو کنیم، باید آن را به یک رابط پرس‌وجو (Query Interface) تبدیل کنیم. رایج‌ترین گزینه‌های تبدیل عبارت‌اند از:</p>
+<ul>
+  <li><code>as_retriever</code>: برای بازیابی پایه‌ی اسناد؛ فهرستی از آبجکت‌های <code>NodeWithScore</code> را همراه با امتیازهای شباهت برمی‌گرداند.</li>
+  <li><code>as_query_engine</code>: برای تعامل‌های تک‌سوال و تک‌جواب؛ یک پاسخ نوشتاری برمی‌گرداند.</li>
+  <li><code>as_chat_engine</code>: برای تعامل‌های مکالمه‌ای که حافظه را در طول چند پیام حفظ می‌کنند؛ با استفاده از تاریخچه‌ی چت و زمینه‌ی ایندکس‌شده، پاسخ نوشتاری برمی‌گرداند.</li>
+</ul>
+<p>ما روی query engine تمرکز می‌کنیم، چون برای تعامل‌های ایجنت‌گونه رایج‌تر است. همچنین یک LLM را برای تولید پاسخ به query engine می‌دهیم.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from llama_index.llms.huggingface_api import HuggingFaceInferenceAPI
+
+llm = HuggingFaceInferenceAPI(model_name="Qwen/Qwen2.5-Coder-32B-Instruct")
+query_engine = index.as_query_engine(
+    llm=llm,
+    response_mode="tree_summarize",
+)
+query_engine.query("What is the meaning of life?")
+# The meaning of life is 42</code></pre></div>
+
+<h3>پردازش پاسخ</h3>
+<p>در پشت صحنه، query engine فقط از LLM برای پاسخ به سوال استفاده نمی‌کند، بلکه یک <code>ResponseSynthesizer</code> را هم به‌عنوان راهبردی برای پردازش پاسخ به کار می‌گیرد. باز هم این بخش کاملاً قابل‌سفارشی‌سازی است، اما سه راهبرد اصلی وجود دارد که به‌صورت پیش‌فرض خوب کار می‌کنند:</p>
+<ul>
+  <li><code>refine</code>: با گذر ترتیبی از هر قطعه‌ی متنِ بازیابی‌شده، پاسخ را می‌سازد و اصلاح می‌کند. این کار برای هر Node یا قطعه‌ی بازیابی‌شده یک فراخوانی جداگانه‌ی LLM انجام می‌دهد.</li>
+  <li><code>compact</code> (پیش‌فرض): مشابه refine است، اما قطعات را از قبل به هم می‌چسباند و در نتیجه فراخوانی‌های LLM کمتری انجام می‌شود.</li>
+  <li><code>tree_summarize</code>: با گذر از هر قطعه‌ی متنِ بازیابی‌شده و ساخت یک ساختار درختی از پاسخ، یک پاسخ دقیق می‌سازد.</li>
+</ul>
+<div class="callout">
+  <div class="callout-title">💡 نکته</div>
+  <p>با <a href="https://docs.llamaindex.ai/en/stable/module_guides/deploying/query_engine/usage_pattern/#low-level-composition-api" target="_blank" rel="noopener">API ترکیب سطح‌پایین (Low-level Composition API)</a> کنترل دقیقی روی گردش‌کارهای پرس‌وجوی خود به‌دست آورید. این API به شما اجازه می‌دهد هر مرحله از فرایند پرس‌وجو را مطابق نیازهای دقیق خود سفارشی و تنظیم کنید و با <a href="https://docs.llamaindex.ai/en/stable/module_guides/workflow/" target="_blank" rel="noopener">Workflowها</a> نیز ترکیب عالی‌ای می‌سازد.</p>
+</div>
+
+<p>مدل زبانی همیشه به شکل قابل‌پیش‌بینی عمل نمی‌کند، پس نمی‌توانیم مطمئن باشیم پاسخ دریافتی همیشه درست است. می‌توانیم این مشکل را با <strong>ارزیابی کیفیت پاسخ</strong> مدیریت کنیم.</p>
+
+<h3>ارزیابی و مشاهده‌پذیری (Evaluation and Observability)</h3>
+<p>LlamaIndex <strong>ابزارهای ارزیابی داخلی برای سنجش کیفیت پاسخ</strong> ارائه می‌دهد. این ارزیاب‌ها با بهره‌گیری از LLMها پاسخ‌ها را در ابعاد مختلف تحلیل می‌کنند. بیایید سه ارزیاب اصلی موجود را ببینیم:</p>
+<ul>
+  <li><code>FaithfulnessEvaluator</code>: وفاداری پاسخ را با بررسی اینکه آیا پاسخ توسط زمینه (Context) پشتیبانی می‌شود ارزیابی می‌کند.</li>
+  <li><code>AnswerRelevancyEvaluator</code>: ارتباط پاسخ را با بررسی اینکه آیا پاسخ به سوال مرتبط است ارزیابی می‌کند.</li>
+  <li><code>CorrectnessEvaluator</code>: صحت پاسخ را با بررسی اینکه آیا پاسخ درست است ارزیابی می‌کند.</li>
+</ul>
+<div class="callout">
+  <div class="callout-title">💡 نکته</div>
+  <p>می‌خواهید درباره‌ی مشاهده‌پذیری و ارزیابی ایجنت بیشتر بدانید؟ سفر خود را با <a href="https://huggingface.co/learn/agents-course/bonus-unit2/introduction" target="_blank" rel="noopener">بخش جایزه ۲ (Bonus Unit 2)</a> ادامه دهید.</p>
+</div>
+<div class="code"><pre dir="ltr"><code class="language-python">from llama_index.core.evaluation import FaithfulnessEvaluator
+
+query_engine = # از بخش قبل
+llm = # از بخش قبل
+
+# پرس‌وجو از ایندکس
+evaluator = FaithfulnessEvaluator(llm=llm)
+response = query_engine.query(
+    "What battles took place in New York City in the American Revolution?"
+)
+eval_result = evaluator.evaluate_response(response=response)
+eval_result.passing</code></pre></div>
+
+<p>حتی بدون ارزیابی مستقیم هم می‌توانیم از طریق <strong>مشاهده‌پذیری (Observability) به عملکرد سیستم‌مان بینش پیدا کنیم.</strong> این موضوع به‌ویژه وقتی گردش‌کارهای پیچیده‌تری می‌سازیم و می‌خواهیم بفهمیم هر کامپوننت چگونه عمل می‌کند، مفید است.</p>
+<details>
+<summary>نصب LlamaTrace</summary>
+<p>همان‌طور که در <a href="02 - آشنایی با LlamaHub.html">بخش LlamaHub</a> معرفی شد، می‌توانیم callback مربوط به LlamaTrace از Arize Phoenix را با دستور زیر نصب کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-bash">pip install -U llama-index-callbacks-arize-phoenix</code></pre></div>
+<p>علاوه بر این، باید متغیر محیطی <code>PHOENIX_API_KEY</code> را روی کلید API حساب LlamaTrace خود تنظیم کنیم. برای دریافت آن:</p>
+<ul>
+  <li>در <a href="https://llamatrace.com/login" target="_blank" rel="noopener">LlamaTrace</a> یک حساب بسازید</li>
+  <li>در تنظیمات حساب خود یک کلید API تولید کنید</li>
+  <li>از کلید API در کد زیر برای فعال‌سازی ردیابی (Tracing) استفاده کنید</li>
+</ul>
+</details>
+<div class="code"><pre dir="ltr"><code class="language-python">import llama_index
+import os
+
+PHOENIX_API_KEY = "&lt;PHOENIX_API_KEY&gt;"
+os.environ["OTEL_EXPORTER_OTLP_HEADERS"] = f"api_key={PHOENIX_API_KEY}"
+llama_index.core.set_global_handler(
+    "arize_phoenix",
+    endpoint="https://llamatrace.com/v1/traces"
+)</code></pre></div>
+<div class="callout">
+  <div class="callout-title">💡 نکته</div>
+  <p>می‌خواهید درباره‌ی کامپوننت‌ها و نحوه‌ی استفاده از آن‌ها بیشتر بدانید؟ سفر خود را با <a href="https://docs.llamaindex.ai/en/stable/module_guides/" target="_blank" rel="noopener">راهنماهای کامپوننت‌ها</a> یا <a href="https://docs.llamaindex.ai/en/stable/understanding/rag/" target="_blank" rel="noopener">راهنمای RAG</a> ادامه دهید.</p>
+</div>
+
+<p>دیدیم که چگونه می‌توان از کامپوننت‌ها برای ساخت یک <code>QueryEngine</code> استفاده کرد. اکنون ببینیم چگونه می‌توانیم <strong>از <code>QueryEngine</code> به‌عنوان یک ابزار برای ایجنت استفاده کنیم!</strong></p>
+<nav class="pager"><a href="02 - آشنایی با LlamaHub.html"><span>درس قبلی</span><strong>→ آشنایی با LlamaHub</strong></a><a class="next" href="04 - ابزارها در LlamaIndex.html"><span>درس بعدی</span><strong>ابزارها در LlamaIndex ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

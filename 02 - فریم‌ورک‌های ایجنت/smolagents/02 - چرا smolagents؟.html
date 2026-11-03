@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>چرا smolagents؟ | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../../assets/style.css">
+<link rel="stylesheet" href="../../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../../assets/vendor/highlight.min.js"></script>
+<script defer src="../../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۲.۱</div>
+    <div class="chapter-name">فریم‌ورک smolagents</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۲.۱</span><span class="toc-title">توسعه ایجنت با smolagents</span><span class="toc-count">۱۲</span></summary>
+      <ol><li><a href="01 - مقدمه‌ای بر smolagents.html">مقدمه‌ای بر smolagents</a></li><li><a href="02 - چرا smolagents؟.html" class="active">چرا smolagents؟</a></li><li><a href="03 - آزمون کوتاه ۱.html">آزمون کوتاه ۱</a></li><li><a href="04 - ساخت ایجنت‌های کد.html">ساخت ایجنت‌های کد</a></li><li><a href="05 - ایجنت‌های فراخوان ابزار.html">ایجنت‌های فراخوان ابزار</a></li><li><a href="06 - ابزارها در smolagents.html">ابزارها در smolagents</a></li><li><a href="07 - ایجنت‌های بازیابی و RAG.html">ایجنت‌های بازیابی و RAG</a></li><li><a href="08 - آزمون کوتاه ۲.html">آزمون کوتاه ۲</a></li><li><a href="09 - سیستم‌های چند ایجنتی.html">سیستم‌های چند ایجنتی</a></li><li><a href="10 - ایجنت‌های بینایی و مرورگر.html">ایجنت‌های بینایی و مرورگر</a></li><li><a href="11 - آزمون پایانی smolagents.html">آزمون پایانی smolagents</a></li><li><a href="12 - جمع‌بندی smolagents.html">جمع‌بندی smolagents</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../../index.html">خانه</a><span>/</span><span>۰۲.۱ — فریم‌ورک smolagents</span><span>/</span><span>چرا smolagents؟</span></div>
+<img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/smolagents/license_to_call.png" alt="بنر smolagents" width="100%"/>
+<h1>چرا باید از smolagents استفاده کنیم؟</h1>
+<p>در این بخش مزایا و معایب استفاده از <a href="https://huggingface.co/docs/smolagents/en/index">smolagents</a> را بررسی می‌کنیم تا بتوانید آگاهانه تصمیم بگیرید که آیا این فریم‌ورک برای نیازهای شما مناسب است یا نه.</p>
+
+<h2><code>smolagents</code> چیست؟</h2>
+<p><code>smolagents</code> یک فریم‌ورک ساده اما قدرتمند برای ساخت ایجنت‌های هوش مصنوعی است. این فریم‌ورک به LLMها «عاملیت» (agency) می‌دهد تا با دنیای واقعی تعامل کنند؛ مثلاً جستجو کنند یا تصویر تولید کنند.</p>
+<p>همان‌طور که در واحد ۱ آموختیم، ایجنت‌های هوش مصنوعی برنامه‌هایی هستند که از LLM استفاده می‌کنند تا بر اساس <strong>«مشاهدات» (observations)</strong>، <strong>«افکار» (thoughts)</strong> تولید کنند و <strong>«اکشن‌ها» (actions)</strong> را انجام دهند. بیایید ببینیم این چرخه در smolagents چگونه پیاده شده است.</p>
+
+<h3>مزایای کلیدی <code>smolagents</code></h3>
+<ul>
+  <li><strong>سادگی:</strong> پیچیدگی کد و انتزاع‌ها در حداقل است، تا فهم، به‌کارگیری و توسعه فریم‌ورک آسان باشد.</li>
+  <li><strong>پشتیبانی منعطف از LLM:</strong> با هر LLM و از طریق یکپارچگی با ابزارهای Hugging Face و APIهای خارجی کار می‌کند.</li>
+  <li><strong>رویکرد کد-محور (Code-First):</strong> پشتیبانی درجه‌یک از ایجنت‌های کد که اکشن‌هایشان را مستقیماً به صورت کد می‌نویسند؛ این کار نیاز به پارس کردن را از بین می‌برد و فراخوانی ابزار را ساده می‌کند.</li>
+  <li><strong>یکپارچگی با HF Hub:</strong> ادغام روان با Hugging Face Hub که امکان استفاده از Gradio Spaces به عنوان ابزار را فراهم می‌کند.</li>
+</ul>
+
+<h3>چه زمانی از smolagents استفاده کنیم؟</h3>
+<p>با توجه به این مزایا، چه زمانی باید <code>smolagents</code> را به فریم‌ورک‌های دیگر ترجیح دهیم؟ استفاده از smolagents زمانی ایده‌آل است که:</p>
+<ul>
+  <li>به یک <strong>راهکار سبک و حداقلی</strong> نیاز دارید.</li>
+  <li>می‌خواهید <strong>سریع آزمایش کنید</strong> بدون آنکه درگیر پیکربندی‌های پیچیده شوید.</li>
+  <li><strong>منطق برنامه شما ساده و سرراست</strong> است.</li>
+</ul>
+
+<h3>اکشن‌های کد در برابر JSON</h3>
+<p>بر خلاف فریم‌ورک‌های دیگر که ایجنت‌ها اکشن‌ها را به صورت JSON می‌نویسند، <code>smolagents</code> <strong>بر فراخوانی ابزار در قالب کد</strong> تمرکز دارد و فرایند اجرا را ساده می‌کند. دلیلش این است که برای ساختن کدی که ابزارها را صدا می‌زند، نیازی به پارس کردن JSON نیست: خروجی مدل را می‌توان مستقیماً اجرا کرد.</p>
+<p>نمودار زیر این تفاوت را نشان می‌دهد:</p>
+<img src="https://huggingface.co/datasets/huggingface/documentation-images/resolve/main/transformers/code_vs_json_actions.png" alt="اکشن‌های کد در برابر JSON" width="100%"/>
+<p>برای مرور تفاوت اکشن‌های کد و JSON می‌توانید به <a href="https://huggingface.co/learn/agents-course/unit1/actions#actions-enabling-the-agent-to-engage-with-its-environment">بخش Actions در واحد ۱</a> برگردید.</p>
+
+<h3>انواع ایجنت در <code>smolagents</code></h3>
+<p>ایجنت‌ها در <code>smolagents</code> به صورت <strong>ایجنت‌های چندمرحله‌ای</strong> عمل می‌کنند. هر <a href="https://huggingface.co/docs/smolagents/main/en/reference/agents#smolagents.MultiStepAgent"><code>MultiStepAgent</code></a> در هر مرحله این کارها را انجام می‌دهد:</p>
+<ul>
+  <li>یک «فکر» (thought)</li>
+  <li>یک فراخوانی ابزار و اجرای آن</li>
+</ul>
+<p>علاوه بر <strong><a href="https://huggingface.co/docs/smolagents/main/en/reference/agents#smolagents.CodeAgent">CodeAgent</a></strong> که نوع اصلی ایجنت است، smolagents از <strong><a href="https://huggingface.co/docs/smolagents/main/en/reference/agents#smolagents.ToolCallingAgent">ToolCallingAgent</a></strong> نیز پشتیبانی می‌کند که فراخوانی ابزارها را در قالب JSON می‌نویسد.</p>
+<p>در بخش‌های بعد هر نوع ایجنت را با جزئیات بیشتری بررسی می‌کنیم.</p>
+<blockquote><p><strong>نکته:</strong> در smolagents ابزارها با دکوراتور <code>@tool</code> روی یک تابع پایتون یا با کلاس <code>Tool</code> تعریف می‌شوند.</p></blockquote>
+
+<h3>یکپارچه‌سازی مدل‌ها در <code>smolagents</code></h3>
+<p><code>smolagents</code> از یکپارچه‌سازی منعطف LLM پشتیبانی می‌کند و می‌توانید از هر مدل قابل‌فراخوانی (callable) که <a href="https://huggingface.co/docs/smolagents/main/en/reference/models">معیارهای مشخصی</a> را داشته باشد استفاده کنید. این فریم‌ورک چند کلاس از پیش تعریف‌شده برای ساده‌سازی اتصال به مدل‌ها ارائه می‌دهد:</p>
+<ul>
+  <li><strong><a href="https://huggingface.co/docs/smolagents/main/en/reference/models#smolagents.TransformersModel">TransformersModel</a>:</strong> یک پایپ‌لاین محلی <code>transformers</code> را برای یکپارچگی روان پیاده می‌کند.</li>
+  <li><strong><a href="https://huggingface.co/docs/smolagents/main/en/reference/models#smolagents.InferenceClientModel">InferenceClientModel</a>:</strong> از فراخوانی <a href="https://huggingface.co/docs/huggingface_hub/main/en/guides/inference">استنتاج سرورلس</a> از طریق <a href="https://huggingface.co/docs/api-inference/index">زیرساخت Hugging Face</a> یا تعداد رو به رشدی از <a href="https://huggingface.co/docs/huggingface_hub/main/en/guides/inference#supported-providers-and-tasks">ارائه‌دهندگان شخص ثالث</a> پشتیبانی می‌کند.</li>
+  <li><strong><a href="https://huggingface.co/docs/smolagents/main/en/reference/models#smolagents.LiteLLMModel">LiteLLMModel</a>:</strong> از <a href="https://www.litellm.ai/">LiteLLM</a> برای تعامل سبک با مدل‌ها بهره می‌برد.</li>
+  <li><strong><a href="https://huggingface.co/docs/smolagents/main/en/reference/models#smolagents.OpenAIServerModel">OpenAIServerModel</a>:</strong> به هر سرویسی که رابط OpenAI API ارائه دهد متصل می‌شود.</li>
+  <li><strong><a href="https://huggingface.co/docs/smolagents/main/en/reference/models#smolagents.AzureOpenAIServerModel">AzureOpenAIServerModel</a>:</strong> از یکپارچه‌سازی با هر استقرار Azure OpenAI پشتیبانی می‌کند.</li>
+</ul>
+<p>این انعطاف تضمین می‌کند توسعه‌دهندگان بتوانند مدل و سرویس مناسب هر مورد کاربردی را انتخاب کنند و آزمایش کردن هم آسان باشد.</p>
+<p>حالا که فهمیدیم چرا و چه زمانی از smolagents استفاده کنیم، بیایید عمیق‌تر به این کتابخانه قدرتمند بپردازیم!</p>
+
+<h2>منابع</h2>
+<ul>
+  <li><a href="https://huggingface.co/blog/smolagents">وبلاگ smolagents</a> — معرفی smolagents و تعامل مبتنی بر کد</li>
+</ul>
+<nav class="pager"><a href="01 - مقدمه‌ای بر smolagents.html"><span>درس قبلی</span><strong>→ مقدمه‌ای بر smolagents</strong></a><a class="next" href="03 - آزمون کوتاه ۱.html"><span>درس بعدی</span><strong>آزمون کوتاه ۱ ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>
