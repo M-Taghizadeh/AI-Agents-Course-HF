@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مسیر پیش‌رو: پروتکل‌های آینده | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../assets/vendor/highlight.min.js"></script>
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۴</div>
+    <div class="chapter-name">پروژه پایانی و ارزیابی GAIA</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۴</span><span class="toc-title">پروژه نهایی و گواهینامه</span><span class="toc-count">۶</span></summary>
+      <ol><li><a href="01 - مقدمه‌ای بر پروژه پایانی.html">مقدمه‌ای بر پروژه پایانی</a></li><li><a href="02 - بنچ‌مارک GAIA چیست؟.html">بنچ‌مارک GAIA چیست؟</a></li><li><a href="03 - پروژه عملی و نحوه ارسال نتایج.html">پروژه عملی و ارسال نتایج</a></li><li><a href="04 - دریافت سرتیفیکیت رسمی دوره.html">دریافت سرتیفیکیت رسمی دوره</a></li><li><a href="05 - جمع‌بندی دوره.html">جمع‌بندی دوره</a></li><li><a href="06 - مسیر پیش‌رو.html" class="active">مسیر پیش‌رو: پروتکل‌های آینده</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../index.html">خانه</a><span>/</span><span>۰۴ — پروژه پایانی و GAIA</span><span>/</span><span>مسیر پیش‌رو: پروتکل‌های آینده</span></div>
+<h1>مسیر پیش‌رو: چه موضوعاتی را باید یاد بگیرم؟</h1>
+<p>هوش مصنوعی ایجنتی (Agentic AI) حوزه‌ای است که به‌سرعت در حال تحول است و درک پروتکل‌های بنیادین برای ساخت سیستم‌های هوشمند و خودمختار ضروری است.</p>
+
+<p>دو استاندارد مهمی که باید با آن‌ها آشنا شوید:</p>
+<ul>
+  <li><strong>پروتکل زمینه مدل (Model Context Protocol - MCP)</strong></li>
+  <li><strong>پروتکل ایجنت-به-ایجنت (Agent-to-Agent Protocol - A2A)</strong></li>
+</ul>
+
+<h2>🔌 پروتکل زمینه مدل (Model Context Protocol - MCP)</h2>
+<p><strong>پروتکل زمینه مدل (MCP)</strong> که توسط Anthropic توسعه یافته، یک استاندارد متن‌باز است که به مدل‌های هوش مصنوعی امکان می‌دهد <strong>به‌صورت امن و یکپارچه به ابزارهای بیرونی، منابع داده و اپلیکیشن‌ها متصل شوند</strong> و ایجنت‌ها را توانمندتر و خودمختارتر می‌کند.</p>
+
+<p>MCP را مانند یک <strong>آداپتور جهانی</strong> تصور کنید، شبیه پورت USB-C، که به مدل‌های هوش مصنوعی اجازه می‌دهد به محیط‌های دیجیتال گوناگون متصل شوند، <strong>بدون اینکه برای هر کدام به یکپارچه‌سازی اختصاصی نیاز باشد</strong>.</p>
+
+<p>MCP به‌سرعت در صنعت در حال جا افتادن است و شرکت‌های بزرگی مانند OpenAI و Google پذیرش آن را آغاز کرده‌اند.</p>
+
+<p>📚 بیشتر بدانید:</p>
+<ul>
+  <li><a href="https://www.anthropic.com/news/model-context-protocol" target="_blank" rel="noopener">اطلاعیه و مستندات رسمی Anthropic</a></li>
+  <li><a href="https://en.wikipedia.org/wiki/Model_Context_Protocol" target="_blank" rel="noopener">MCP در ویکی‌پدیا</a></li>
+  <li><a href="https://huggingface.co/blog/Kseniase/mcp" target="_blank" rel="noopener">وبلاگی درباره MCP</a></li>
+</ul>
+
+<h2>🤝 پروتکل ایجنت-به-ایجنت (Agent-to-Agent - A2A)</h2>
+<p>گوگل <strong>پروتکل ایجنت-به-ایجنت (A2A)</strong> را به‌عنوان مکمل پروتکل MCP شرکت Anthropic توسعه داده است.</p>
+
+<p>در حالی که MCP ایجنت‌ها را به ابزارهای بیرونی متصل می‌کند، <strong>A2A ایجنت‌ها را به یکدیگر متصل می‌کند</strong> و راه را برای سیستم‌های چندایجنتی همکار هموار می‌سازد که می‌توانند برای حل مسائل پیچیده با هم کار کنند.</p>
+
+<p>📚 درباره A2A عمیق‌تر بخوانید:</p>
+<ul>
+  <li><a href="https://developers.googleblog.com/en/a2a-a-new-era-of-agent-interoperability/" target="_blank" rel="noopener">اطلاعیه A2A از گوگل</a></li>
+</ul>
+<nav class="pager"><a href="05 - جمع‌بندی دوره.html"><span>درس قبلی</span><strong>→ جمع‌بندی دوره</strong></a><span></span></nav>
+</main>
+</div>
+</body>
+</html>

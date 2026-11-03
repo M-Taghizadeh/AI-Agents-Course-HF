@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>بنچ‌مارک GAIA چیست؟ | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../assets/vendor/highlight.min.js"></script>
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۴</div>
+    <div class="chapter-name">پروژه پایانی و ارزیابی GAIA</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۴</span><span class="toc-title">پروژه نهایی و گواهینامه</span><span class="toc-count">۶</span></summary>
+      <ol><li><a href="01 - مقدمه‌ای بر پروژه پایانی.html">مقدمه‌ای بر پروژه پایانی</a></li><li><a href="02 - بنچ‌مارک GAIA چیست؟.html" class="active">بنچ‌مارک GAIA چیست؟</a></li><li><a href="03 - پروژه عملی و نحوه ارسال نتایج.html">پروژه عملی و ارسال نتایج</a></li><li><a href="04 - دریافت سرتیفیکیت رسمی دوره.html">دریافت سرتیفیکیت رسمی دوره</a></li><li><a href="05 - جمع‌بندی دوره.html">جمع‌بندی دوره</a></li><li><a href="06 - مسیر پیش‌رو.html">مسیر پیش‌رو: پروتکل‌های آینده</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../index.html">خانه</a><span>/</span><span>۰۴ — پروژه پایانی و GAIA</span><span>/</span><span>بنچ‌مارک GAIA چیست؟</span></div>
+<h1>بنچ‌مارک GAIA چیست؟ (General AI Assistants)</h1>
+<p><a href="https://huggingface.co/papers/2311.12983" target="_blank" rel="noopener">GAIA</a> یک <strong>بنچ‌مارک برای ارزیابی دستیارهای هوش مصنوعی روی تسک‌های دنیای واقعی</strong> است؛ تسک‌هایی که ترکیبی از توانمندی‌های اصلی مانند استدلال، فهم چندوجهی (Multimodal)، وب‌گردی و تسلط بر استفاده از ابزارها را می‌طلبند.</p>
+
+<p>این بنچ‌مارک در مقاله‌ی <em>«<a href="https://huggingface.co/papers/2311.12983" target="_blank" rel="noopener">GAIA: A Benchmark for General AI Assistants</a>»</em> معرفی شده است.</p>
+
+<p>GAIA شامل <strong>۴۶۶ سوال با دقت گزینش‌شده</strong> است که از نظر مفهومی <strong>برای انسان‌ها ساده</strong>، اما برای سیستم‌های هوش مصنوعی کنونی <strong>به‌طرز چشمگیری چالش‌برانگیز</strong> هستند.</p>
+
+<p>برای نشان دادن این شکاف:</p>
+<ul>
+  <li><strong>انسان‌ها:</strong> نرخ موفقیت حدود ۹۲٪</li>
+  <li><strong>GPT-4 همراه با پلاگین‌ها:</strong> حدود ۱۵٪</li>
+  <li><strong>Deep Research (OpenAI):</strong> ۶۷.۳۶٪ روی مجموعه اعتبارسنجی (Validation)</li>
+</ul>
+
+<p>GAIA محدودیت‌های فعلی مدل‌های هوش مصنوعی را نمایان می‌کند و یک بنچ‌مارک سخت‌گیرانه برای سنجش پیشرفت به‌سوی دستیارهای هوش مصنوعی واقعاً همه‌منظوره فراهم می‌سازد.</p>
+
+<h2>🌱 اصول بنیادین GAIA</h2>
+<p>GAIA با دقت حول ستون‌های زیر طراحی شده است:</p>
+<ul>
+  <li>🔍 <strong>دشواری واقعی (Real-world difficulty):</strong> تسک‌ها نیازمند استدلال چندمرحله‌ای، فهم چندوجهی و تعامل با ابزارها هستند.</li>
+  <li>🧾 <strong>تفسیرپذیری انسانی (Human interpretability):</strong> با وجود دشواری برای هوش مصنوعی، تسک‌ها از نظر مفهومی برای انسان‌ها ساده و قابل‌دنبال‌کردن باقی می‌مانند.</li>
+  <li>🛡️ <strong>غیرقابل دور زدن (Non-gameability):</strong> پاسخ درست مستلزم اجرای کامل تسک است و بنابراین روش آزمون‌وخطا و حدس تصادفی کارایی ندارد.</li>
+  <li>🧰 <strong>سادگی ارزیابی (Simplicity of evaluation):</strong> پاسخ‌ها مختصر، فکت‌محور و بدون ابهام هستند؛ ویژگی‌ای ایده‌آل برای بنچ‌مارکینگ.</li>
+</ul>
+
+<h2>سطوح دشواری (Difficulty Levels)</h2>
+<p>تسک‌های GAIA در <strong>سه سطح با پیچیدگی فزاینده</strong> سازمان‌دهی شده‌اند و هر سطح مهارت‌های مشخصی را می‌سنجد:</p>
+<ul>
+  <li><strong>سطح ۱:</strong> کمتر از ۵ مرحله و حداقل استفاده از ابزار.</li>
+  <li><strong>سطح ۲:</strong> شامل استدلال پیچیده‌تر و هماهنگی میان چند ابزار، با ۵ تا ۱۰ مرحله.</li>
+  <li><strong>سطح ۳:</strong> نیازمند برنامه‌ریزی بلندمدت و یکپارچه‌سازی پیشرفته ابزارهای گوناگون.</li>
+</ul>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit4/gaia_levels.png" alt="سطوح دشواری GAIA" width="100%"/>
+</div>
+
+<h2>نمونه‌ای از یک سوال دشوار GAIA</h2>
+<blockquote>
+<p>کدام‌یک از میوه‌های نشان‌داده‌شده در نقاشی سال ۲۰۰۸ با عنوان «Embroidery from Uzbekistan» (گلدوزی ازبکستان)، جزو منوی صبحانه‌ی اکتبر ۱۹۴۹ کشتی اقیانوس‌پیمایی بوده‌اند که بعدها به‌عنوان یک وسیله‌ی صحنه‌ی شناور در فیلم «The Last Voyage» استفاده شد؟ موارد را به‌صورت فهرستی جداشده با کاما بنویسید و آن‌ها را بر اساس چیدمانشان در نقاشی و به‌صورت ساعت‌گرد، از موقعیت ساعت ۱۲ شروع کنید. از شکل جمع هر میوه استفاده کنید.</p>
+</blockquote>
+
+<p>همان‌طور که می‌بینید، این سوال سیستم‌های هوش مصنوعی را از چند جهت به چالش می‌کشد:</p>
+<ul>
+  <li>نیازمند یک <strong>قالب پاسخ ساختاریافته</strong> است</li>
+  <li>مستلزم <strong>استدلال چندوجهی</strong> است (مثلاً تحلیل تصاویر)</li>
+  <li>نیازمند <strong>بازیابی چندگامی (Multi-hop retrieval)</strong> از واقعیت‌های وابسته به هم است:
+    <ul>
+      <li>شناسایی میوه‌های موجود در نقاشی</li>
+      <li>پیدا کردن اینکه کدام کشتی اقیانوس‌پیما در فیلم <em>The Last Voyage</em> استفاده شده است</li>
+      <li>جست‌وجوی منوی صبحانه‌ی اکتبر ۱۹۴۹ برای آن کشتی</li>
+    </ul>
+  </li>
+  <li>نیازمند <strong>ترتیب‌بندی صحیح</strong> و برنامه‌ریزی سطح بالا است تا حل مسئله به‌درستی و به ترتیب درست انجام شود</li>
+</ul>
+
+<p>این‌گونه تسک‌ها نشان می‌دهند که LLMهای مستقل (بدون ابزار) معمولاً در کجا کم می‌آورند و GAIA را به بنچ‌مارکی ایده‌آل برای <strong>سیستم‌های مبتنی بر ایجنت</strong> تبدیل می‌کنند؛ سیستم‌هایی که می‌توانند در چند مرحله و چند وجه (Modality) استدلال کنند، اطلاعات بازیابی کنند و عملیات را اجرا نمایند.</p>
+
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit4/gaia_capabilities.png" alt="نمودار مهارت‌های GAIA" width="100%"/>
+</div>
+
+<h2>ارزیابی زنده (Live Evaluation)</h2>
+<p>برای تشویق به بنچ‌مارکینگ مستمر، <strong>GAIA یک لیدربورد عمومی روی Hugging Face ارائه می‌دهد</strong> که در آن می‌توانید مدل‌های خود را روی <strong>۳۰۰ سوال آزمون (Testing)</strong> بسنجید.</p>
+
+<p>👉 لیدربورد را <a href="https://huggingface.co/spaces/gaia-benchmark/leaderboard" target="_blank" rel="noopener">اینجا</a> ببینید</p>
+
+<div class="flex justify-center">
+<iframe src="https://gaia-benchmark-leaderboard.hf.space" frameborder="0" style="width:100%;max-width:850px;height:450px;border:0;" title="لیدربورد GAIA"></iframe>
+</div>
+
+<p>می‌خواهید عمیق‌تر به GAIA بپردازید؟</p>
+<ul>
+  <li>📄 <a href="https://huggingface.co/papers/2311.12983" target="_blank" rel="noopener">مطالعه‌ی مقاله‌ی کامل</a></li>
+  <li>📄 <a href="https://openai.com/index/introducing-deep-research/" target="_blank" rel="noopener">پست معرفی Deep Research از OpenAI</a></li>
+  <li>📄 <a href="https://huggingface.co/blog/open-deep-research" target="_blank" rel="noopener">Open-source DeepResearch – Freeing our search agents</a></li>
+</ul>
+<nav class="pager"><a href="01 - مقدمه‌ای بر پروژه پایانی.html"><span>درس قبلی</span><strong>→ مقدمه‌ای بر پروژه پایانی</strong></a><a class="next" href="03 - پروژه عملی و نحوه ارسال نتایج.html"><span>درس بعدی</span><strong>پروژه عملی و ارسال نتایج ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>پروژه عملی و ارسال نتایج | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../assets/vendor/highlight.min.js"></script>
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">۰۴</div>
+    <div class="chapter-name">پروژه پایانی و ارزیابی GAIA</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">۰۴</span><span class="toc-title">پروژه نهایی و گواهینامه</span><span class="toc-count">۶</span></summary>
+      <ol><li><a href="01 - مقدمه‌ای بر پروژه پایانی.html">مقدمه‌ای بر پروژه پایانی</a></li><li><a href="02 - بنچ‌مارک GAIA چیست؟.html">بنچ‌مارک GAIA چیست؟</a></li><li><a href="03 - پروژه عملی و نحوه ارسال نتایج.html" class="active">پروژه عملی و ارسال نتایج</a></li><li><a href="04 - دریافت سرتیفیکیت رسمی دوره.html">دریافت سرتیفیکیت رسمی دوره</a></li><li><a href="05 - جمع‌بندی دوره.html">جمع‌بندی دوره</a></li><li><a href="06 - مسیر پیش‌رو.html">مسیر پیش‌رو: پروتکل‌های آینده</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../index.html">خانه</a><span>/</span><span>۰۴ — پروژه پایانی و GAIA</span><span>/</span><span>پروژه عملی و ارسال نتایج</span></div>
+<h1>پروژه عملی: توسعه ایجنت و ارسال پاسخ‌ها (Hands-On)</h1>
+<p>اکنون که آماده‌اید عمیق‌تر وارد ساخت ایجنت پایانی خود شوید، ببینیم چگونه می‌توانید آن را برای بررسی و ارزیابی ارسال کنید.</p>
+
+<h2>دیتاست (The Dataset)</h2>
+<p>دیتاستی که در این لیدربورد استفاده می‌شود شامل <strong>۲۰ سوال</strong> است که از میان سوالات <strong>سطح ۱</strong> در مجموعه‌ی <strong>اعتبارسنجی (Validation)</strong> بنچ‌مارک GAIA استخراج شده‌اند.</p>
+
+<p>سوالات منتخب بر اساس تعداد ابزارها و مراحل لازم برای پاسخ‌دادن به هر سوال فیلتر شده‌اند.</p>
+
+<p>با توجه به وضعیت کنونی بنچ‌مارک GAIA، فکر می‌کنیم هدف‌گذاری برای کسب ۳۰٪ روی سوالات سطح ۱ یک آزمون منصفانه است.</p>
+
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/unit4/leaderboard%20GAIA%2024%3A04%3A2025.png" alt="وضعیت فعلی GAIA" width="100%"/>
+</div>
+
+<h2>فرایند کار (The Process)</h2>
+<p>سوال بزرگ در ذهن شما احتمالاً این است: «چطور ارسال را شروع کنم؟»</p>
+
+<p>برای این فصل، یک API ساخته‌ایم که به شما اجازه می‌دهد سوالات را دریافت کنید و پاسخ‌هایتان را برای امتیازدهی ارسال نمایید. خلاصه‌ی مسیرها (Routes) در ادامه آمده است (برای جزئیات تعاملی به <a href="https://agents-course-unit4-scoring.hf.space/docs" target="_blank" rel="noopener">مستندات زنده</a> مراجعه کنید):</p>
+<ul>
+  <li><code>GET /questions</code>: دریافت فهرست کامل سوالات ارزیابیِ فیلترشده.</li>
+  <li><code>GET /random-question</code>: واکشی یک سوال تصادفی از فهرست.</li>
+  <li><code>GET /files/{task_id}</code>: دانلود فایل مشخصی که به یک شناسه‌ی تسک (task ID) مرتبط است.</li>
+  <li><code>POST /submit</code>: ارسال پاسخ‌های ایجنت، محاسبه‌ی نمره و به‌روزرسانی لیدربورد.</li>
+</ul>
+
+<div class="callout warning">
+  <div class="callout-title">قانون مهم در فرمت پاسخ‌ها (Exact Match)</div>
+  <p>تابع ارسال (submit)، پاسخ شما را با پاسخ صحیح (Ground Truth) به‌صورت <strong>تطابق دقیق (EXACT MATCH)</strong> مقایسه می‌کند؛ بنابراین پرامپت خود را خوب بنویسید! تیم GAIA یک نمونه‌ی پرامپت برای ایجنت شما <a href="https://huggingface.co/spaces/gaia-benchmark/leaderboard" target="_blank" rel="noopener">اینجا</a> به اشتراک گذاشته است (برای این دوره، مطمئن شوید عبارت <code>FINAL ANSWER</code> را در ارسال خود نمی‌گنجانید؛ فقط کاری کنید که ایجنت شما خودِ پاسخ را بدهد و هیچ چیز دیگری ننویسد).</p>
+</div>
+
+<h2>🎨 قالب را از آنِ خودتان کنید!</h2>
+<p>برای نشان دادن روند تعامل با API، یک <a href="https://huggingface.co/spaces/agents-course/Final_Assignment_Template" target="_blank" rel="noopener">قالب پایه (Basic Template)</a> به‌عنوان نقطه‌ی شروع قرار داده‌ایم.</p>
+
+<p>با خیال راحت — و <strong>با تشویق جدی ما</strong> — آن را تغییر دهید، به آن چیز اضافه کنید یا ساختارش را کاملاً از نو بچینید! آن را به هر شکلی که با رویکرد و خلاقیت شما سازگارتر است، تغییر دهید.</p>
+
+<p>برای ارسال با این قالب، سه چیز که API به آن‌ها نیاز دارد محاسبه می‌شود:</p>
+<ul>
+  <li><code>Username</code>: نام کاربری شما در Hugging Face (در اینجا از طریق ورود Gradio به‌دست می‌آید) که برای شناسایی ارسال شما استفاده می‌شود.</li>
+  <li><code>Code Link</code> (<code>agent_code</code>): نشانی لینک به کد Space شما در Hugging Face (<code>.../tree/main</code>) برای راستی‌آزمایی؛ پس لطفاً Space خود را عمومی (Public) نگه دارید.</li>
+  <li><code>Answers</code> (<code>answers</code>): فهرست پاسخ‌هایی (<code>{"task_id": ..., "submitted_answer": ...}</code>) که ایجنت شما برای امتیازدهی تولید کرده است.</li>
+</ul>
+
+<p>بنابراین توصیه می‌کنیم کار را با <strong>Duplicate</strong> کردن این <a href="https://huggingface.co/spaces/agents-course/Final_Assignment_Template" target="_blank" rel="noopener">قالب</a> روی پروفایل Hugging Face خودتان شروع کنید.</p>
+
+<p>🏆 لیدربورد را <a href="https://huggingface.co/spaces/agents-course/Students_leaderboard" target="_blank" rel="noopener">اینجا</a> ببینید</p>
+
+<div class="callout">
+  <div class="callout-title">یادداشتی دوستانه</div>
+  <p>این لیدربورد برای سرگرمی است! می‌دانیم که امکان ثبت نمره بدون راستی‌آزمایی کامل وجود دارد. اگر ببینیم نمره‌های بالای زیادی بدون لینک عمومی برای پشتوانه‌شان ثبت شده‌اند، ممکن است لازم شود برخی ورودی‌ها را بازبینی، اصلاح یا حذف کنیم تا لیدربورد مفید باقی بماند.</p>
+  <p>لیدربورد، لینک کدبیس Space شما را نمایش می‌دهد؛ از آنجا که این لیدربورد مخصوص دانشجویان است، اگر به نمره‌ای رسیدید که به آن افتخار می‌کنید، لطفاً Space خود را عمومی نگه دارید.</p>
+</div>
+
+<div class="flex justify-center">
+<iframe src="https://agents-course-students-leaderboard.hf.space" frameborder="0" style="width:100%;max-width:850px;height:450px;border:0;" title="لیدربورد دانشجویان"></iframe>
+</div>
+<nav class="pager"><a href="02 - بنچ‌مارک GAIA چیست؟.html"><span>درس قبلی</span><strong>→ بنچ‌مارک GAIA چیست؟</strong></a><a class="next" href="04 - دریافت سرتیفیکیت رسمی دوره.html"><span>درس بعدی</span><strong>دریافت سرتیفیکیت رسمی دوره ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>
