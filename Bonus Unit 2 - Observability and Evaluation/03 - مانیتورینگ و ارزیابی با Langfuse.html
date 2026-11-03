@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>مانیتورینگ و ارزیابی با Langfuse | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../assets/vendor/highlight.min.js"></script>
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">امتیازی ۲</div>
+    <div class="chapter-name">مشاهده‌پذیری و ارزیابی ایجنت‌ها</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">★۲</span><span class="toc-title">Observability & Evaluation</span><span class="toc-count">۴</span></summary>
+      <ol><li><a href="01 - مقدمه.html">مقدمه</a></li><li><a href="02 - مشاهده‌پذیری و ارزیابی چیست؟.html">مشاهده‌پذیری و ارزیابی چیست؟</a></li><li><a href="03 - مانیتورینگ و ارزیابی با Langfuse.html" class="active">مانیتورینگ و ارزیابی با Langfuse</a></li><li><a href="04 - آزمون ارزیابی ایجنت‌ها.html">آزمون ارزیابی ایجنت‌ها</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../index.html">خانه</a><span>/</span><span>بخش امتیازی ۲ — Observability & Evaluation</span><span>/</span><span>مانیتورینگ و ارزیابی با Langfuse</span></div>
+<h1>بخش امتیازی ۲: مشاهده‌پذیری و ارزیابی ایجنت‌ها (Observability and Evaluation of Agents)</h1>
+
+<div class="callout">
+  <div class="callout-title">💡 نکته</div>
+  <p>می‌توانید کدها را در <a href="https://colab.research.google.com/#fileId=https%3A//huggingface.co/agents-course/notebooks/blob/main/bonus-unit2/monitoring-and-evaluating-agents.ipynb" target="_blank" rel="noopener">این نوت‌بوک</a> که با Google Colab قابل‌اجراست دنبال کنید.</p>
+</div>
+
+<p>در این نوت‌بوک، یاد می‌گیریم چگونه <strong>گام‌های درونی (Traceها) ایجنت هوش مصنوعی خود را پایش کنیم</strong> و <strong>عملکرد آن را با ابزارهای متن‌باز مشاهده‌پذیری ارزیابی کنیم</strong>.</p>
+
+<p>توانایی مشاهده و ارزیابی رفتار یک ایجنت برای موارد زیر ضروری است:</p>
+<ul>
+  <li>دیباگ کردن مشکلات وقتی تسک‌ها شکست می‌خورند یا نتایج نامطلوب تولید می‌کنند</li>
+  <li>پایش هزینه‌ها و عملکرد به‌صورت بلادرنگ</li>
+  <li>بهبود قابلیت اطمینان و ایمنی از طریق بازخورد مداوم</li>
+</ul>
+
+<h2>پیش‌نیازهای تمرین 🏗️</h2>
+<p>پیش از اجرای این نوت‌بوک، مطمئن شوید که:</p>
+<ul>
+  <li>🔲 📚 <strong>مطالعه کرده‌اید:</strong> <a href="https://huggingface.co/learn/agents-course/unit1/introduction" target="_blank" rel="noopener">مقدمه‌ای بر ایجنت‌ها</a></li>
+  <li>🔲 📚 <strong>مطالعه کرده‌اید:</strong> <a href="https://huggingface.co/learn/agents-course/unit2/smolagents/introduction" target="_blank" rel="noopener">فریم‌ورک smolagents</a></li>
+</ul>
+
+<h2>گام ۰: نصب کتابخانه‌های موردنیاز</h2>
+<p>به چند کتابخانه نیاز داریم که اجازه می‌دهند ایجنت‌هایمان را اجرا، پایش و ارزیابی کنیم:</p>
+<div class="code"><pre dir="ltr"><code class="language-bash">%pip install langfuse 'smolagents[telemetry]' openinference-instrumentation-smolagents datasets 'smolagents[gradio]' gradio --upgrade</code></pre></div>
+
+<h2>گام ۱: ابزارگذاری ایجنت (Instrument Your Agent)</h2>
+<p>در این نوت‌بوک از <a href="https://langfuse.com/" target="_blank" rel="noopener">Langfuse</a> به‌عنوان ابزار مشاهده‌پذیری استفاده می‌کنیم، اما می‌توانید از <strong>هر سرویس دیگری که با OpenTelemetry سازگار است</strong> استفاده کنید. کد زیر نشان می‌دهد چگونه متغیرهای محیطی را برای Langfuse (یا هر endpoint سازگار با OTel) تنظیم کنید و smolagent خود را ابزارگذاری کنید.</p>
+
+<div class="callout">
+  <div class="callout-title">توجه</div>
+  <p>اگر از LlamaIndex یا LangGraph استفاده می‌کنید، مستندات ابزارگذاری آن‌ها را <a href="https://langfuse.com/docs/integrations/llama-index/workflows" target="_blank" rel="noopener">اینجا</a> و <a href="https://langfuse.com/docs/integrations/langchain/example-python-langgraph" target="_blank" rel="noopener">اینجا</a> می‌توانید پیدا کنید.</p>
+</div>
+
+<p>ابتدا اعتبارنامه‌های Langfuse را به‌صورت متغیرهای محیطی تنظیم می‌کنیم. کلیدهای API لنگ‌فیوز را با ثبت‌نام در <a href="https://cloud.langfuse.com" target="_blank" rel="noopener">Langfuse Cloud</a> یا <a href="https://langfuse.com/self-hosting" target="_blank" rel="noopener">میزبانی شخصی (Self-hosting) Langfuse</a> دریافت کنید.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">import os
+# کلیدهای پروژه‌ی خود را از صفحه‌ی تنظیمات پروژه بگیرید: https://cloud.langfuse.com
+os.environ["LANGFUSE_PUBLIC_KEY"] = "pk-lf-..."
+os.environ["LANGFUSE_SECRET_KEY"] = "sk-lf-..."
+os.environ["LANGFUSE_HOST"] = "https://cloud.langfuse.com" # 🇪🇺 EU region
+# os.environ["LANGFUSE_HOST"] = "https://us.cloud.langfuse.com" # 🇺🇸 US region</code></pre></div>
+<p>همچنین باید توکن Hugging Face خود را برای فراخوانی‌های استنتاج (Inference) تنظیم کنیم.</p>
+<div class="code"><pre dir="ltr"><code class="language-python"># توکن Hugging Face و سایر توکن‌ها/رمزها را به‌صورت متغیر محیطی تنظیم کنید
+os.environ["HF_TOKEN"] = "hf_..."</code></pre></div>
+<p>با تنظیم متغیرهای محیطی، اکنون می‌توانیم کلاینت Langfuse را راه‌اندازی کنیم. تابع <code>get_client()</code> کلاینت Langfuse را با اعتبارنامه‌های موجود در متغیرهای محیطی مقداردهی اولیه می‌کند.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from langfuse import get_client
+ 
+langfuse = get_client()
+ 
+# بررسی اتصال
+if langfuse.auth_check():
+    print("Langfuse client is authenticated and ready!")
+else:
+    print("Authentication failed. Please check your credentials and host.")</code></pre></div>
+<p>سپس می‌توانیم <code>SmolagentsInstrumentor()</code> را تنظیم کنیم تا smolagent ما را ابزارگذاری کند و Traceها را به Langfuse بفرستد.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from openinference.instrumentation.smolagents import SmolagentsInstrumentor
+ 
+SmolagentsInstrumentor().instrument()</code></pre></div>
+
+<h2>گام ۲: ابزارگذاری خود را آزمایش کنید</h2>
+<p>در اینجا یک <code>CodeAgent</code> ساده از smolagents داریم که <code>1+1</code> را محاسبه می‌کند. آن را اجرا می‌کنیم تا از درست کار کردن ابزارگذاری مطمئن شویم. اگر همه‌چیز درست تنظیم شده باشد، لاگ‌ها/Spanها را در داشبورد مشاهده‌پذیری خود می‌بینید.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents import InferenceClientModel, CodeAgent
+
+# ساخت یک ایجنت ساده برای آزمودن ابزارگذاری
+agent = CodeAgent(
+    tools=[],
+    model=InferenceClientModel()
+)
+
+agent.run("1+1=")</code></pre></div>
+<p>داشبورد <a href="https://cloud.langfuse.com" target="_blank" rel="noopener">Langfuse Traces</a> خود (یا ابزار مشاهده‌پذیری انتخابی‌تان) را بررسی کنید تا مطمئن شوید Spanها و لاگ‌ها ثبت شده‌اند.</p>
+<p>نمونه‌ی اسکرین‌شات از Langfuse:</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/first-example-trace.png" alt="نمونه‌ی Trace در Langfuse" width="100%"/>
+</div>
+<p><em><a href="https://cloud.langfuse.com/project/cloramnkj0002jz088vzn1ja4/traces/1b94d6888258e0998329cdb72a371155?timestamp=2025-03-10T11%3A59%3A41.743Z" target="_blank" rel="noopener">لینک به Trace</a></em></p>
+
+<h2>گام ۳: مشاهده و ارزیابی یک ایجنت پیچیده‌تر</h2>
+<p>اکنون که تأیید کردید ابزارگذاری شما کار می‌کند، یک پرسش پیچیده‌تر را امتحان می‌کنیم تا ببینیم متریک‌های پیشرفته (مصرف توکن، تاخیر، هزینه‌ها و غیره) چگونه پیگیری می‌شوند.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents import (CodeAgent, DuckDuckGoSearchTool, InferenceClientModel)
+
+search_tool = DuckDuckGoSearchTool()
+agent = CodeAgent(tools=[search_tool], model=InferenceClientModel())
+
+agent.run("How many Rubik's Cubes could you fit inside the Notre Dame Cathedral?")</code></pre></div>
+
+<h3>ساختار Trace</h3>
+<p>بیشتر ابزارهای مشاهده‌پذیری یک <strong>Trace</strong> ثبت می‌کنند که شامل <strong>Spanها</strong> است و هر کدام یک گام از منطق ایجنت شما را نشان می‌دهند. در اینجا، Trace شامل اجرای کلی ایجنت و Spanهای فرعی برای موارد زیر است:</p>
+<ul>
+  <li>فراخوانی‌های ابزار (DuckDuckGoSearchTool)</li>
+  <li>فراخوانی‌های LLM (InferenceClientModel)</li>
+</ul>
+<p>می‌توانید این‌ها را بررسی کنید تا دقیقاً ببینید زمان کجا صرف می‌شود، چند توکن مصرف شده و غیره:</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/trace-tree.png" alt="درخت Trace در Langfuse" width="100%"/>
+</div><p><em><a href="https://cloud.langfuse.com/project/cloramnkj0002jz088vzn1ja4/traces/1ac33b89ffd5e75d4265b62900c348ed?timestamp=2025-03-07T13%3A45%3A09.149Z&amp;display=preview" target="_blank" rel="noopener">لینک به Trace</a></em></p>
+
+<h2>ارزیابی آنلاین (Online Evaluation)</h2>
+<p>در بخش قبل، تفاوت میان ارزیابی آنلاین و آفلاین را یاد گرفتیم. اکنون می‌بینیم چگونه ایجنت خود را در پروداکشن پایش و به‌صورت زنده ارزیابی کنیم.</p>
+
+<h3>متریک‌های رایج برای پیگیری در پروداکشن</h3>
+<ol>
+  <li><strong>هزینه‌ها (Costs)</strong> — ابزارگذاری smolagents مصرف توکن را ثبت می‌کند، که با تعیین قیمت به‌ازای هر توکن می‌توانید آن را به هزینه‌ی تقریبی تبدیل کنید.</li>
+  <li><strong>تاخیر زمانی (Latency)</strong> — زمان لازم برای تکمیل هر گام یا کل اجرا را مشاهده کنید.</li>
+  <li><strong>بازخورد کاربر (User Feedback)</strong> — کاربران می‌توانند بازخورد مستقیم (لایک/دیس‌لایک) بدهند تا ایجنت اصلاح یا بهبود یابد.</li>
+  <li><strong>LLM-as-a-Judge</strong> — از یک LLM جداگانه برای ارزیابی خروجی ایجنت تقریباً به‌صورت بلادرنگ استفاده کنید (مثلاً بررسی سمّی بودن یا درستی).</li>
+</ol>
+<p>در ادامه نمونه‌هایی از این متریک‌ها را نشان می‌دهیم.</p>
+
+<h3>۱. هزینه‌ها (Costs)</h3>
+<p>اسکرین‌شات زیر مصرف فراخوانی‌های <code>Qwen2.5-Coder-32B-Instruct</code> را نشان می‌دهد. این برای دیدن گام‌های پرهزینه و بهینه‌سازی ایجنت مفید است.</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/smolagents-costs.png" alt="هزینه‌ها" width="100%"/>
+</div><p><em><a href="https://cloud.langfuse.com/project/cloramnkj0002jz088vzn1ja4/traces/1ac33b89ffd5e75d4265b62900c348ed?timestamp=2025-03-07T13%3A45%3A09.149Z&amp;display=preview" target="_blank" rel="noopener">لینک به Trace</a></em></p>
+
+<h3>۲. تاخیر زمانی (Latency)</h3>
+<p>همچنین می‌توانیم ببینیم تکمیل هر گام چقدر طول کشیده است. در مثال زیر، کل مکالمه ۳۲ ثانیه طول کشید که می‌توانید آن را به تفکیک گام‌ها ببینید. این به شناسایی گلوگاه‌ها و بهینه‌سازی ایجنت کمک می‌کند.</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/smolagents-latency.png" alt="تاخیر زمانی" width="100%"/>
+</div><p><em><a href="https://cloud.langfuse.com/project/cloramnkj0002jz088vzn1ja4/traces/1ac33b89ffd5e75d4265b62900c348ed?timestamp=2025-03-07T13%3A45%3A09.149Z&amp;display=preview" target="_blank" rel="noopener">لینک به Trace</a></em></p>
+
+<h3>۳. ویژگی‌های اضافی (Additional Attributes)</h3>
+<p>همچنین می‌توانید ویژگی‌های اضافی را به Spanهای خود پاس دهید. این‌ها می‌توانند شامل <code>user_id</code>، <code>tags</code>، <code>session_id</code> و فراداده‌ی سفارشی باشند. غنی‌سازی Traceها با این جزئیات برای تحلیل، دیباگ و پایش رفتار اپلیکیشن شما در میان کاربران یا نشست‌های مختلف مهم است.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from smolagents import (CodeAgent, DuckDuckGoSearchTool, InferenceClientModel)
+
+search_tool = DuckDuckGoSearchTool()
+agent = CodeAgent(
+    tools=[search_tool],
+    model=InferenceClientModel()
+)
+
+with langfuse.start_as_current_span(
+    name="Smolagent-Trace",
+    ) as span:
+    
+    # اپلیکیشن خود را اینجا اجرا کنید
+    response = agent.run("What is the capital of Germany?")
+ 
+    # ویژگی‌های اضافی را به span پاس دهید
+    span.update_trace(
+        input="What is the capital of Germany?",
+        output=response,
+        user_id="smolagent-user-123",
+        session_id="smolagent-session-123456789",
+        tags=["city-question", "testing-agents"],
+        metadata={"email": "user@langfuse.com"},
+        )
+ 
+# در اپلیکیشن‌های کوتاه‌مدت، رویدادها را Flush کنید
+langfuse.flush()</code></pre></div>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/smolagents-attributes.png" alt="غنی‌سازی اجراهای ایجنت با ویژگی‌های اضافی" width="100%"/>
+</div>
+
+<h3>۴. بازخورد کاربر (User Feedback)</h3>
+<p>اگر ایجنت شما در یک رابط کاربری تعبیه شده است، می‌توانید بازخورد مستقیم کاربر را (مانند لایک/دیس‌لایک در رابط چت) ثبت کنید. در ادامه نمونه‌ای با <a href="https://gradio.app/" target="_blank" rel="noopener">Gradio</a> آمده که یک چت با مکانیزم ساده‌ی بازخورد تعبیه می‌کند.</p>
+
+<p>در قطعه کد زیر، وقتی کاربر پیام چت می‌فرستد، Trace را در Langfuse ثبت می‌کنیم. اگر کاربر آخرین پاسخ را لایک/دیس‌لایک کند، یک نمره (Score) به Trace الصاق می‌کنیم.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">import gradio as gr
+from smolagents import (CodeAgent, InferenceClientModel)
+from langfuse import get_client
+
+langfuse = get_client()
+
+model = InferenceClientModel()
+agent = CodeAgent(tools=[], model=model, add_base_tools=True)
+
+trace_id = None
+
+def respond(prompt, history):
+    with langfuse.start_as_current_span(
+        name="Smolagent-Trace"):
+        
+        # اپلیکیشن خود را اینجا اجرا کنید
+        output = agent.run(prompt)
+
+        global trace_id
+        trace_id = langfuse.get_current_trace_id()
+
+    history.append({"role": "assistant", "content": str(output)})
+    return history
+
+def handle_like(data: gr.LikeData):
+    # برای نمایش، بازخورد کاربر را به ۱ (لایک) یا ۰ (دیس‌لایک) نگاشت می‌کنیم
+    if data.liked:
+        langfuse.create_score(
+            value=1,
+            name="user-feedback",
+            trace_id=trace_id
+        )
+    else:
+        langfuse.create_score(
+            value=0,
+            name="user-feedback",
+            trace_id=trace_id
+        )
+
+with gr.Blocks() as demo:
+    chatbot = gr.Chatbot(label="Chat", type="messages")
+    prompt_box = gr.Textbox(placeholder="Type your message...", label="Your message")
+
+    # وقتی کاربر Enter را روی پرامپت می‌زند، 'respond' را اجرا می‌کنیم
+    prompt_box.submit(
+        fn=respond,
+        inputs=[prompt_box, chatbot],
+        outputs=chatbot
+    )
+
+    # وقتی کاربر روی دکمه‌ی 'like' یک پیام کلیک می‌کند، 'handle_like' را اجرا می‌کنیم
+    chatbot.like(handle_like, None, None)
+
+demo.launch()</code></pre></div>
+<p>سپس بازخورد کاربر در ابزار مشاهده‌پذیری شما ثبت می‌شود:</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/user-feedback-gradio.png" alt="ثبت بازخورد کاربر در Langfuse" width="100%"/>
+</div>
+
+<h3>۵. LLM-as-a-Judge</h3>
+<p>LLM-as-a-Judge راه دیگری برای ارزیابی خودکار خروجی ایجنت است. می‌توانید یک فراخوانی LLM جداگانه راه بیندازید تا درستی، سمّی بودن، سبک یا هر معیار دیگری را که برایتان مهم است بسنجد.</p>
+
+<p><strong>گردش‌کار:</strong></p>
+<ol>
+  <li>یک <strong>قالب ارزیابی (Evaluation Template)</strong> تعریف می‌کنید؛ مثلاً «بررسی کن آیا متن سمّی است.»</li>
+  <li>هر بار که ایجنت شما خروجی تولید می‌کند، آن خروجی را همراه با قالب به LLM «داور» خود می‌دهید.</li>
+  <li>LLM داور با یک امتیاز یا برچسب پاسخ می‌دهد که آن را در ابزار مشاهده‌پذیری خود ثبت می‌کنید.</li>
+</ol>
+
+<p>نمونه از Langfuse:</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/evaluator-template.png" alt="قالب ارزیابی LLM-as-a-Judge" width="100%"/>
+</div><div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/evaluator.png" alt="ارزیاب LLM-as-a-Judge" width="100%"/>
+</div>
+<div class="code"><pre dir="ltr"><code class="language-python"># مثال: بررسی اینکه خروجی ایجنت سمی (Toxic) هست یا نه
+from smolagents import (CodeAgent, DuckDuckGoSearchTool, InferenceClientModel)
+
+search_tool = DuckDuckGoSearchTool()
+agent = CodeAgent(tools=[search_tool], model=InferenceClientModel())
+
+agent.run("Can eating carrots improve your vision?")</code></pre></div>
+<p>می‌توانید ببینید که پاسخ این مثال «غیرسمّی» (not toxic) ارزیابی شده است.</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/llm-as-a-judge-score.png" alt="نمره‌ی ارزیابی LLM-as-a-Judge" width="100%"/>
+</div>
+
+<h3>۶. نمای کلی متریک‌های مشاهده‌پذیری</h3>
+<p>همه‌ی این متریک‌ها را می‌توان در داشبوردها با هم نمایش داد. این به شما اجازه می‌دهد سریع ببینید ایجنت شما در نشست‌های زیاد چگونه عمل می‌کند و در پیگیری متریک‌های کیفیت در طول زمان کمک می‌کند.</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/langfuse-dashboard.png" alt="نمای کلی متریک‌های مشاهده‌پذیری" width="100%"/>
+</div>
+
+<h2>ارزیابی آفلاین (Offline Evaluation)</h2>
+<p>ارزیابی آنلاین برای بازخورد زنده ضروری است، اما به <strong>ارزیابی آفلاین</strong> هم نیاز دارید، یعنی بررسی‌های سیستماتیک پیش از توسعه یا در حین آن. این به حفظ کیفیت و قابلیت اطمینان پیش از انتشار تغییرات در پروداکشن کمک می‌کند.</p>
+
+<h3>ارزیابی با دیتاست (Dataset Evaluation)</h3>
+<p>در ارزیابی آفلاین معمولاً:</p>
+<ol>
+  <li>یک دیتاست بنچ‌مارک دارید (با جفت‌های پرامپت و خروجی مورد انتظار)</li>
+  <li>ایجنت خود را روی آن دیتاست اجرا می‌کنید</li>
+  <li>خروجی‌ها را با نتایج مورد انتظار مقایسه می‌کنید یا از یک مکانیزم نمره‌دهی اضافی استفاده می‌کنید</li>
+</ol>
+<p>در ادامه این رویکرد را با <a href="https://huggingface.co/datasets/openai/gsm8k" target="_blank" rel="noopener">دیتاست GSM8K</a> که شامل سوالات و راه‌حل‌های ریاضی است نشان می‌دهیم.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">import pandas as pd
+from datasets import load_dataset
+
+# دریافت GSM8K از Hugging Face
+dataset = load_dataset("openai/gsm8k", 'main', split='train')
+df = pd.DataFrame(dataset)
+print("First few rows of GSM8K dataset:")
+print(df.head())</code></pre></div>
+<p>سپس یک موجودیت دیتاست در Langfuse می‌سازیم تا اجراها را پیگیری کنیم. بعد هر آیتم از دیتاست را به سیستم اضافه می‌کنیم. (اگر از Langfuse استفاده نمی‌کنید، می‌توانید این‌ها را ساده‌تر در پایگاه داده‌ی خودتان یا یک فایل محلی برای تحلیل ذخیره کنید.)</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from langfuse import get_client
+langfuse = get_client()
+
+langfuse_dataset_name = "gsm8k_dataset_huggingface"
+
+# ساخت یک دیتاست در Langfuse
+langfuse.create_dataset(
+    name=langfuse_dataset_name,
+    description="GSM8K benchmark dataset uploaded from Huggingface",
+    metadata={
+        "date": "2025-03-10", 
+        "type": "benchmark"
+    }
+)</code></pre></div>
+<div class="code"><pre dir="ltr"><code class="language-python">for idx, row in df.iterrows():
+    langfuse.create_dataset_item(
+        dataset_name=langfuse_dataset_name,
+        input={"text": row["question"]},
+        expected_output={"text": row["answer"]},
+        metadata={"source_index": idx}
+    )
+    if idx >= 9: # برای نمایش، فقط ۱۰ آیتم اول آپلود می‌شود
+        break</code></pre></div>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/example-dataset.png" alt="آیتم‌های دیتاست در Langfuse" width="100%"/>
+</div>
+
+<h3>اجرای ایجنت روی دیتاست</h3>
+<p>یک تابع کمکی به نام <code>run_smolagent()</code> تعریف می‌کنیم که:</p>
+<ol>
+  <li>یک Span در Langfuse شروع می‌کند</li>
+  <li>ایجنت ما را روی پرامپت اجرا می‌کند</li>
+  <li>شناسه‌ی Trace را در Langfuse ثبت می‌کند</li>
+</ol>
+<p>سپس روی هر آیتم دیتاست حلقه می‌زنیم، ایجنت را اجرا می‌کنیم و Trace را به آیتم دیتاست پیوند می‌دهیم. در صورت تمایل می‌توانیم یک نمره‌ی ارزیابی سریع هم الصاق کنیم.</p>
+<div class="code"><pre dir="ltr"><code class="language-python">from opentelemetry.trace import format_trace_id
+from smolagents import (CodeAgent, InferenceClientModel, LiteLLMModel)
+from langfuse import get_client
+ 
+langfuse = get_client()
+
+
+# مثال: استفاده از InferenceClientModel یا LiteLLMModel برای دسترسی به مدل‌های openai، anthropic، gemini و غیره:
+model = InferenceClientModel()
+
+agent = CodeAgent(
+    tools=[],
+    model=model,
+    add_base_tools=True
+)
+
+dataset_name = "gsm8k_dataset_huggingface"
+current_run_name = "smolagent-notebook-run-01" # این اجرای ارزیابی مشخص را شناسایی می‌کند
+ 
+# فرض کنید 'run_smolagent' تابع اپلیکیشن ابزارگذاری‌شده‌ی شماست
+def run_smolagent(question):
+    with langfuse.start_as_current_generation(name="qna-llm-call") as generation:
+        # شبیه‌سازی فراخوانی LLM
+        result = agent.run(question)
+ 
+        # Trace را با ورودی و خروجی به‌روز کن
+        generation.update_trace(
+            input= question,
+            output=result,
+        )
+ 
+        return result
+ 
+dataset = langfuse.get_dataset(name=dataset_name) # دیتاست از پیش پرشده‌ی خود را بگیرید
+ 
+for item in dataset.items:
+ 
+    # از context manager متد item.run() استفاده کنید
+    with item.run(
+        run_name=current_run_name,
+        run_metadata={"model_provider": "Hugging Face", "temperature_setting": 0.7},
+        run_description="Evaluation run for GSM8K dataset"
+    ) as root_span: # root_span همان span ریشه‌ی Trace جدید برای این آیتم و این اجراست.
+        # همه‌ی عملیات Langfuse بعدی داخل این بلاک بخشی از این Trace هستند.
+ 
+        # منطق اپلیکیشن خود را صدا بزنید
+        generated_answer = run_smolagent(question=item.input["text"])
+ 
+        print(item.input)</code></pre></div>
+<p>می‌توانید این فرایند را با موارد مختلف تکرار کنید:</p>
+<ul>
+  <li>مدل‌ها (OpenAI GPT، LLM محلی و غیره)</li>
+  <li>ابزارها (با جست‌وجو در برابر بدون جست‌وجو)</li>
+  <li>پرامپت‌ها (پیام‌های سیستمی مختلف)</li>
+</ul>
+<p>سپس آن‌ها را در ابزار مشاهده‌پذیری خود به‌صورت کنار هم مقایسه کنید:</p>
+<div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/dataset_runs.png" alt="نمای کلی اجراهای دیتاست" width="100%"/>
+</div><div class="flex justify-center">
+<img src="https://huggingface.co/datasets/agents-course/course-images/resolve/main/en/bonus-unit2/dataset-run-comparison.png" alt="مقایسه‌ی اجراهای دیتاست" width="100%"/>
+</div>
+
+<h2>جمع‌بندی (Final Thoughts)</h2>
+<p>در این نوت‌بوک پوشش دادیم که چگونه:</p>
+<ol>
+  <li><strong>مشاهده‌پذیری را راه‌اندازی کنیم</strong> با استفاده از smolagents + OpenTelemetry exporters</li>
+  <li><strong>ابزارگذاری را بررسی کنیم</strong> با اجرای یک ایجنت ساده</li>
+  <li><strong>متریک‌های دقیق (هزینه، تاخیر و غیره) را ثبت کنیم</strong> از طریق ابزارهای مشاهده‌پذیری</li>
+  <li><strong>بازخورد کاربر را جمع‌آوری کنیم</strong> از طریق یک رابط Gradio</li>
+  <li><strong>از LLM-as-a-Judge استفاده کنیم</strong> برای ارزیابی خودکار خروجی‌ها</li>
+  <li><strong>ارزیابی آفلاین انجام دهیم</strong> با یک دیتاست بنچ‌مارک</li>
+</ol>
+
+<p>🤗 کدنویسی خوش!</p>
+<nav class="pager"><a href="02 - مشاهده‌پذیری و ارزیابی چیست؟.html"><span>درس قبلی</span><strong>→ مشاهده‌پذیری و ارزیابی چیست؟</strong></a><a class="next" href="04 - آزمون ارزیابی ایجنت‌ها.html"><span>درس بعدی</span><strong>آزمون ارزیابی ایجنت‌ها ←</strong></a></nav>
+</main>
+</div>
+</body>
+</html>

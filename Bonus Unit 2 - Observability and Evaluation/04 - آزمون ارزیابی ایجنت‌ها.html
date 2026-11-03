@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>آزمون ارزیابی ایجنت‌ها | دوره جامع ایجنت‌های هوش مصنوعی</title>
+<link rel="stylesheet" href="../assets/style.css">
+<link rel="stylesheet" href="../assets/vendor/github-dark.min.css">
+<script>window.MathJax = {tex: {inlineMath: [['\\(', '\\)']], displayMath: [['\\[', '\\]']]}, svg: {fontCache: 'global'}};</script>
+<script defer src="../assets/vendor/tex-svg-full.js"></script>
+<script defer src="../assets/vendor/highlight.min.js"></script>
+<script defer src="../assets/app.js"></script>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="topbar-start">
+      <button id="toggle-sidebar" type="button" title="باز و بسته کردن منو" aria-label="باز و بسته کردن منو" aria-controls="course-sidebar" aria-expanded="true">☰</button>
+      <a class="brand" href="../index.html">دوره جامع ایجنت‌های هوش مصنوعی (AI Agents)</a>
+    </div>
+    <button id="toggle-theme" type="button" title="تغییر حالت روشن/تیره" aria-label="تغییر حالت روشن/تیره">◐</button>
+  </div>
+</header>
+<div class="layout">
+<aside class="sidebar" id="course-sidebar">
+  <div class="sidebar-head">
+    <div class="sidebar-kicker">امتیازی ۲</div>
+    <div class="chapter-name">مشاهده‌پذیری و ارزیابی ایجنت‌ها</div>
+  </div>
+  <nav class="toc">
+    <details class="toc-ch active-ch" open>
+      <summary><span class="toc-num">★۲</span><span class="toc-title">Observability & Evaluation</span><span class="toc-count">۴</span></summary>
+      <ol><li><a href="01 - مقدمه.html">مقدمه</a></li><li><a href="02 - مشاهده‌پذیری و ارزیابی چیست؟.html">مشاهده‌پذیری و ارزیابی چیست؟</a></li><li><a href="03 - مانیتورینگ و ارزیابی با Langfuse.html">مانیتورینگ و ارزیابی با Langfuse</a></li><li><a href="04 - آزمون ارزیابی ایجنت‌ها.html" class="active">آزمون ارزیابی ایجنت‌ها</a></li></ol>
+    </details>
+  </nav>
+</aside>
+<main class="content">
+<div class="crumb"><a href="../index.html">خانه</a><span>/</span><span>بخش امتیازی ۲ — Observability & Evaluation</span><span>/</span><span>آزمون ارزیابی ایجنت‌ها</span></div>
+<h1>آزمون: ارزیابی ایجنت‌های هوش مصنوعی (Quiz)</h1>
+<p>بیایید میزان درک شما از مفاهیم ردیابی (Tracing) و ارزیابی ایجنت را که در این بخش امتیازی پوشش داده شد بسنجیم.</p>
+<p>این آزمون اختیاری است و نمره‌ای ندارد.</p>
+
+<hr>
+<h3>سوال ۱: منظور از مشاهده‌پذیری (Observability) در ایجنت‌های هوش مصنوعی در اصل چیست؟</h3>
+<p>کدام گزاره هدف مشاهده‌پذیری برای ایجنت‌های هوش مصنوعی را به‌درستی توصیف می‌کند؟</p>
+<div class="quiz">
+  <details class="choice ok">
+    <summary>ردیابی عملیات درونی از طریق لاگ‌ها، متریک‌ها و Spanها برای درک رفتار ایجنت.</summary>
+    <div class="explain"><b>درست است!</b> مشاهده‌پذیری یعنی استفاده از لاگ‌ها، متریک‌ها و Spanها برای روشن کردن سازوکار درونی ایجنت.</div>
+  </details>
+  <details class="choice no">
+    <summary>صرفاً بر کاهش هزینه‌ی مالی اجرای ایجنت تمرکز دارد.</summary>
+    <div class="explain"><b>نادرست:</b> مشاهده‌پذیری هزینه را پوشش می‌دهد اما به آن محدود نیست.</div>
+  </details>
+  <details class="choice no">
+    <summary>فقط به ظاهر بیرونی و رابط کاربری ایجنت اشاره دارد.</summary>
+    <div class="explain"><b>نادرست:</b> مشاهده‌پذیری درباره‌ی فرایندهای درونی است، نه رابط کاربری.</div>
+  </details>
+  <details class="choice no">
+    <summary>فقط به سبک کدنویسی و زیبایی کد مربوط است.</summary>
+    <div class="explain"><b>نادرست:</b> سبک کد در این زمینه ربطی به مشاهده‌پذیری ندارد.</div>
+  </details>
+</div>
+<h3>سوال ۲: کدام‌یک از موارد زیر جزو متریک‌های رایجِ پایش در مشاهده‌پذیری ایجنت <u>نیست</u>؟</h3>
+<p>متریکی را انتخاب کنید که معمولاً زیر چتر مشاهده‌پذیری قرار نمی‌گیرد.</p>
+<div class="quiz">
+  <details class="choice no">
+    <summary>تاخیر زمانی (Latency)</summary>
+    <div class="explain"><b>نادرست:</b> تاخیر زمانی معمولاً برای سنجش پاسخ‌گویی ایجنت پیگیری می‌شود.</div>
+  </details>
+  <details class="choice no">
+    <summary>هزینه‌ی هر اجرای ایجنت (Cost per Agent Run)</summary>
+    <div class="explain"><b>نادرست:</b> پایش هزینه یک جنبه‌ی کلیدی مشاهده‌پذیری است.</div>
+  </details>
+  <details class="choice no">
+    <summary>بازخورد و امتیازهای کاربر (User Feedback and Ratings)</summary>
+    <div class="explain"><b>نادرست:</b> بازخورد کاربر برای ارزیابی عملکرد ایجنت حیاتی است.</div>
+  </details>
+  <details class="choice ok">
+    <summary>تعداد خطوط کد ایجنت (Lines of Code)</summary>
+    <div class="explain"><b>درست است!</b> تعداد خطوط کد یک متریک معمول مشاهده‌پذیری نیست.</div>
+  </details>
+</div>
+<h3>سوال ۳: کدام گزینه ارزیابی آفلاین (Offline Evaluation) یک ایجنت هوش مصنوعی را به بهترین شکل توصیف می‌کند؟</h3>
+<p>گزاره‌ای را تعیین کنید که جوهره‌ی ارزیابی آفلاین را درست بیان می‌کند.</p>
+<div class="quiz">
+  <details class="choice no">
+    <summary>ارزیابی ایجنت با استفاده از تعاملات واقعی کاربران در یک محیط زنده.</summary>
+    <div class="explain"><b>نادرست:</b> این توصیف ارزیابی آنلاین است، نه آفلاین.</div>
+  </details>
+  <details class="choice ok">
+    <summary>سنجش عملکرد ایجنت با استفاده از دیتاست‌های گزینش‌شده با پاسخ‌های مرجع (Ground Truth) معلوم.</summary>
+    <div class="explain"><b>درست است!</b> ارزیابی آفلاین از دیتاست‌های آزمون برای سنجش عملکرد در برابر پاسخ‌های معلوم استفاده می‌کند.</div>
+  </details>
+  <details class="choice no">
+    <summary>پایش لاگ‌های درونی ایجنت به‌صورت بلادرنگ.</summary>
+    <div class="explain"><b>نادرست:</b> این بیشتر به مشاهده‌پذیری مربوط است تا ارزیابی.</div>
+  </details>
+  <details class="choice no">
+    <summary>اجرای ایجنت بدون هیچ متریک ارزیابی.</summary>
+    <div class="explain"><b>نادرست:</b> این رویکرد هیچ بینش معناداری نمی‌دهد.</div>
+  </details>
+</div>
+<h3>سوال ۴: ارزیابی آنلاین (Online Evaluation) ایجنت‌ها کدام مزیت را ارائه می‌دهد؟</h3>
+<p>گزاره‌ای را انتخاب کنید که مزیت ارزیابی آنلاین را به بهترین شکل بازتاب می‌دهد.</p>
+<div class="quiz">
+  <details class="choice no">
+    <summary>سناریوهای آزمون کنترل‌شده با دیتاست‌های از پیش تعریف‌شده فراهم می‌کند.</summary>
+    <div class="explain"><b>نادرست:</b> آزمون کنترل‌شده مزیت ارزیابی آفلاین است، نه آنلاین.</div>
+  </details>
+  <details class="choice ok">
+    <summary>تعاملات زنده‌ی کاربران و داده‌های عملکرد دنیای واقعی را ثبت می‌کند.</summary>
+    <div class="explain"><b>درست است!</b> ارزیابی آنلاین با پایش ایجنت در محیط زنده بینش‌هایی ارائه می‌دهد.</div>
+  </details>
+  <details class="choice no">
+    <summary>نیاز به هرگونه آزمون و بنچ‌مارک آفلاین را از بین می‌برد.</summary>
+    <div class="explain"><b>نادرست:</b> ارزیابی آفلاین و آنلاین هر دو مهم و مکمل یکدیگرند.</div>
+  </details>
+  <details class="choice no">
+    <summary>صرفاً بر کاهش هزینه‌ی محاسباتی ایجنت تمرکز دارد.</summary>
+    <div class="explain"><b>نادرست:</b> پایش هزینه بخشی از مشاهده‌پذیری است، نه مزیت اصلی ارزیابی آنلاین.</div>
+  </details>
+</div>
+<h3>سوال ۵: OpenTelemetry در مشاهده‌پذیری و ارزیابی ایجنت‌های هوش مصنوعی چه نقشی دارد؟</h3>
+<p>کدام گزاره نقش OpenTelemetry را در پایش ایجنت‌های هوش مصنوعی به بهترین شکل توصیف می‌کند؟</p>
+<div class="quiz">
+  <details class="choice ok">
+    <summary>یک چارچوب استاندارد برای ابزارگذاری کد فراهم می‌کند که جمع‌آوری ردپاها (Traces)، متریک‌ها و لاگ‌ها را برای مشاهده‌پذیری ممکن می‌سازد.</summary>
+    <div class="explain"><b>درست است!</b> OpenTelemetry ابزارگذاری داده‌های تلمتری را استاندارد می‌کند، که برای پایش و عیب‌یابی رفتار ایجنت حیاتی است.</div>
+  </details>
+  <details class="choice no">
+    <summary>جایگزین دیباگ دستی است و مشکلات کد را به‌صورت خودکار اصلاح می‌کند.</summary>
+    <div class="explain"><b>نادرست:</b> OpenTelemetry برای جمع‌آوری داده‌ی تلمتری است، نه دیباگ مشکلات کد.</div>
+  </details>
+  <details class="choice no">
+    <summary>عمدتاً به‌عنوان یک پایگاه داده برای ذخیره‌ی لاگ‌های تاریخی و بدون قابلیت بلادرنگ عمل می‌کند.</summary>
+    <div class="explain"><b>نادرست:</b> OpenTelemetry بر جمع‌آوری بلادرنگ داده‌ی تلمتری و صدور آن به ابزارهای تحلیل تمرکز دارد.</div>
+  </details>
+  <details class="choice no">
+    <summary>برای بهینه‌سازی عملکرد محاسباتی ایجنت از طریق تنظیم خودکار پارامترهای مدل استفاده می‌شود.</summary>
+    <div class="explain"><b>نادرست:</b> OpenTelemetry حول مشاهده‌پذیری می‌چرخد، نه تنظیم عملکرد.</div>
+  </details>
+</div>
+
+<hr>
+<p>بابت تکمیل این آزمون تبریک می‌گوییم! 🎉 اگر به سوالی پاسخ نادرست داده‌اید، مرور محتوای این بخش امتیازی را برای درک عمیق‌تر در نظر بگیرید. اگر عملکرد خوبی داشتید، آماده‌اید موضوعات پیشرفته‌تر مشاهده‌پذیری و ارزیابی ایجنت را بررسی کنید!</p>
+<nav class="pager"><a href="03 - مانیتورینگ و ارزیابی با Langfuse.html"><span>درس قبلی</span><strong>→ مانیتورینگ و ارزیابی با Langfuse</strong></a><span></span></nav>
+</main>
+</div>
+</body>
+</html>
